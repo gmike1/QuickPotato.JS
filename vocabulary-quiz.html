@@ -1,0 +1,562 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+<title>Quiz</title>
+    <style> 
+	/*容器的居中*/	
+	/*css布局中margin为0,页面依然与浏览器顶部有一个间隙的问题*/
+	body{
+		margin:0px;padding:0;
+		font-size: 50%;
+		/*font-family:Fantasy;*/
+	}
+
+	div.container{
+		margin:0 auto; 
+		/*
+		注意：顶部第一行不能有<!DOCTYPE HTML>否则高度不能撑开。
+		背景色豆沙绿：background-color:#C7EDCC;
+		*/
+		width:100%;border:0px solid red;line-height:150%;background-color:#C7EDCC;
+	}
+	
+	div.header,div.footer{color:black;clear:left;}
+	h1.header{padding:0;margin:0;}
+	div.left,div.right{float:left;width:0%;height:100%;border:0px solid red;background-color:#C7EDCC;}
+	div.content{width:99%;padding:1.0em;border:0px solid blue;float:left;}
+	div.stem,div.explanation{width:90%;}
+
+	A:visited{TEXT-DECORATION:none;COLOR:#009999} 
+	A:link{text-decoration:none} 
+	A:hover{TEXT-DECORATION:COLOR:#FF0000;FONT-WEIGHT:bold;FONT-STYLE:italic} 
+	A.1:link{text-decoration:none} 
+	A.1:visited{TEXT-DECORATION:none;COLOR:#000000} 
+	A.1:hover{TEXT-DECORATION:none;COLOR:#FFffff;FONT-WEIGHT:bold;FONT-STYLE:italic} 
+	/* css注释：只对table td标签设置红色边框样式 */ 
+	table{border-collapse:collapse;border:1px solid #66CCFF;width:800px;} 
+	table td{border:1px dotted #66CCFF;padding:5px;} 
+	#main{border:0px solid #66CCFF;width:80%;clear:both;}
+	.contain {width:100%;height:50px;border:0px solid #66CCFF;margin:1px 0px;padding:0px 0px; float:left}
+	.inner_contain { border-top:1px  dotted #66CCFF;margin:10px 0px;padding:5px 0px;} 
+	.lay1{ width:100%; height:450px; border:1px dotted #66CCFF; margin:1px 0px;padding:0px 0px;float:left} 
+	.nav_bottom{border-top:0px solid #66CCFF;margin:10px 10px;padding:5px 0px;text-align:center;}
+
+.css_btn_class {
+    font-size:14px;
+    font-family:Arial;
+    font-weight:normal;
+    -moz-border-radius:42px;
+    -webkit-border-radius:42px;
+    border-radius:42px;
+    border:1px solid #dcdcdc;
+    padding:6px 18px;
+    text-decoration:none;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(5%, #ededed), color-stop(100%, #dfdfdf) );
+    background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+    background:-ms-linear-gradient( top, #ededed 5%, #dfdfdf 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+    background-color:#ededed;
+    color:#777777;
+    display:inline-block;
+    text-shadow:1px 1px 0px #ffffff;
+    -webkit-box-shadow:inset 1px 1px 0px 0px #ffffff;
+    -moz-box-shadow:inset 1px 1px 0px 0px #ffffff;
+    box-shadow:inset 1px 1px 0px 0px #ffffff;
+}
+.css_btn_class:hover {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(5%, #dfdfdf), color-stop(100%, #ededed) );
+    background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+    background:-ms-linear-gradient( top, #dfdfdf 5%, #ededed 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+    background-color:#dfdfdf;
+}
+.css_btn_class:active {
+    position:relative;
+    top:1px;
+}
+
+
+	h2{text-align:center;}
+	h3{text-align:center;}
+
+
+
+ol.QuizQuestions{
+	text-align: left;
+	list-style-type: none;
+}
+
+li.QuizQuestion{
+	padding: 0.5em;
+	/*border-style: solid;*/
+	border-width: 0px 0px 1px 0px;
+	list-style-type: none;
+}
+	
+.FuncButton {
+	text-align: center;
+	border-style: solid;
+
+	border-left-color: #ddddf6;
+	border-top-color: #ddddf6;
+	border-right-color: #5d5d77;
+	border-bottom-color: #5d5d77;
+	color: #000000;
+	background-color: #bbbbee;
+
+	border-width: 2px;
+	padding: 3px 6px 3px 6px;
+	cursor: pointer;
+}
+
+.FuncButtonUp {
+	color: #bbbbee;
+	text-align: center;
+	border-style: solid;
+
+	border-left-color: #ddddf6;
+	border-top-color: #ddddf6;
+	border-right-color: #5d5d77;
+	border-bottom-color: #5d5d77;
+
+	background-color: #000000;
+	color: #bbbbee;
+	border-width: 2px;
+	padding: 3px 6px 3px 6px;
+	cursor: pointer;
+}
+
+.FuncButtonDown {
+	color: #bbbbee;
+	text-align: center;
+	border-style: solid;
+
+	border-left-color: #5d5d77;
+	border-top-color: #5d5d77;
+	border-right-color: #ddddf6;
+	border-bottom-color: #ddddf6;
+	background-color: #000000;
+	color: #bbbbee;
+
+	border-width: 2px;
+	padding: 3px 6px 3px 6px;
+	cursor: pointer;
+}
+
+
+div.StdDiv{
+	background-color: #90EE90;/*#bbbbee#66DD00	#55AA00*/
+	text-align: center;
+	color: #000000;
+	padding: 0.5em;
+	border-style: solid;
+	border-width: 1px 1px 1px 1px;
+	border-color: #000000;
+	margin-bottom: 1px;
+}
+
+    </style>
+</head>
+<SCRIPT src="MultipleChoiceUtil.js"></SCRIPT>
+<SCRIPT src="Catelogue.js"></SCRIPT>
+
+<script type="text/javascript">
+	/*
+	vocabulary-quiz调用逻辑
+	注：vocabulary-quiz.html是multiplechoiceplus-5.0.html的词汇测试定制版（把词汇拼写当完型填空题），逐字母拼写方式参考spelling-2.0.html
+	1. 点击Start按钮，调用js方法load()，通过以下语句跳转到org.cj.myoral.activity.QuizActivity进行android处理：
+	window.location.href="js://webview?act=3&book="+v1+"&unit="+v2;
+	
+	2. android获取测试数据后让webview跳转到
+	url ="file:///android_asset/vocabulary-quiz.html?items=" +value;
+	webView.loadUrl(url);
+	
+	3. <body onload="TimerStartUp()">调用js方法TimerStartUp()；
+	在TimerStartUp()内部先调用Init()方法初始化json数据结构;然后调用StartUp()方法；
+	StartUp()方法调用nextItem()方法正式进入测试；
+	
+	*/
+	/*Java-Javascript Interaction In Android*/
+	/*
+	本地js动态生成人教版高中英语单元单词拼写测试页面（从QuickPotato.Android安卓应用“我”>“选择测试”（应该改为“填空测试”）进入）。参考d:\LeanCloud\matchxx-2.0\quickpotato.match.target-example.html
+	*/
+	//var jsonString = '<?php echo json_encode($quiz);?>';//传递php中的数据给js
+	/*var quiz = JSON.parse(jsonString); //将json字符串转化为js中的json对象
+	//var quiz = json_parse(jsonString);//将json字符串转化为js中的json对象
+	//vartquiz = jsonString.parseJSON(); //将json字符串转化为js中的json对象
+	var target=quiz.groups[current].target;
+	*/
+	var quiz=null;
+	var current=-1;
+	var kid=10001;
+	var correctCount=0;
+	var  score="0%";
+	
+	//先必须通过SCRIPT标签引入MultipleChoiceUtil.js
+	var multipleChoiceUtil=new MultipleChoiceUtil('MultipleChoiceUtil');
+	//先必须通过SCRIPT标签引入Catelogue.js
+	var catelogueUtil=new Catelogue('Catelogue');
+	
+	var CorrectIndicator = '&nbsp;&nbsp;:)&nbsp;&nbsp;';//'√';
+	var IncorrectIndicator = '&nbsp;&nbsp;X&nbsp;&nbsp;';
+	var Feedback='';
+	
+	/*
+	android与JS交互,互相调用方法,跳转到网页
+	原文链接：https://blog.csdn.net/thw_m/article/details/78583922
+	
+	//这个方式是被java调用的
+	function androidCallJs(){
+		 alert("android界面按钮启动：java调用js弹窗(AddJavascriptInterface)");
+	}*/
+        	
+	/*
+	matchxx 20181113 cemike@126.com
+	js 将json字符串转换为json对象的方法解析：
+	https://www.cnblogs.com/guoziyi/p/6003752.html
+	*/
+	function Init(){
+		//alert("a")
+		console.log("Init");
+		//multipleChoiceUtil.speak();
+		//JSON字符串:
+		//var str = '[{ "stem": "1. There are plans to split the corporation into a number of smaller ____ (adj.) companies.", "answer": "independent" },{ "stem": "2. The house was surrounded by trees and ____ (adj.) from the road.", "answer": "invisible" },{ "stem": "3. Without the right date stamped on it, your ticket will be ____ (adj.).", "answer": "invalid" }]';
+		//multiplechoice 
+		//var str2 = '[{"id":1, "kid":1, "content": "1.The question is {~if# ~what# =whether#考察whether引导的表语从句 ~how#h} the film is worth seeing. "},{"id":2, "kid":1, "content": "5. {~That# =Whether#考察whether引导的主语从句 ~If# ~Even if#} his dream of going to college will come true is uncertain."}]';
+		//cloze
+		//var str2 = '[{"id":1,"kid":10007,"point":1, "content": "Nowadays {=the#互联网the Intenet是万维网www的特殊实例（目前世界唯一）要用定冠词}Intenet is becoming increasingly popular and a new high speed broadband network has recently started. "},{"id":2,"kid":10007,"point":1,  "content": "While {=the#此处music是特指后面the TV play的音乐，用定冠词；不同于listen to music泛指听音乐；} music is just so-so, the story in this TV play is quite moving. "}]';
+		
+		//var str2 = '[{"id":1,"kid":10007,"point":1, "content": "Nowadays {=the#互联网the Intenet是万维网www的特殊实例（目前世界唯一）要用定冠词}Intenet is becoming increasingly popular and a new high speed broadband network has recently started. "},{"id":2,"kid":10007,"point":1,  "content": "While {=the#此处music是特指后面the TV play的音乐，用定冠词；不同于listen to music泛指听音乐；} music is just so-so, the story in this TV play is quite moving. "},{"id":3, "kid":1, "content": "5. {~That# =Whether#考察whether引导的主语从句 ~If# ~Even if#} his dream of going to college will come true is uncertain."}]';
+	/*
+    用户在编辑器编辑时用=#包围答案以保证与其他平台的一致性；
+    因为作为url参数?param=value方式传递，而js时通过=判断解析参数；因此传递时=#分别替换为@$，见org.cj.myoral.Fragment.Fragment3#getEditorText;
+    但在解析完成后最终还是转换回=#，见QuickPotato.Android\app\src\main\assets\quickpotato.clozexa.template.js#function Init()；
+	注意：getParam(paramName)是自定义参数，用于获取指定的URL参数值 
+     */
+	 var items = getParam('items');//注意：getParam(paramName)是自定义参数，用于获取指定的URL参数值 
+	 if(items!=null)
+		 items =items.replace(/@/gi,'=').replace(/\$/gi,'#');
+	 else
+		 items ='[{"id":1,"kid":10007,"point":1, "content": "Nowadays {=the#互联网the Intenet是万维网www的特殊实例（目前世界唯一）要用定冠词}Intenet is becoming increasingly popular and a new high speed broadband network has recently started. "},{"id":2,"kid":10007,"point":1,  "content": "While {=the#此处music是特指后面the TV play的音乐，用定冠词；不同于listen to music泛指听音乐；} music is just so-so, the story in this TV play is quite moving. "},{"id":3, "kid":1, "content": "5. {~That# =Whether#考察whether引导的主语从句 ~If# ~Even if#} his dream of going to college will come true is uncertain."}]';
+	//document.getElementById('Instructions').innerHTML=items;
+		
+		//JSON对象
+		quiz = eval('{groups: [];answers:[]}');
+		//var jsonObj= eval('(' + str2 + ')');
+		//var jsonObj= JSON.parse(str2);
+		//var jsonObj= eval('(' + str + ')');
+		quiz.groups=multipleChoiceUtil.getItems(items);//str2
+		console.log('groups', quiz.groups);
+		document.getElementById("total").innerHTML =quiz.groups.length+''; 
+		
+		/**/
+	}
+	function load(){  
+	    var v1 = document.getElementById("books").value;   //此方法兼容性好
+	    var v2 = document.getElementById("units").value;   //此方法兼容性好
+		//var sql='select * from glossary where book='+v1+' and unit='+v2+'  order by seq  ';
+		/*act=3参考org.cj.myoral.activity.QuizActivity中的
+		android.webkit.WebViewClient.shouldOverrideUrlLoading(android.webkit.WebView, java.lang.String)
+		*/
+		window.location.href="js://webview?act=3&book="+v1+"&unit="+v2;
+	}
+/** 
+ * 获取指定的URL参数值 
+ * URL:http://www.quwan.com/index?name=tyler 
+ * 参数：paramName URL参数 
+ * 调用方法:getParam("name") 
+ * 返回值:
+ * 注意：用unescape()解码会导致中文乱码，用decodeURI()解码就能保证中文不出现乱码
+ *
+ */ 
+function getParam(paramName) { 
+    paramValue = "", isFound = !1; 
+    if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+		//用unescape()解码会导致中文乱码，用decodeURI()解码就能保证中文不出现乱码
+        arrSource = decodeURI(this.location.search).substring(1, this.location.search.length).split("&"), i = 0; 
+        while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++ 
+    } 
+    return paramValue == "" && (paramValue = null), paramValue 
+} 
+
+	function StartUp(){
+		nextItem();
+
+	}
+	/**/
+	function TimerStartUp(){
+		Init();
+		setTimeout('StartUp()', 300);
+	}
+	//type 1-cloze;2-multiplechoice
+	function nextItem(){
+		len=quiz.groups.length;
+		current=++current%len;
+		document.getElementById("current").innerHTML =current+1; 	
+		
+		kid=quiz.groups[current].kid;
+		var entry=catelogueUtil.getNodeLabel(kid);
+		if(entry==null)entry="词汇";
+		
+		if(quiz.groups[current].type==1){//1-cloze;
+			console.log('stem',quiz.groups[current].stem);			
+			document.getElementById("top").innerHTML=' 填空题 | '+kid+' | '+entry+" | <a href='js://webview?act=2&kid="+kid+"'>举一反三</a>&nbsp;&nbsp;<a href='sql-editor.html'>Customize</a>";//+" | <a href='kid2.html' target='_blank'>目录</a>";
+			
+			var stemComplex=quiz.groups[current].stem;
+			
+			var af='&nbsp;<span id="answer" class="answer"><input type="text" class="GapBox" id="gap1"  size="'+(quiz.groups[current].key.length+2)+'" ></input></span><span id="mark" class="mark"></span>&nbsp;';
+			stemComplex=stemComplex.replace(/_+/g,af);
+			
+			document.getElementById("stem").innerHTML=stemComplex;
+			
+			/*
+			document.getElementById("stem").innerHTML=quiz.groups[current].stem;
+			var af='<input type="text" class="GapBox" id="gap1" ></input>';
+			document.getElementById("answer").innerHTML=af;
+			*/
+		}else{//2-multiplechoice
+			document.getElementById("top").innerHTML=' 选择题 | '+kid+' | '+entry+" | <a href='js://webview?act=2&kid="+kid+"'>举一反三</a>&nbsp;&nbsp;<a href='sql-editor.html'>Customize</a>";//+" | <a href='kid2.html' target='_blank'>目录</a>";
+			var af='';
+			//current=Math.abs(--current)%len;
+			console.log('stem',quiz.groups[current].stem)
+			var stemComplex=quiz.groups[current].stem+'<br/>';
+			for(var k=0;k<quiz.groups[current].choices.length;k++){
+				var choice=quiz.groups[current].choices[k].answer; 
+				af+='<li id="Q_0_0" class="QuizQuestion"><button class="FuncButton"  onfocus="FuncBtnOver(this)"  onblur="FuncBtnOut(this)"  onmouseover="FuncBtnOver(this)"  onmouseout="FuncBtnOut(this)"  onmousedown="FuncBtnDown(this)"  onmouseup="FuncBtnOut(this)"  id="Q_0_0_Btn"  onclick="CheckMCAnswer(0,'+k+',this)">&nbsp;&nbsp;?&nbsp;&nbsp;</button>&nbsp;&nbsp;'+choice+'</li>';
+			}
+			stemComplex+=af;
+			//document.getElementById("answer").innerHTML=af;
+			document.getElementById("stem").innerHTML=stemComplex;
+			
+		}
+		showHint(0);//hide hint of last item
+		//target=quiz.groups[current].target;
+		/*for(var k=0;k<len;k++){
+			if(k==current)
+				document.getElementById("group"+k).style="display:block";
+			else
+				document.getElementById("group"+k).style="display:none";
+		}*/
+	}
+	
+	//检查填空题答案：
+	function checkClozeAnswer(){//
+		var answer=document.getElementById("gap1").value;
+		console.log("checkClozeAnswer", answer);
+		//return;
+		var msg="That a nice try!";
+		if(answer !=quiz.groups[current].key){//wrong
+			msg="Please try again!";
+			var  key=quiz.groups[current].key;
+			document.getElementById('mark').innerHTML="&nbsp;<span nowrap style=\"color:red;font-size:20px;font-weight:bold;\">χ</span>&nbsp;<span  style=\"text-decoration:underline\">"+key+"</span><span nowrap style=\"color:green;font-size:20px;font-weight:bold;\">√</span>";
+			//document.getElementById('mark').innerHTML="χ";
+			//document.getElementById('mark').style="color:red;font-size:20px;font-weight:bold;";
+			
+		}else{//right
+			msg="Good. You are right!";
+			document.getElementById('mark').innerHTML="<span nowrap style=\"color:green;font-size:20px;font-weight:bold;display:inline\">√</span>";
+			
+			correctCount++;
+			
+		}//
+		var rate=correctCount/quiz.groups.length;
+		console.log('correctCount',correctCount)
+		console.log('rate',rate)
+		document.getElementById("score").innerHTML= correctCount;//四舍五入保留1位小数
+		document.getElementById("rate").innerHTML= (rate*100).toFixed(2)+"%";//四舍五入保留1位小数
+		
+		//cemike@126.com 20180815
+		var x=document.getElementById('stem');
+		//alert(x.firstChild.innerHTML);
+		Feedback = quiz.groups[current].generalExplanation;
+		x.title=Feedback;//选对选项时为正确答案的解析
+		document.getElementById('hint3').innerHTML='提示：'+Feedback;
+		//document.getElementById('hint2').innerHTML=quiz.groups[current].key;	
+		
+		//document.getElementById('feedback').innerHTML=msg;
+		//readAloud(msg);
+	}
+	//检查多选题答案：QNum问题索引, ANum选项索引（0-3）, Btn选项前的按钮
+	function CheckMCAnswer(QNum, ANum, Btn){
+		console.log('CheckMCAnswer',quiz.groups[current].choices[ANum].answer+'<->'+quiz.groups[current].key)
+		if (quiz.groups[current].choices[ANum].answer !=quiz.groups[current].key){//wrong
+			//Mark the answer
+			Btn.innerHTML = IncorrectIndicator;
+
+		} else {//right
+			//Mark the answer
+			Btn.innerHTML = CorrectIndicator;
+					
+			//Calculate the score for this question
+			//CalculateMCQuestionScore(QNum);
+
+			//cemike@126.com 20180815
+			var x=document.getElementById('stem');
+			//alert(x.firstChild.innerHTML);
+			Feedback = quiz.groups[current].generalExplanation;
+			x.title=Feedback;//选对选项时为正确答案的解析
+			document.getElementById('hint3').innerHTML='提示：'+Feedback;
+			//document.getElementById('hint2').innerHTML=quiz.groups[current].key;
+
+		}
+	}
+	//type 1-next;2-previous
+	/*function next(type){
+		len=quiz.groups.length;
+		if(type==1)
+			current=++current%len;
+		else
+			current=Math.abs(--current)%len;
+		
+		target=quiz.groups[current].target;
+		document.getElementById("stem").innerHTML='['+(current+1)+'/'+len+']'+quiz.groups[current].wds[target].entry;
+		for(var k=0;k<len;k++){
+			if(k==current)
+				document.getElementById("group"+k).style="display:block";
+			else
+				document.getElementById("group"+k).style="display:none";
+		}
+	}*/
+
+	function FuncBtnOver(Btn){
+		if (Btn.className != 'FuncButtonDown'){Btn.className = 'FuncButtonUp';}
+	}
+
+	function FuncBtnOut(Btn){
+		Btn.className = 'FuncButton';
+	}
+
+	function FuncBtnDown(Btn){
+		Btn.className = 'FuncButtonDown';
+	}
+
+	//百度文字转语音免费接口使用实例
+	//https://blog.csdn.net/ztblog/article/details/52209308
+	//百度语音合成接口
+	//http://yuyin.baidu.com/docs/tts/136
+	function readAloud(val){
+		//var val=document.getElementById("val").value;
+		var zhText = val;
+		zhText = encodeURI(zhText);
+		document.getElementById("player").innerHTML="<audio autoplay=\"autoplay\">"+
+			"<source src=\"http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&per=4&text="+ zhText +"\" type=\"audio/mpeg\">"+
+			"<embed height=\"0\" width=\"0\" src=\"http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&per=4&text="+ zhText +"\">"+
+			"</audio>";
+	}
+
+	/*mode: 1-show;0-hide*/
+    function showHint(mode) {
+	console.log('showHint',mode, Feedback)
+        Feedback = quiz.groups[current].generalExplanation;
+		if(mode==1){
+			document.getElementById('hint3').innerHTML='提示：'+Feedback;
+		}else {
+			document.getElementById('hint3').innerHTML='';
+		}
+    }
+
+    function alertMessage(message) {
+        alert(message)
+    }
+
+    function toastMessage(message) {
+        window.control.toastMessage(message)
+    }
+
+    function sumToJava(number1, number2){
+       window.control.onSumResult(number1 + number2)
+    }
+</script>
+<body onload="TimerStartUp()">
+  <div class="container">
+  <div class="header"><h1 class="header">&nbsp;&nbsp;&nbsp;&nbsp;</h1></div>
+  <div class="left"></div>
+  <div class="content">
+<!-- 
+<h1 id="name" >Quiz</h1><br/>
+-->
+<b>Quiz</b><br/>
+<div id="top" class="top">
+填空题 | 10068 |  <a href='sql-editor.html'>举一反三</a>&nbsp;&nbsp;<a href='sql-editor.html'>Customize</a>
+</div>
+
+<div id="StatusDiv" class="StdDiv" style="display: block;float:center">
+	<span style="padding:3px;">Current</span>
+	<span id="current" style="padding:3px;">0</span>
+	<span style="padding:3px;">Total</span>
+	<span id="total" style="padding:3px;">0</span>
+	<span style="padding:3px;">Score</span>
+	<span id="score" style="padding:3px;">0</span>
+	<span style="padding:3px;">Rate</span>
+	<span id="rate" style="padding:3px;">0</span>
+	
+</div>
+
+<div id="CheckButtonDiv" class="StdDiv">
+Book
+<select id="books">
+	<option value="1" selected="selected">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+	<option value="8">8</option>
+	<option value="9">9</option>
+	<option value="10">10</option>
+</select>
+
+Unit
+<select id="units">
+	<option value="1" selected="selected">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+</select>
+
+<button id="CheckButton1" class="css_btn_class" onclick="load();">&nbsp;Start&nbsp;</button>
+
+</div>
+<br/>
+
+<div id="stem" class="stem">stem</div>
+<!--
+<span id="answer" class="answer">answer</span>
+<span id="mark" class="mark"></span>
+-->
+<br/>
+
+<div  class="explanation">
+<!--提示<div id="hint1" onclick="callAndroid()"> </div>
+答案：<div id="hint2" onclick="callAndroid()"></div>-->
+<div id="hint3" onclick="showHint(0)"></div>
+</div>
+<!--
+<div class="StdDiv" id="CheckButtonDiv">
+<button id="CheckButton1"  onclick="TimerStartUp()">&nbsp;Start&nbsp;</button>
+<button id="CheckButton2"  onclick="CheckAnswers()">&nbsp;Check&nbsp;</button>
+</div>
+-->
+
+
+<br/>
+
+<div id="control" style="display: flex;justify-content: center;align-items: center;">
+<button type="button" id="button1" class="css_btn_class" onclick="checkClozeAnswer()">提交</button>&nbsp;&nbsp;
+<button type="button" id="button2" class="css_btn_class" onclick="showHint(1)">提示</button>&nbsp;&nbsp;
+<button type="button" id="button3" class="css_btn_class" onclick="nextItem()">下一题</button>
+</div>
+  <!--control end--->
+
+
+  </div>
+  <!--content end--->
+  <div class="right"></div>
+  <div class="footer" style="text-align:center;">Copyright 2019</div>
+  </div>
+</body>
+
+
+</html>

@@ -1,0 +1,1438 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+<title>Quiz</title>
+    <style> 
+	/*容器的居中*/	
+	/*
+	css布局中margin为0,页面依然与浏览器顶部有一个间隙的问题：
+	注意：顶部第一行不能有<!DOCTYPE HTML>否则高度不能撑开。
+	*/
+	body{
+		margin:0px;padding:0;
+		font-family:微软雅黑, "Times New Roman",Georgia,Serif, Fantasy;/**/
+	}
+
+	div.container{
+		margin:0 auto; 
+		/*
+		注意：顶部第一行不能有<!DOCTYPE HTML>否则高度不能撑开。
+		背景色豆沙绿：background-color:#C7EDCC;
+		*/
+		width:100%;border:0px solid gray;line-height:150%;background-color:#C7EDCC;
+	}
+	/*
+	div.content的width:90%;
+	必须与div.left,div.right的width:4%;呼应，即
+	div.content的width+div.left的width+div.right的width小于100%，
+	不能等于或大于100%，否则内容挤不见。
+	*/
+	div.content{width:90%;padding:1.5em;border:0px solid gray;float:left;}
+	div.header,div.footer{color:black;clear:left;height:30px;}
+	div.left,div.right{float:left;width:4%;height:100%;border:0px solid red;background-color:#C7EDCC;}
+	h1.header{padding:0;margin:0;}
+	
+	/*--------------------------------------------------------------------------------- */
+	
+	div.stem,div.explanation{width:90%;}
+
+	A:visited{TEXT-DECORATION:none;COLOR:#009999} 
+	A:link{text-decoration:none} 
+	A:hover{TEXT-DECORATION:COLOR:#FF0000;FONT-WEIGHT:bold;FONT-STYLE:italic} 
+	A.1:link{text-decoration:none} 
+	A.1:visited{TEXT-DECORATION:none;COLOR:#000000} 
+	A.1:hover{TEXT-DECORATION:none;COLOR:#FFffff;FONT-WEIGHT:bold;FONT-STYLE:italic} 
+	/* css注释：只对table td标签设置红色边框样式 */ 
+	table{border-collapse:collapse;border:1px solid #66CCFF;width:800px;} 
+	table td{border:1px dotted #66CCFF;padding:5px;} 
+	#main{border:0px solid #66CCFF;width:80%;clear:both;}
+	.contain {width:100%;height:50px;border:0px solid #66CCFF;margin:1px 0px;padding:0px 0px; float:left}
+	.inner_contain { border-top:1px  dotted #66CCFF;margin:10px 0px;padding:5px 0px;} 
+	.lay1{ width:100%; height:450px; border:1px dotted #66CCFF; margin:1px 0px;padding:0px 0px;float:left} 
+	.nav_bottom{border-top:0px solid #66CCFF;margin:10px 10px;padding:5px 0px;text-align:center;}
+
+.css_btn_class {
+    font-size:14px;
+    font-family:Arial;
+    font-weight:normal;
+    -moz-border-radius:42px;
+    -webkit-border-radius:42px;
+    border-radius:42px;
+    border:1px solid #dcdcdc;
+    padding:6px 18px;
+    text-decoration:none;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(5%, #ededed), color-stop(100%, #dfdfdf) );
+    background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+    background:-ms-linear-gradient( top, #ededed 5%, #dfdfdf 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+    background-color:#ededed;
+    color:#777777;
+    display:inline-block;
+    text-shadow:1px 1px 0px #ffffff;
+    -webkit-box-shadow:inset 1px 1px 0px 0px #ffffff;
+    -moz-box-shadow:inset 1px 1px 0px 0px #ffffff;
+    box-shadow:inset 1px 1px 0px 0px #ffffff;
+}
+.css_btn_class:hover {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(5%, #dfdfdf), color-stop(100%, #ededed) );
+    background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+    background:-ms-linear-gradient( top, #dfdfdf 5%, #ededed 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+    background-color:#dfdfdf;
+}
+.css_btn_class:active {
+    position:relative;
+    top:1px;
+}
+
+
+	h2{text-align:center;}
+	h3{text-align:center;}
+
+
+
+ol.QuizQuestions{
+	text-align: left;
+	list-style-type: none;
+}
+
+li.QuizQuestion{
+	padding: 0.5em;
+	/*border-style: solid;*/
+	border-width: 0px 0px 1px 0px;
+	list-style-type: none;
+}
+	
+.FuncButton {
+	text-align: center;
+	border-style: solid;
+
+	border-left-color: #ddddf6;
+	border-top-color: #ddddf6;
+	border-right-color: #5d5d77;
+	border-bottom-color: #5d5d77;
+	color: #000000;
+	background-color: #bbbbee;
+
+	border-width: 2px;
+	padding: 3px 6px 3px 6px;
+	cursor: pointer;
+}
+
+.FuncButtonUp {
+	color: #bbbbee;
+	text-align: center;
+	border-style: solid;
+
+	border-left-color: #ddddf6;
+	border-top-color: #ddddf6;
+	border-right-color: #5d5d77;
+	border-bottom-color: #5d5d77;
+
+	background-color: #000000;
+	color: #bbbbee;
+	border-width: 2px;
+	padding: 3px 6px 3px 6px;
+	cursor: pointer;
+}
+
+.FuncButtonDown {
+	color: #bbbbee;
+	text-align: center;
+	border-style: solid;
+
+	border-left-color: #5d5d77;
+	border-top-color: #5d5d77;
+	border-right-color: #ddddf6;
+	border-bottom-color: #ddddf6;
+	background-color: #000000;
+	color: #bbbbee;
+
+	border-width: 2px;
+	padding: 3px 6px 3px 6px;
+	cursor: pointer;
+}
+
+    /*toast样式：宽高等在此处设置
+    js封装toast组件——常用工具函数
+	https://segmentfault.com/a/1190000018012740
+	设置DIV随滚动条滚动而滚动(margin:0px auto;position:fixed;top:50%;left:50%;)
+	https://www.cnblogs.com/Keteven/p/4354684.html
+    */
+    #toastWaka {
+        position: fixed;
+        display: none;
+        left: 50%;
+        top: 50%;
+        z-index: 99999;
+        margin: 0 auto;
+        -webkit-transform: translate(-50%);
+        transform: translate(-50%);
+        width: 90%;
+        height:auto;
+        #height:20%;
+		#height:80px;
+		#height:100%;
+        border-radius: 5px;
+        text-align: center;
+        color: #fff;
+        background-color: rgba(000,000,000,0.5);
+		#border:#00ffff solid 1px;
+		zoom:1;
+		overflow:hidden;
+		padding:10px;
+    }
+
+    #toastWaka .text{
+        color: #fff;
+        display: block;
+		height:auto;
+        #line-height: 80px;
+        vertical-align:middle;
+        font-size: 14px;
+        position: absolute;
+        top:0;
+        bottom:0;
+        right:0;
+        left:0;
+		#border:red solid 1px;
+		#background-color: rgba(000,000,000,0.5);
+
+    }
+	
+    </style>
+</head>
+<!--
+jquery代码下载https://www.jsdaima.com/jquery/
+http://code.jquery.com/jquery-latest.js
+-->
+<script type="text/javascript">
+</script>
+<script src="jquery-3.3.1.min.js"></script>
+<SCRIPT src="MultipleChoiceUtil.js"></SCRIPT>
+<SCRIPT src="Catelogue.js"></SCRIPT>
+<script type="text/javascript" src="toast.js"></script>
+
+<script src="eruda.js"></script>
+
+<script type="text/javascript">
+	/*
+	选择题和填空题测试页面
+
+	引用文件：
+	MultipleChoiceUtil.js
+	Catelogue.js
+	toast.js
+	text2speech.js
+	eruda.js
+	jquery-3.3.1.min.js
+
+
+
+	调用逻辑：
+	<body onload="TimerStartUp()">
+
+	TimerStartUp()
+		∟Init()
+		∟StartUp()
+				∟nextItem()
+						∟doNextItem()
+								∟checkMCAnswer(mode)
+								∟checkClozeAnswer(mode)
+	选择题点击选项前的问号按钮也会调用checkMCAnswer(mode)方法
+	F2-(supermode=5)进入轮播模式，填空题自动填入答案mock	ESC-退出轮播模式
+	F4-(supermode=6)自动核对模式和轮播模式（无滚屏）（F6快捷键进入ESC退出）；
+	F7-(supermode=7)自动核对和轮播模式(自动滚屏)（F7快捷键进入ESC退出）；
+	F8-向下滚动一屏幕，解决题目内容较多一屏显示不全的问题
+	F9-自动模式中不等倒计时（默认30秒）结束立即跳到下一题，填空填入答案mock，选择题自动模拟填入正确答案;轮播模式(先按F2)中F9才有效，测试模式中会提示此题未作答
+	注意：F1F3F5F6F10F11F12已经被chrome占用，联想等笔记本电脑要Fn键与功能键组合才有效
+
+		
+	Versions
+
+	v8.2 20250104
+	*增加判断此题项是否整体正确，包括有多个正确答案的情况，更新正确率界面，并自动跳转到下一题。参考：
+	CheckMCAnswer()方法:
+		if(quiz.groups[current].answer.length>=quiz.groups[current].key.length){//用户已经点击的选项数目大于等于正确答案的数目
+	*修改：item.answer改为字符串数组。由存储用户最后选择的项目索引（0-3,不是ABCD）改为将用户点击选项的文字添加到数组末尾，不考虑顺序。参考：MultipleChoiceUtil.js->getItems(str)
+	*增加function arraysEqual(arr1, arr2)自定义方法：判断两个数组是否相等，不考虑顺序。
+	
+
+	v8.1 20241227
+	*增加<span id="statisticArea">和<div id="caption">两个界面元素，显示当前题号、正确率等统计数据。用statisticArea标签代替indexer标签
+
+	v8.0 20241226
+	实现多个正确选项的多选题，支持多个正确答案，如Drinks{~egg# =juice# =milk# } Food{=egg# ~milk# =noodles# =apples# =chocolate# =pizza# =candies# }。参考：
+	CheckMCAnswer()方法:
+	if(quiz.groups[current].key.indexOf(quiz.groups[current].choices[ANum].choiceText)==-1){//wrong用户答案错误
+	GiftConverter.js->processMultipleChoiceItem(input) {
+
+
+	v7.0
+	key改为数组，可以有多个正确答案（用于classify题型和多个正确选项的多选题），第一个正确答案为key[0]
+
+
+
+		multiplechoiceplus-6.5 20221205 
+		*增加加减按钮实现调整字体大小
+
+		multiplechoiceplus-6.4 20221011
+		checkClozeAnswer()和CheckMCAnswer()方法增加返回值 0-正常；1-用户未作答。自动轮播模式中不拦截，未作答也可以跳转到下一题；自动轮播以外的模式中拦截，未作答不可以跳转到下一题。
+		multiplechoiceplus页面文件名统一为multiplechoiceplus.html，不再带版本数字，真实版本以此注释中的最新版本为准。带版本数字的为备份文件
+
+		multiplechoiceplus-6.3 20200426
+		*增加自动核对和轮播模式（无滚屏）F4快捷键进入ESC退出；参考：function doCountDown()和document.onkeydown=function(event)
+		
+		multiplechoiceplus-6.2 20200426
+		*增加自动轮播模式时倒计时显示
+		
+		multiplechoiceplus-6.1 20200425
+		*增加自动核对和轮播模式(自动滚屏，本页面滚动到底部才跳入下一题)，F7快捷键进入ESC退出；参考：function scrollToEnd(interval)
+		*增加按F8向下滚动一屏；参考：function scrollToNextScreen(speed)
+		
+		multiplechoiceplus-6.0 20200424
+		*增加 supermode: 1-admin;2-coordinator;3-debug;4-restore(用用户上次提交答案重建页面);5-自动轮播（F4快捷键进入ESC退出）；6-自动模式（F3快捷键自动跳到下一题，填入答案mock）；1000以内预留给管理员；1004-evaluation/review边做题边提示;1005-exercise提交后提示;1006-test无提示，只能提交，用于考试；参考：document.onkeydown=function(event)
+		*不删除domToastWaka节点，这样Toast.init()只需开始时调用一次;参考：toast.js
+
+		multiplechoiceplus-5.4
+		20200412击下一个按钮前未按提交按钮则默认跳转前检查（选择题不存在此情况）
+		multiplechoiceplus-5.3
+		*检查完成前一题才能跳到下一题
+		multiplechoiceplus-5.2
+		*填空题为空时无法提交
+		multiplechoiceplus-5.1
+		*增加选择题'复习'功能
+		multiplechoiceplus-5.0
+		*增加填空题'复习'功能
+	*/
+	
+	//web 调试神器 eruda网址//cdn.jsdelivr.net/npm/eruda
+	//Eruda是一款专为前端移动端设计的调试面板，具备捕获console日志、检查元素状态、显示性能指标等功能，类似于Chrome DevTools的迷你版。支持动态加载、URL链接控制等多种使用方式，适用于调试移动端网页。
+	eruda.init();
+	/*
+	本地js动态生成页面参考d:\LeanCloud\matchxx-2.0\quickpotato.match.target-example.html
+	*/
+	//var jsonString = '<?php echo json_encode($quiz);?>';//传递php中的数据给js
+	/*var quiz = JSON.parse(jsonString); //将json字符串转化为js中的json对象
+	//var quiz = json_parse(jsonString);//将json字符串转化为js中的json对象
+	//vartquiz = jsonString.parseJSON(); //将json字符串转化为js中的json对象
+	var target=quiz.groups[current].target;
+	*/
+	var quiz=null;
+	var current=-1;//当前题目下标，从-1开始
+	var count=-1;
+	var correctCount=0;
+	var countRate=0.0;//正确率
+	var kid=10001;
+	
+	//先必须通过SCRIPT标签引入MultipleChoiceUtil.js
+	var multipleChoiceUtil=new MultipleChoiceUtil('MultipleChoiceUtil');
+	//先必须通过SCRIPT标签引入Catelogue.js
+	var catelogueUtil=new Catelogue('Catelogue');
+	
+	var CorrectIndicator = '&nbsp;&nbsp;:)&nbsp;&nbsp;';//'√';
+	var IncorrectIndicator = '&nbsp;&nbsp;X&nbsp;&nbsp;';
+	var Feedback='';
+	/*
+	20200421 supermode: 1-admin;2-coordinator;3-debug;4-restore(用用户上次提交答案重建页面);5-自动轮播（F4快捷键进入ESC退出）；6-自动模式（F3快捷键自动跳到下一题，填入答案mock）；1000以内预留给管理员；1004-evaluation/review边做题边提示;1005-exercise提交后提示;1006-test无提示，只能提交，用于考试；
+	*/
+	var supermode = 1004;//supermode从mtml.js传来，区别于mode
+	var  intervalId=null;
+	var  intervalId2=null;
+	//倒计时
+	var countDownInt=31;//倒计时秒数
+	var countDownId=3;
+	var  intervalId3=null;
+	var  intervalId4=null;
+	var  intervalId5=null;
+	
+	var scrollState=0;//滚动状态：0-未完成；1-完成；未完成时拒绝跳到下一题；
+	var currentScrollTop=0;
+	
+	
+	
+	/*
+	android与JS交互,互相调用方法,跳转到网页
+	原文链接：https://blog.csdn.net/thw_m/article/details/78583922
+	
+	//这个方式是被java调用的
+	function androidCallJs(){
+		 alert("android界面按钮启动：java调用js弹窗(AddJavascriptInterface)");
+	}*/
+        	
+	/*
+	matchxx 20181113 cemike@126.com
+	js 将json字符串转换为json对象的方法解析：
+	https://www.cnblogs.com/guoziyi/p/6003752.html
+	*/
+	function Init(){
+		//console.log("Init");
+		Toast.init();
+		//multipleChoiceUtil.speak();
+		//JSON字符串:
+		//var str = '[{ "stem": "1. There are plans to split the corporation into a number of smaller ____ (adj.) companies.", "answer": "independent" },{ "stem": "2. The house was surrounded by trees and ____ (adj.) from the road.", "answer": "invisible" },{ "stem": "3. Without the right date stamped on it, your ticket will be ____ (adj.).", "answer": "invalid" }]';
+		//multiplechoice 
+		//var str2 = '[{"id":1, "kid":1, "content": "1.The question is {~if# ~what# =whether#考察whether引导的表语从句 ~how#h} the film is worth seeing. "},{"id":2, "kid":1, "content": "5. {~That# =Whether#考察whether引导的主语从句 ~If# ~Even if#} his dream of going to college will come true is uncertain."}]';
+		//cloze
+		//var str2 = '[{"id":1,"kid":10007,"point":1, "content": "Nowadays {=the#互联网the Intenet是万维网www的特殊实例（目前世界唯一）要用定冠词}Intenet is becoming increasingly popular and a new high speed broadband network has recently started. "},{"id":2,"kid":10007,"point":1,  "content": "While {=the#此处music是特指后面the TV play的音乐，用定冠词；不同于listen to music泛指听音乐；} music is just so-so, the story in this TV play is quite moving. "}]';
+		
+		//var str2 = '[{"id":1,"kid":10007,"point":1, "content": "Nowadays {=the#互联网the Intenet是万维网www的特殊实例（目前世界唯一）要用定冠词}Intenet is becoming increasingly popular and a new high speed broadband network has recently started. "},{"id":2,"kid":10007,"point":1,  "content": "While {=the#此处music是特指后面the TV play的音乐，用定冠词；不同于listen to music泛指听音乐；} music is just so-so, the story in this TV play is quite moving. "},{"id":3, "kid":1, "content": "5. {~That# =Whether#考察whether引导的主语从句 ~If# ~Even if#} his dream of going to college will come true is uncertain."}]';
+	/*
+    用户在编辑器编辑时用=#包围答案以保证与其他平台的一致性；
+    因为作为url参数?param=value方式传递，而js时通过=判断解析参数；因此传递时=#分别替换为@$，见org.cj.myoral.Fragment.Fragment3#getEditorText;
+    但在解析完成后最终还是转换回=#，见QuickPotato.Android\app\src\main\assets\quickpotato.clozexa.template.js#function Init()；
+	注意：getParam(paramName)是自定义函数，用于获取指定的URL参数值 
+     */
+	 var items = getParam('items');//注意：getParam(paramName)是自定义函数，用于获取指定的URL参数值 
+	 if(items!=null)
+		 items =items.replace(/@/gi,'=').replace(/\$/gi,'#');
+	 else
+		 items ='[{"id":1,"kid":10007,"point":1, "content": "1. Nowadays {=the#互联网the Intenet是万维网www的特殊实例（目前世界唯一）要用定冠词}Intenet is becoming increasingly popular and a new high speed broadband network has recently started. "},{"id":2,"kid":10007,"point":1,  "content": "2. While {=the#此处music是特指后面the TV play的音乐，用定冠词；不同于listen to music泛指听音乐；} music is just so-so, the story in this TV play is quite moving. "},{"id":3, "kid":10101, "content": "3. {~That# =Whether#考察whether引导的主语从句 ~If# ~Even if#} his dream of going to college will come true is uncertain."}]';
+	//document.getElementById('Instructions').innerHTML=items;
+		
+		//JSON对象
+		quiz = eval('{groups: [];answers:[]}');
+		//var jsonObj= eval('(' + str2 + ')');
+		//var jsonObj= JSON.parse(str2);
+		//var jsonObj= eval('(' + str + ')');
+		quiz.groups=multipleChoiceUtil.getItems(items);//将GIFT格式字符串解析为JSON对象
+		/*
+		每个题目(Item/quiz.groups[i])包含以下 属性：
+		id			int		唯一标识
+		kid		int		题目考点对应的KnowledgeID，如'冠词'
+		type		int		1-cloze;2-multiplechoice
+		stem		String	题干(要填的空替换为下划线)
+		key		String	答案(选择题答案也是选项的文本而不是ABCD)
+		generalExplanation		String	整个题的解析（填空题等同于答案的解析）
+		choices Array	包括一个（单选题的空）或多个元素（多选题的选项），每个元素为一个json对象，
+		包括以下属性{'answer':answer,'explanation':explanation}
+		具体如下：
+		answer	String	（填空题）用户输入的文字；（选择题）用户最后选择的项目索引（0-3,不是ABCD）
+		explanation		String	（选择题）备选项对应显示给学习者的解析
+		status				int		状态（用于统计错题等）：0-初始化；1-显示；2-答题正确；3-答题错误；4-查看解析；5-复习；//20200417
+			
+		*/
+		console.log('quiz.groups', quiz.groups);
+	}
+
+	/** 
+	 * 获取指定的URL参数值 
+	 * URL:http://www.quwan.com/index?name=tyler 
+	 * 参数：paramName URL参数 
+	 * 调用方法:getParam("name") 
+	 * 返回值:
+	 * 注意：用unescape()解码会导致中文乱码，用decodeURI()解码就能保证中文不出现乱码
+	JS中encodeURI()、decodeURI()、encodeURIComponent()和decodeURIComponent()编码与解码
+	https://www.cnblogs.com/ylxmt/p/10234210.html
+	 *
+	 */ 
+	function getParam(paramName) { 
+		paramValue = "", isFound = !1; 
+		if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+			//用unescape()解码会导致中文乱码，用decodeURI()解码就能保证中文不出现乱码
+			arrSource = decodeURIComponent(this.location.search).substring(1, this.location.search.length).split("&"), i = 0; 
+			while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++ 
+		} 
+		return paramValue == "" && (paramValue = null), paramValue 
+	}
+	
+	/*function sleep (time) {
+	  return new Promise((resolve) => setTimeout(resolve, time));
+	}*/
+	
+	/*
+	原文链接：https://blog.csdn.net/hj850126/java/article/details/19112795  
+	*/
+	function sleep(n) { //n表示的毫秒数
+            var start = new Date().getTime();
+            while (true) if (new Date().getTime() - start > n) break;
+    }  
+	/*
+	
+	*/
+	function TimerStartUp(){
+		Init();
+		setTimeout('StartUp()', 300);
+	}
+
+	function StartUp(){
+		nextItem();
+	}
+
+	/*
+	主要处理轮播模式，处理新题项界面代码参考doNextItem()方法。 
+	Type: 1-Cloze（填空题）；2-MultipleChoice（选择题）；3-Match（匹配题）；4-Spell（逐字母拼写）；5-Sort（排序题）；6-Classify（分类题）	
+	*/
+	function nextItem(){
+		if(current>=0){//20200305 current当前题目下标，从-1开始。除初始化第一题外，都要检查完成前一题才能跳到下一题
+			/*if( scrollState==0){
+				console.log("Scrolling not finished yet, scrollState",scrollState);
+				return;
+			}*/
+			
+			if(quiz.groups[current].type==1){//1-cloze;
+				/*
+				answer=document.getElementById("gap1").value.trim();
+				//Toast.init();
+				//console.log("supermode",supermode);
+				//if(supermode !=5)
+				if(typeof(answer)   ==   "undefined" || answer.length<1){//
+					Toast.show('你还未回答此题。', 'success', 10000);
+					setTimeout(function () {
+						Toast.hide();
+					}, 3000);
+					return;
+				}else{}*/
+					//JSON判断是否存在某键或字段的方法hasOwnProperty()https://blog.csdn.net/hotlinhao/article/details/78830733
+					//不能用=="undefined"这种方法判断if(quiz.groups[current].answer=="undefined")
+					//20200412击下一个按钮前未按提交按钮则默认跳转前检查（选择题不存在此情况）
+					if(!quiz.groups[current].hasOwnProperty("answer")){
+						//console.log("auto check while hitting next button");
+						var res=checkClozeAnswer(1);//跳转前检查，20221011增加返回值 0-正常；1-用户未作答
+						if(res==1){//
+							if(supermode==5 || supermode==6){//自动轮播模式中不拦截，未作答也可以跳转到下一题
+								//什么也不做
+							}else{//自动轮播以外的模式中拦截，未作答不可以跳转到下一题
+								return;
+							}
+						}
+					}
+				
+					
+			}else{//2-multiplechoice
+				/*answer=quiz.groups[current].answer;
+				//Toast.init();
+				if   (typeof(answer)   ==   "undefined" || answer.length<1){
+					Toast.show('你还未回答此题。', 'success', 10000);
+					setTimeout(function () {
+						Toast.hide();
+					}, 3000);
+					return;
+				}else{
+					//
+				}*/
+				if(!quiz.groups[current].hasOwnProperty("answer")){
+					//console.log("auto check while hitting next button");
+					var res=CheckMCAnswer(0,0,null,1);//跳转前检查，20221011增加返回值 0-正常；1-用户未作答
+					if(res==1){//
+						if(supermode==5 || supermode==6 || supermode==7){//自动轮播模式中不拦截，未作答也可以跳转到下一题
+							//什么也不做
+						}else{//自动轮播以外的模式中拦截，未作答不可以跳转到下一题
+							return;
+						}
+					}
+				}
+				
+			}
+			console.log('supermode', supermode);
+			
+			//20221013
+			//window.clearInterval(intervalId3);
+			//window.clearInterval(intervalId4);
+
+			if(supermode==5) {//
+				countDownInt=31;
+				countDownId=4;
+				//setTimeout('intervalId4 = window.setInterval(doCountDown(), 1000);', 30000)
+				intervalId4 = window.setInterval(doCountDown(), 1000);
+				doNextItem();
+			}else if(supermode==6) {//
+				countDownInt=31;
+				countDownId=4;
+				//setTimeout('intervalId4 = window.setInterval(doCountDown(), 1000);', 30000)
+				intervalId4 = window.setInterval(doCountDown(), 1000);
+				setTimeout('doNextItem();', 30000);
+				
+			}else if(supermode==7) {//20200425
+				///////////////////////////////////////////////////////////////////////////////////////
+				//自动核对和轮播模式中核对并停留足够时间后才开始新一轮的下一题和滚屏
+				//第一个30000，每隔30秒向下滚动一屏，滚到页面底部
+				//第二个30000，30秒后开始第一次滚动
+				//最后一个60000，自动核对和轮播模式中检查后停留60秒才跳入下一题
+				//此setTimeout(scrollToEnd(60000)调用应该与if(e && e.keyCode==118)内的调用保持一致
+				//显示倒计时 countdown
+				countDownInt=31;
+				countDownId=4;
+				setTimeout('doNextItem();setTimeout(scrollToEnd(30000),30000);intervalId4 = window.setInterval(doCountDown(), 1000);', 30000);
+				
+			}else{
+				doNextItem();
+			}
+
+		}else{// current<0 第一题，不检查对错，直接渲染页面
+			doNextItem();
+		}
+	}//nextItem()
+		
+		
+
+	/*
+	处理新题项界面代码
+	Type: 1-Cloze（填空题）；2-MultipleChoice（选择题）；3-Match（匹配题）；4-Spell（逐字母拼写）；5-Sort（排序题）；6-Classify（分类题）	
+	*/
+	function doNextItem(){
+		document.getElementById('stem').title='提交查看解析';
+		
+		len=quiz.groups.length;
+		++current;
+		++count;
+		current=current%len;
+		kid=quiz.groups[current].kid;
+		if(kid==null)kid=10000;//20241227 kid==null,console打印时显示undefined
+		
+		//20241227 用statisticArea标签代替indexer标签
+		//document.getElementById('indexer').innerHTML=(current+1)+'/'+len;//20200304
+		document.getElementById("statisticArea").innerHTML="Current "+(current+1)+" | Total "+quiz.groups.length+" | Correct "+" | Wrong "+" | Rate " + "%";
+		
+		var entry=catelogueUtil.getNodeLabel(kid);
+		if(entry==null)entry="通用";
+		if(quiz.groups[current].type==1){//1-cloze;
+			//console.log('stem',quiz.groups[current].stem)
+			document.getElementById("button1").style.display="inline-block";
+			document.getElementById("top").innerHTML=' 填空题 | '+kid+' | '+entry+" | <a href='js://webview?act=2&kid="+kid+"'>举一反三</a>"+" | <a href='kid2.html' target='_blank'>目录</a>&nbsp;&nbsp; | <a href='sql-editor.html'>Customize</a>&nbsp;&nbsp;";
+			
+			var stemComplex=quiz.groups[current].stem;
+			
+			var af='&nbsp;<span id="answer" class="answer"><input type="text" autofocus="autofocus" class="GapBox" id="gap1" name="gap1" size="'+(quiz.groups[current].key[0].length+2)+'"  style ="font-size:26px;" ></input></span><span id="mark" class="mark"></span>&nbsp;';
+			stemComplex=stemComplex.replace(/_+/g,af);
+			
+			document.getElementById("stem").innerHTML=stemComplex;
+			
+			//页面渲染完成后，延时让输入框获取焦点；单纯autofocus="autofocus"不够
+			setTimeout("$('#gap1').focus()",500);
+			
+			/*
+			document.getElementById("stem").innerHTML=quiz.groups[current].stem;
+			var af='<input type="text" class="GapBox" id="gap1" ></input>';
+			document.getElementById("answer").innerHTML=af;
+			*/
+		}else{//2-multiplechoice
+			document.getElementById("button1").style.display="none";
+			document.getElementById("top").innerHTML=' 选择题 | '+kid+' | '+entry+" | <a href='js://webview?act=2&kid="+kid+"'>举一反三</a>"+" | <a href='kid2.html' target='_blank'>目录</a>&nbsp; | &nbsp;<a href='sql-editor.html'>Customize</a>&nbsp;&nbsp;";
+			var af='';
+			//current=Math.abs(--current)%len;
+			//console.log('stem',quiz.groups[current].stem)
+			var stemComplex=quiz.groups[current].stem+'<br/><br/>';
+			
+			var j=0;
+			for(var k=0;k<quiz.groups[current].choices.length;k++){
+				//20200225增加ABCD选项字母
+				//65对应A，其他以此类推。js char ascill 转换 https://www.jianshu.com/p/2b207b6cc46a
+				var letter=String.fromCharCode(65+j++);
+				//（选择题）备选项，用户选择的项目文本（不是ABCD），参考MultipleChoiceUtil.js其中方法getItems(str)
+				var choice=quiz.groups[current].choices[k].choiceText; //20241206 answer改为choiceText 参考MultipleChoiceUtil.js->processBlank(input)方法
+				af+='<li id="Q_0_0" class="QuizQuestion"><button class="FuncButton"  onfocus="FuncBtnOver(this)"  onblur="FuncBtnOut(this)"  onmouseover="FuncBtnOver(this)"  onmouseout="FuncBtnOut(this)"  onmousedown="FuncBtnDown(this)"  onmouseup="FuncBtnOut(this)"  id="Q_0_'+k+'_Btn"  onclick="CheckMCAnswer(0,'+k+',this, 1)">&nbsp;&nbsp;?&nbsp;&nbsp;</button>&nbsp;&nbsp;'+letter+'. '+choice+'</li>';
+			}
+			stemComplex+=af;
+			//document.getElementById("answer").innerHTML=af;
+			document.getElementById("stem").innerHTML=stemComplex;
+		}//2-multiplechoice
+			
+		showHint(0);//hide hint of last item
+		//target=quiz.groups[current].target;
+		if(count>=len-1){
+			document.getElementById("button3").innerHTML='复习';
+		}
+			
+		if(count>=len){//本组题完成，下一个按钮不可用，复习按钮可用
+			document.getElementById("button3").innerHTML='复习下一题';
+			//document.getElementById("button3").style.display="none";
+			//document.getElementById("button4").style.display="inline-block";
+			
+			//document.getElementById("button3").setAttribute("disabled", true);
+			//document.getElementById("button4").removeAttribute("disabled");
+			//review
+			//console.log("review", 'count', count, 'current', current);
+			
+			//Toast.init();
+		
+			if(quiz.groups[current].type==1){//1-cloze;
+				if(typeof(quiz.groups[current].answer)   ==   "undefined"){
+					/*Toast.show('你还未回答此题。', 'success', 10000);
+					setTimeout(function () {
+						Toast.hide();
+					}, 3000);*/
+				}else{
+				checkClozeAnswer(2);//mode：2-复习模式
+				}
+			}else{//2-multiplechoice
+				//if(typeof(quiz.groups[current].answer)   ==   "undefined"){
+				//20250104 groups[current].answer 改为字符串数组，存储选项的文字。
+				if(quiz.groups[current].answer.length<1){
+					/*Toast.show('你还未回答此题。', 'success', 10000);
+					setTimeout(function () {
+						Toast.hide();
+					}, 3000);*/
+				}else{
+				CheckMCAnswer(0,0,null,2);//mode：2-复习模式
+				showHint(1);
+				
+				}
+			}	
+		}//if(count>=len)
+		
+	}//doNextItem()
+
+
+	/*
+	检查填空题答案
+	20200225增加参数mode：1-测试模式；2-复习模式（提取用户之前输入的答案并显示检查结果）；
+	20221011增加返回值 0-正常；1-用户未作答
+
+	*/
+	function checkClozeAnswer(mode){//
+		var answer='';
+		
+		if(mode==2) {//复习模式
+			answer=quiz.groups[current].answer;
+			//复习模式，自动填上之前用户输入的答案
+			document.getElementById("gap1").value=answer;
+
+		}else if(mode==1){//测试模式
+			answer=document.getElementById("gap1").value.trim();
+			//自动轮播模式中模拟填入答案
+			if(supermode==5||supermode==6||supermode==7) {//20200424
+				answer='mock';
+				//console.log('mock answer',current,quiz.groups[current].answer);
+			}
+			//console.log("AnswerLen", answer.length, 'typeof(answer)', typeof(answer));
+			
+			//Toast.init();
+			if(typeof(answer)   ==   "undefined" || answer.length<1){//填空题为空时无法提交
+				Toast.show('你还未回答此题。', 'success', 10000);
+				setTimeout(function () {
+					Toast.hide();
+				}, 3000);
+				return 1;//返回值 0-正常；1-用户未作答
+			}/**/
+			quiz.groups[current].answer=answer;//20200225记录用户输入的答案：(Cloze填空题）是文字；MultipleChoice（选择题）是选择的项目索引（0-3,不是ABCD）；用于检查正确错误和复习
+			//return;
+		}
+		
+		console.log("checkClozeAnswer", answer, 'mode', mode, 'supermode', supermode);
+		
+		var msg="That's a nice try!";//新版取消
+		if(answer !=quiz.groups[current].key[0]){//wrong
+			msg="Please try again!";
+			var  key=quiz.groups[current].key[0];
+			document.getElementById('mark').innerHTML="&nbsp;<span nowrap style=\"color:red;font-size:20px;font-weight:bold;\">χ</span>&nbsp;<span  style=\"text-decoration:underline\">"+key+"</span><span nowrap style=\"color:green;font-size:20px;font-weight:bold;\">√</span>";
+			//document.getElementById('mark').innerHTML="χ";
+			//document.getElementById('mark').style="color:red;font-size:20px;font-weight:bold;";
+
+		}else{//right
+			msg="Good. You are right!";
+			document.getElementById('mark').innerHTML="<span nowrap style=\"color:green;font-size:20px;font-weight:bold;display:inline\">√</span>"
+		}//
+		
+		//cemike@126.com 20180815
+		var x=document.getElementById('stem');
+		//alert(x.firstChild.innerHTML);
+		Feedback = quiz.groups[current].generalExplanation;
+		x.title=Feedback;//选对选项时为正确答案的解析
+		/*setTimeout(function () {//几秒后清除上一题工具提示
+			document.getElementById('stem').title='提交查看解析';
+		}, 5000);*/
+		document.getElementById('caption3').style.display='block';
+		document.getElementById('hint3').innerHTML=Feedback;
+		//document.getElementById('hint2').innerHTML=quiz.groups[current].key[0];	
+		
+		//document.getElementById('feedback').innerHTML=msg;//新版取消
+		//readAloud(msg);
+		return 0; //返回值 0-正常；1-用户未作答
+	}
+	/*
+	判断两个数组是否相等，不考虑顺序，可以先将数组排序，然后比较排序后的结果。
+
+	*/
+	function arraysEqual(arr1, arr2) {
+
+		var rst=true;
+		// 对数组进行排序
+		const sortedA = arr1.slice().sort();
+		const sortedB = arr2.slice().sort();
+		// 比较排序后的数组
+		//return JSON.stringify(sortedA) === JSON.stringify(sortedB);
+		if(arr1.length === arr2.length){
+			// 一一比较元素值，有一个不相等就不等
+			for (let i = 0; i < sortedA.length; i++) {
+				if (sortedA[i] !== sortedB[i]) {
+					rst=false
+				}
+			}
+		}else{
+			rst=false;
+		}
+		return rst;
+	}
+	
+	/*
+	检查多选题答案
+	20241226 目前还没有加入计算正确率的代码。
+	参数：QNum问题索引, ANum用户最后选择的项目索引（0-3,不是ABCD，复习模式中可忽略）, 
+	Btn用户最后选择的选项前的按钮
+	20200225增加参数mode：1-测试模式；2-复习模式（提取用户之前输入的答案并显示检查结果）
+	复习模式中QNum, ANum, Btn忽略，调用方法：CheckMCAnswer(0,0,null,2);
+	20221011增加返回值 0-正常；1-用户未作答
+	//20250104 groups[current].answer 改为字符串数组，存储选项的文字。
+	if(quiz.groups[current].answer.length<1){
+	*/
+	function CheckMCAnswer(QNum, ANum, Btn, mode){
+		//var answer='';//20250104弃用此变量
+		if(mode==1){//测试模式
+			//自动轮播模式中模拟填入正确答案，否则无法显示解析
+			if(supermode==5||supermode==6||supermode==7) {//20200424
+				ANum=0;//
+				//自动轮播模式中找出正确答案的索引（0-3)模拟填入正确答案
+				for(var k=0;k<quiz.groups[current].choices.length;k++){
+					if (quiz.groups[current].choices[k].choiceText ==quiz.groups[current].key[0]){
+						ANum=k;
+						break;
+					}
+				}
+				//console.log('mock answer',current,quiz.groups[current].answer);
+				Btn=document.getElementById("Q_0_"+ANum+"_Btn");
+			}
+			//20250104 groups[current].answer 改为字符串数组，存储选项的文字。
+			quiz.groups[current].answer.push(quiz.groups[current].choices[ANum].choiceText);//非自动轮播模式中直接把用户输入答案赋值给quiz.groups[current].answer用于下面检测是否正确
+			//20200225记录用户输入的答案(选择题answer字段0-3；填空题答案为用户输入的字符串)，用于复习
+			//quiz.groups[current].answer=ANum;//非自动轮播模式中直接把用户输入答案赋值给quiz.groups[current].answer用于下面检测是否正确
+
+		}else{//复习模式 20250104重写 
+			for(var k=0;k<quiz.groups[current].choices.length;k++){
+				if (quiz.groups[current].key.indexOf(quiz.groups[current].choices[ANum].choiceText)>-1){
+					document.getElementById("Q_0_"+k+"_Btn").innerHTML = CorrectIndicator;;
+				}
+			}
+			Btn=document.getElementById("Q_0_"+ANum+"_Btn");
+			
+			/*
+			ANum=quiz.groups[current].answer;
+			Btn=document.getElementById("Q_0_"+ANum+"_Btn");
+			
+			//20221001复习模式中找出正确答案的索引（0-3)以显示正确选项的笑脸
+			idx=0;//
+			for(var k=0;k<quiz.groups[current].choices.length;k++){
+				if (quiz.groups[current].choices[k].answer ==quiz.groups[current].key[0]){
+					idx=k;
+					break;
+				}
+			}
+			//console.log('mock answer',current,quiz.groups[current].answer);
+			BtnCorrect=document.getElementById("Q_0_"+idx+"_Btn");
+			BtnCorrect.innerHTML = CorrectIndicator;
+			*/
+
+		}
+		//answer=ANum;
+		//console.log('answer=', answer)
+		//Toast.init();
+		//console.log('mode', mode, 'supermode', supermode);
+		//20221001增加Btn==null判断：如果用户未点击任何选项前的按钮无法进入下一题
+		//if (typeof(answer) == "undefined" || Btn==null || answer.length<1){
+		//20250104 改为用quiz.groups[current].answer.length<1判断用户未回答此题
+		if(quiz.groups[current].answer.length<1){//Btn==null ||  
+			Toast.show('你还未回答此题。', 'success', 10000);
+			setTimeout(function () {
+				Toast.hide();
+			}, 3000);
+			return 1;//返回值 0-正常；1-用户未作答
+		}
+
+		//判断此题项是否整体正确，包括有多个正确答案的情况
+		if(quiz.groups[current].answer.length>=quiz.groups[current].key.length){//用户已经点击的选项数目大于等于正确答案的数目
+			var rst=arraysEqual(quiz.groups[current].key, quiz.groups[current].answer);
+			if(rst){//arraysEqual(arr1, arr2)为自定义方法，参考multiplechoiceplus.html
+				quiz.groups[current].status=3;//status	int	状态（用于统计错题等）：0-初始化；1-显示；2-答题过程中（部分正确）；3-答题正确；4-答题错误；5-查看解析；6-复习
+			}else{//arraysEqual(arr1, arr2)为自定义方法
+				quiz.groups[current].status=4;//
+			}
+			console.log('CheckMCAnswer() ANum', ANum,' 是否整体正确:',rst,' quiz.groups['+current+'].status=',quiz.groups[current].status);
+			var wrongCount=0;
+			for(var k=0;k<quiz.groups.length;k++){
+				if (quiz.groups[k].status==4){
+					++wrongCount;
+				}
+			}
+			var totalCount=quiz.groups.length;//-wrongCount;
+			correctCount=totalCount-wrongCount;//因错误单词被附加在列表末尾，所以错词要减2次
+			countRate=parseFloat(correctCount/totalCount*100);
+			var rate2= countRate.toFixed(2);//四舍五入，保留两位小数
+			document.getElementById("statisticArea").innerHTML="Current "+(current+1)+" | Total "+totalCount+" | Correct "+correctCount+" | Wrong "+wrongCount+" | Rate "+rate2 + "%";
+
+			setTimeout("nextItem()",3000);
+
+		}
+		
+		console.log('CheckMCAnswer() ANum', ANum)
+		if(quiz.groups[current].choices[ANum])
+			console.log('CheckMCAnswer() quiz.groups[current].choices[ANum].choiceText', quiz.groups[current].choices[ANum].choiceText);
+		//console.log('CheckMCAnswer',quiz.groups[current].choices[ANum].choiceText+'<->'+ quiz.groups[current].key[0])
+		//if (quiz.groups[current].choices[ANum].choiceText !=quiz.groups[current].key[0]){//wrong用户答案错误
+		//20241225 兼容有多个正确答案
+		//判断用户当前点击的单个选项是否正确，包括有多个正确答案的情况
+		if(quiz.groups[current].key.indexOf(quiz.groups[current].choices[ANum].choiceText)==-1){//wrong用户答案错误
+			//Mark the answer
+			Btn.innerHTML = IncorrectIndicator;
+
+		} else {//right用户答案正确
+			//Mark the answer
+			Btn.innerHTML = CorrectIndicator;
+					
+			//Calculate the score for this question
+			//CalculateMCQuestionScore(QNum);
+
+			//cemike@126.com 20180815
+			var x=document.getElementById('stem');
+			//alert(x.firstChild.innerHTML);
+			Feedback = quiz.groups[current].generalExplanation;
+			x.title=Feedback;//选对选项时为正确答案的解析
+			document.getElementById('caption3').style.display='block';
+			document.getElementById('hint3').innerHTML=Feedback;
+			//document.getElementById('hint2').innerHTML=quiz.groups[current].key[0];
+
+		}
+		return 0;//返回值 0-正常；1-用户未作答
+	}
+	
+	//@deprecated改为放入nextItem()
+	function review(){
+		console.log("review", current);
+		nextItem();
+		if(quiz.groups[current].type==1){//1-cloze;
+			checkClozeAnswer(2);
+		}else{//2-multiplechoice
+
+
+		}		
+		/*len=quiz.groups.length;
+		if(type==1)
+			current=++current%len;
+		else
+			current=Math.abs(--current)%len;
+		
+		target=quiz.groups[current].target;
+		document.getElementById("stem").innerHTML='['+(current+1)+'/'+len+']'+quiz.groups[current].wds[target].entry;
+		for(var k=0;k<len;k++){
+			if(k==current)
+				document.getElementById("group"+k).style="display:block";
+			else
+				document.getElementById("group"+k).style="display:none";
+		}*/
+	}
+
+	function FuncBtnOver(Btn){
+		if (Btn.className != 'FuncButtonDown'){Btn.className = 'FuncButtonUp';}
+	}
+
+	function FuncBtnOut(Btn){
+		Btn.className = 'FuncButton';
+	}
+
+	function FuncBtnDown(Btn){
+		Btn.className = 'FuncButtonDown';
+	}
+
+	//百度文字转语音免费接口使用实例
+	//https://blog.csdn.net/ztblog/article/details/52209308
+	//百度语音合成接口
+	//http://yuyin.baidu.com/docs/tts/136
+	function readAloud(val){
+		//var val=document.getElementById("val").value;
+		var zhText = val;
+		zhText = encodeURI(zhText);
+		document.getElementById("player").innerHTML="<audio autoplay=\"autoplay\">"+
+			"<source src=\"http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&per=4&text="+ zhText +"\" type=\"audio/mpeg\">"+
+			"<embed height=\"0\" width=\"0\" src=\"http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&per=4&text="+ zhText +"\">"+
+			"</audio>";
+	}
+
+	/*mode: 1-show;0-hide*/
+    function showHint(mode) {
+		//console.log('showHint',mode, Feedback)
+        Feedback = quiz.groups[current].generalExplanation;
+		if(mode==1){
+			document.getElementById('caption3').style.display='block';
+			document.getElementById('hint3').innerHTML=Feedback;
+		}else {
+			document.getElementById('caption3').style.display='none';
+			document.getElementById('hint3').innerHTML='';
+		}
+    }
+	/*
+	20221016
+	将具体操作代码移植到doAutoMode()方法，便于在此处和菜单showMenu()方法中都便于调用
+
+
+	20200424
+	实现自动轮播模式(默认每题展示60秒)：
+	增加全局参数supermode；supermode =5;//轮播 1004-evaluation/review边做题边提示;1005-exercise提交后提示;supermode=1006;//非轮播
+	F2-(supermode=5)进入轮播模式，填空题自动填入答案mock	ESC-退出轮播模式
+	F4-(supermode=6)自动模式核对和轮播模式（无滚屏）（F6快捷键进入ESC退出）；
+	F7-(supermode=7)自动核对和轮播模式(自动滚屏)（F7快捷键进入ESC退出）；
+	F8-向下滚动一屏幕，解决题目内容较多一屏显示不全的问题
+	F9-自动模式中不等倒计时（默认30秒）结束立即跳到下一题，填空填入答案mock，选择题自动模拟填入正确答案;自动模式(先按F2F4F7)中F9才有效，测试模式中会提示此题未作答
+	注意：F1F3F5F6F10F11F12已经被chrome占用，联想等笔记本电脑要Fn键与功能键组合才有效
+
+	JS实现键盘监听(包括组合键)
+	https://www.cnblogs.com/telwanggs/p/9609699.html
+	control键：e.ctrlKey，shift键：e.shiftKey，alt键：e.altKey
+	参考https://blog.csdn.net/m0_65580904/article/details/126020376
+	
+	setTimeout()和setInterval()的区别
+	https://blog.csdn.net/KysonLai/article/details/79965660
+
+	*/
+	document.onkeydown=function(event){
+		var e = event || window.event || arguments.callee.caller.arguments[0];
+		//if(e.ctrlKey)
+		if(e && e.keyCode==27){ // 按 Esc
+			doAutoMode(27);
+		}
+		if(e && e.keyCode==113){ // 按 F2进入轮播模式,ESC退出
+			doAutoMode(113);
+
+		}
+
+		if(e && e.keyCode==115){ // 按F4(supermode=6)进入自动模式核对和轮播模式（无滚屏）,ESC退出；
+			doAutoMode(115);
+		}
+		if(e && e.keyCode==118){// 按F7自动核对和轮播模式(自动滚屏)
+			doAutoMode(118);
+
+		}
+		if(e && e.keyCode==119){ //按F8向下滚动一屏
+			doAutoMode(119);
+		}
+		if(e && e.keyCode==120){ //按F9下一题
+			doAutoMode(120);
+		}
+		
+		
+		if(e && e.keyCode==13){ // enter 键
+			//要做的事情
+			alert("按 Enter");
+		}
+		//control键：e.ctrlKey，shift键：e.shiftKey，alt键：e.altKey参考https://blog.csdn.net/m0_65580904/article/details/126020376
+		if (e.keyCode == 86 && e.ctrlKey) {
+			alert("你按下了ctrl+V");
+		}
+
+
+
+		/*
+		if(e && e.keyCode==27){ // 按 Esc
+			//Toast.init();
+			Toast.show('退出轮播模式。', 'success', 1000);
+			setTimeout(function () {
+				Toast.hide();
+			}, 3000);
+		
+			supermode=1006;//非轮播 
+			//console.log("supermode",supermode);
+			window.clearInterval(intervalId);
+			window.clearInterval(intervalId2);
+			document.getElementById('countdown').innerHTML='';
+			window.clearInterval(intervalId3);
+			window.clearInterval(intervalId4);
+		}
+		if(e && e.keyCode==113){ // 按 F2进入轮播模式,ESC退出
+			//Toast.init();
+			Toast.show('进入轮播模式。', 'success', 1000);
+			setTimeout(function () {
+				Toast.hide();
+			}, 3000);
+		
+			supermode =5;//轮播
+			//每隔30秒执行一次方法；默认每题展示60秒
+			intervalId = window.setInterval("nextItem()",30000);
+
+			countDownInt=31;
+			countDownId=3;
+			//doCountDown与nextItem方法分别执行，doCountDown每秒执行一次，共执行30次；
+			//nextItem30秒后执行，效果就是倒计时30秒后跳转到下一题
+			intervalId3 = window.setInterval("doCountDown()", 1000);
+
+		}
+
+		if(e && e.keyCode==115){ // 按F4(supermode=6)进入自动模式核对和轮播模式（无滚屏）,ESC退出；
+			Toast.show('进入轮播模式。', 'success', 1000);
+			setTimeout(function () {
+				Toast.hide();
+			}, 3000);
+			supermode=6;//
+			//每隔30秒执行一次方法；默认每题展示60秒
+			//intervalId = window.setInterval("nextItem()",30000);
+			setTimeout("nextItem()",30000);
+			
+			countDownInt=31;
+			countDownId=3;
+			intervalId3 = window.setInterval("doCountDown()", 1000);
+
+		}
+		if(e && e.keyCode==118){// 按F7自动核对和轮播模式(自动滚屏)
+			currentScrollTop=(currentScrollTop+document.body.clientHeight);
+			supermode =7;//自动核对和轮播（自动滚屏）
+			Toast.show('进入自动核对和轮播模式。', 'success', 1000);
+			setTimeout(function () {
+				Toast.hide();
+			}, 3000);
+			//此调用应该和next()方法中以下注释处的调用保持一致
+			//自动核对和轮播模式中核对并停留足够时间后才开始新一轮的下一题和滚屏
+			setTimeout(scrollToEnd(30000),30000);
+			countDownInt=31;
+			countDownId=3;
+			intervalId3 = window.setInterval("doCountDown()", 1000);
+
+		}
+		if(e && e.keyCode==119){ //按F8向下滚动一屏
+			scrollToNextScreen(1000);
+		}
+		if(e && e.keyCode==120){ //按F9下一题
+			console.log("按F9下一题");
+			nextItem();//F9快捷键自动跳到下一题，填入答案mock
+		}
+		
+		
+		if(e && e.keyCode==13){ // enter 键
+		//要做的事情
+		alert("按 Enter");
+		}
+		//control键：e.ctrlKey，shift键：e.shiftKey，alt键：e.altKey参考https://blog.csdn.net/m0_65580904/article/details/126020376
+		if (e.keyCode == 86 && e.ctrlKey) {
+		alert("你按下了ctrl+V");
+		}*/
+	}
+
+	function doAutoMode(code){	
+		if(code==27){ // 按 Esc
+			//Toast.init();
+			Toast.show('退出轮播模式。', 'success', 1000);
+			setTimeout(function () {
+				Toast.hide();
+			}, 3000);
+		
+			supermode=1006;//非轮播 
+			//console.log("supermode",supermode);
+			window.clearInterval(intervalId);
+			window.clearInterval(intervalId2);
+			document.getElementById('countdown').innerHTML='';
+			window.clearInterval(intervalId3);
+			window.clearInterval(intervalId4);
+		}
+		if(code==113){ // 按 F2进入轮播模式,ESC退出
+			//Toast.init();
+			Toast.show('进入轮播模式。', 'success', 1000);
+			setTimeout(function () {
+				Toast.hide();
+			}, 3000);
+		
+			supermode =5;//轮播
+			//每隔30秒执行一次方法；默认每题展示60秒
+			intervalId = window.setInterval("nextItem()",30000);
+
+			countDownInt=31;
+			countDownId=3;
+			//doCountDown与nextItem方法分别执行，doCountDown每秒执行一次，共执行30次；
+			//nextItem30秒后执行，效果就是倒计时30秒后跳转到下一题
+			intervalId3 = window.setInterval("doCountDown()", 1000);
+
+		}
+
+		if(code==115){ // 按F4(supermode=6)进入自动模式核对和轮播模式（无滚屏）,ESC退出；
+			Toast.show('进入轮播模式。', 'success', 1000);
+			setTimeout(function () {
+				Toast.hide();
+			}, 3000);
+			supermode=6;//
+			//每隔30秒执行一次方法；默认每题展示60秒
+			//intervalId = window.setInterval("nextItem()",30000);
+			setTimeout("nextItem()",30000);
+			
+			countDownInt=31;
+			countDownId=3;
+			intervalId3 = window.setInterval("doCountDown()", 1000);
+
+		}
+		if(code==118){// 按F7自动核对和轮播模式(自动滚屏)
+			currentScrollTop=(currentScrollTop+document.body.clientHeight);
+			supermode =7;//自动核对和轮播（自动滚屏）
+			Toast.show('进入自动核对和轮播模式。', 'success', 1000);
+			setTimeout(function () {
+				Toast.hide();
+			}, 3000);
+			//此调用应该和next()方法中以下注释处的调用保持一致
+			//自动核对和轮播模式中核对并停留足够时间后才开始新一轮的下一题和滚屏
+			setTimeout(scrollToEnd(30000),30000);
+			countDownInt=31;
+			countDownId=3;
+			intervalId3 = window.setInterval("doCountDown()", 1000);
+
+		}
+		if(code==119){ //按F8向下滚动一屏
+			scrollToNextScreen(1000);
+		}
+		if(code==120){ //按F9下一题
+			console.log("按F9下一题");
+			nextItem();//F9快捷键自动跳到下一题，填入答案mock
+		}
+		
+		
+		if(code==13){ // enter 键
+		//要做的事情
+		alert("按 Enter");
+		}
+		//control键：e.ctrlKey，shift键：e.shiftKey，alt键：e.altKey参考https://blog.csdn.net/m0_65580904/article/details/126020376
+		if (code == 86) {// && e.ctrlKey
+		alert("你按下了ctrl+V");
+		}
+
+
+
+	}
+	/*
+	一次倒计时方法（主要是更新倒计时数字），不是连续倒计时
+	每次调用前要设置countDownInt倒计时秒数
+	setInterval() 方法按照指定的周期(以毫秒计)来调用函数或计算表达式；clearInterval() 停止周期执行。
+	*/
+	function doCountDown(){	
+		/*显示倒计时 countdown
+		   遇到页面较高需要滚屏幕时还没来得及等到next()重置countDownInt； 会出现countDownInt<0从而出现负数倒计时的情况
+		   解决方法是遇到负数重置为31，显示时遇到负数显示0，从而每轮倒计时30秒；
+		*/
+		if(countDownInt==null|| countDownInt=='undefined'||countDownInt<0) countDownInt=31;
+		countDownInt=countDownInt-1;
+		
+		document.getElementById('countdown').innerHTML=(countDownInt<0)?'0':countDownInt+'';
+		//console.log('countDownInt',countDownInt);
+		if(countDownInt<=0){
+			if(countDownId==3)window.clearInterval(intervalId3);
+			if(countDownId==4)window.clearInterval(intervalId4);
+			if(supermode==6){//supermode==6模式中题目显示倒计时30秒之后自动核对答案，再倒计时30秒给用户查看答案，之后再跳到下一题
+				setTimeout("nextItem()",30000);
+				window.clearInterval(intervalId3);//每执行一次countDownInt减1，减到0时停止周期执行
+				window.clearInterval(intervalId4);
+				countDownInt=31;
+				countDownId=3;
+				intervalId3 = window.setInterval("doCountDown()", 1000);
+			
+			}
+		}
+	}
+	/*
+	每隔interval秒滚动到下一屏，滚动到页面底部
+	*/
+	function scrollToEnd(interval){
+		if(interval=='undefined' || interval==null)interval=30000;	
+		///////////////////////////////////////////////////////
+		//每隔60秒执行一次方法；默认每屏展示60秒
+		intervalId2 = window.setInterval("scrollToNextScreen(1000)",interval);
+		
+	}
+	/*
+	按 F7向下滚动一屏；
+	F8自动核对和轮播模式(自动滚屏)中则在滚动到页面底部后跳到下一题
+	speed滚动一屏的时间（毫秒）
+	*/
+	function scrollToNextScreen(speed){ // 
+		if(speed=='undefined' || speed==null)speed=1000;
+		
+		//console.log('clientHeight',document.body.clientHeight);
+		//console.log('currentScrollTop',currentScrollTop);
+		
+		currentScrollTop=(currentScrollTop+document.body.clientHeight);
+		if(currentScrollTop>document.body.offsetHeight){
+			currentScrollTop=0;
+			scrollState=1;
+			if(scrollState==1){
+				//alert('scrollState=1');
+				scrollState=0;
+				window.clearInterval(intervalId2);
+				if(supermode==7)nextItem();
+				
+			}	
+		}	
+		//console.log('currentScrollTop',currentScrollTop)
+		/*speed是速度(毫秒)*/
+		$('body,html').animate({
+				scrollTop: currentScrollTop
+			},
+			speed
+		);
+
+
+	}
+	
+	/*
+	20221016
+	增加菜单界面（点击齿轮图标调出）以适应手机和平板等无键盘的环境。
+	功能键具体操作代码移植到doAutoMode()方法，便于在此处和功能键监听方法中都便于调用。
+
+	*/
+	function showMenu() {
+		console.log('showMenu');
+		var menu="&nbsp;&nbsp;| <a href='javascript:doAutoMode(113);'>F2轮播模式</a><br/>&nbsp;&nbsp;| <a href='javascript:doAutoMode(115);'>F4轮播模式</a><br/>&nbsp;&nbsp;| <a href='javascript:doAutoMode(118);'>F7轮播模式</a><br/>&nbsp;&nbsp;| <a href='javascript:doAutoMode(120);'>F9立即跳到下一题（F2轮播模式中适用）</a>";
+		Toast.show(menu, 'success', 10000);
+		/*setTimeout(function () {
+			Toast.hide();
+		}, 3000);*/
+		return 1;//返回值 0-正常；1-用户未作答
+	}
+	
+	
+	/*
+	20221205
+	增加菜单界面（点击齿轮图标调出）以适应手机和平板等无键盘的环境。
+	功能键具体操作代码移植到doAutoMode()方法，便于在此处和功能键监听方法中都便于调用。
+
+	*/
+	function setFontPreference() {
+		console.log('showMenu');
+		document.getElementById("stem").style="none";
+		return 1;//返回值 0-正常；1-用户未作答
+	}
+	
+	function doFunctionKey2(){ // 按 F2进入轮播模式,ESC退出
+		//Toast.init();
+		Toast.show('进入轮播模式。', 'success', 1000);
+		setTimeout(function () {
+			Toast.hide();
+		}, 3000);
+	
+		supermode =5;//轮播
+		//每隔30秒执行一次方法；默认每题展示60秒
+		intervalId = window.setInterval("nextItem()",30000);
+
+		countDownInt=31;
+		countDownId=3;
+		//doCountDown与nextItem方法分别执行，doCountDown每秒执行一次，共执行30次；
+		//nextItem30秒后执行，效果就是倒计时30秒后跳转到下一题
+		intervalId3 = window.setInterval("doCountDown()", 1000);
+
+	}
+
+
+    function alertMessage(message) {
+        alert(message)
+    }
+
+    function toastMessage(message) {
+        window.control.toastMessage(message)
+    }
+
+    function sumToJava(number1, number2){
+       window.control.onSumResult(number1 + number2)
+    }
+	
+
+	
+</script>
+<body onload="TimerStartUp()">
+  <div class="container">
+  <div class="header"><h1 class="header">&nbsp;&nbsp;&nbsp;&nbsp;</h1></div>
+  <div class="left"></div>
+  <div class="content">
+
+
+<div id="name" style="font-weight:bold;">
+	Quiz&nbsp;&nbsp;<span id="top" class="top">
+	填空题 | 10068 |  <a href='js://webview?act=2&kid=10068'>举一反三</a>
+	</span>
+	<!--
+	<span id="indexer" class="indexer" style="float:left;"></span><br/>
+	-->
+	<span id="fontPreference"  style="float:right;"><a href='javascript:showMenu()'>⚙️</a>&nbsp;&nbsp;<input id="Btn1" type="button" value="+" name=""/>
+	<input id="Btn2" type="button" value="-" name=""/></span>
+</div>
+<br/>
+
+<span id="statisticArea" style="display: flex;justify-content: center;align-items: center;">Current 1 | Total  | Correct  | Wrong  | Rate </span>
+<br/>
+<div id="caption" style="justify-content: center;align-items: center;text-align:center;line-height: 20px;font-size:20px;" ></div>
+<br/><br/>
+
+<div id="stem" class="stem">stem</div>
+<!--
+<span id="answer" class="answer">answer</span>
+<span id="mark" class="mark"></span>
+-->
+<br/>
+
+<div  class="explanation">
+<!--提示<div id="hint1" onclick="callAndroid()"> </div>
+答案：<div id="hint2" onclick="callAndroid()"></div>-->
+<div id="caption3" style="display:none;" onclick="showHint(0)">
+<span nowrap style="color:red;font-size:20px;font-weight:bold;">解析：</span>
+<br/>
+<br/>
+</div>
+<div id="hint3" onclick="showHint(0)"></div>
+</div>
+<!--
+<div class="StdDiv" id="CheckButtonDiv">
+<button id="CheckButton1"  onclick="TimerStartUp()">&nbsp;Start&nbsp;</button>
+<button id="CheckButton2"  onclick="CheckAnswers()">&nbsp;Check&nbsp;</button>
+</div>
+-->
+
+<div style="display: flex;justify-content: left;align-items: center;">
+<button type="button" id="button1" class="css_btn_class" onclick="checkClozeAnswer(1)">提交</button>&nbsp;&nbsp;
+<button type="button" id="button2" class="css_btn_class" onclick="showHint(1)">提示</button>&nbsp;&nbsp;
+<button type="button" id="button3" class="css_btn_class" onclick="nextItem()">下一题</button>&nbsp;&nbsp;
+<button type="button" id="button4" class="css_btn_class" style="display:none;" onclick="review()">复习</button>
+<span id='countdown' nowrap style="color:green;font-size:5px;font-weight:bold;"></span>&nbsp;&nbsp;
+</div>
+
+
+<!--
+<br/>
+ -->
+
+
+
+
+
+  </div>
+  <!-- content end -->
+  <div class="right"></div>
+  <div class="footer" style="text-align:center;">Copyright 2019-2020</div>
+  </div>    
+  <!--container end--->
+	<script>
+
+		//20221205 加减按钮实现调整字体大小（此段代码必须放在html文件末尾body标签的后面才有效果）
+		//https://www.gxlsystem.com/qianduan-10030.html
+        var oPtxt=document.getElementById("stem");
+        var oBtn1=document.getElementById("Btn1");
+        var oBtn2=document.getElementById("Btn2");
+        var num = 60; /*定义一个初始变量*/
+        oBtn1.onclick = function(){
+            num++;
+            oPtxt.style.fontSize=num+'px';
+			oPtxt.style.lineHeight=num+'px';//"200%";//line-hight: 200%;
+			
+			var oGap1=document.getElementById("gap1");
+			//console.log("oGap1",oGap1);
+			if(oGap1 !=null){//只有Cloze有gap1
+				oGap1.style.fontSize=num+'px';
+				oGap1.style.lineHeight=num+'px';//"200%";//line-hight: 200%;
+			}
+        };
+        oBtn2.onclick = function(){
+            num--;
+            oPtxt.style.fontSize=num+'px';
+			oPtxt.style.lineHeight=num+'px';//"200%";//line-hight: 200%;
+			
+			var oGap1=document.getElementById("gap1");
+			//console.log("oGap1",oGap1);
+			if(oGap1 !=null){//只有Cloze有gap1
+				oGap1.style.fontSize=num+'px';
+				oGap1.style.lineHeight=num+'px';//"200%";//line-hight: 200%;
+			}
+		}
+//document.querySelector('#toastWaka').style.height = document.querySelector('#child').offsetHeight + 'px';
+	</script>
+  
+</body>
+
+
+</html>

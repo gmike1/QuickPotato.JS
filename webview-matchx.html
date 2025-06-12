@@ -1,0 +1,716 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh"><head>
+<meta name="author" content="Created with Hot Potatoes by Half-Baked Software, registered to tgd."></meta>
+<meta name="keywords" content="Hot Potatoes, Hot Potatoes, Half-Baked Software, Java, University of Victoria"></meta>
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+<title>
+Match
+</title>
+
+<!-- Made with executable version Java Hot Potatoes 6.1.0.5 -->
+<!-- The following insertion allows you to add your own code directly to this head tag from the configuration screen -->
+
+	<link href="quickpotato.matchx.template.css" rel="stylesheet"/> 
+    <style> 
+
+    /*toast样式：宽高等在此处设置
+    js封装toast组件——常用工具函数
+	https://segmentfault.com/a/1190000018012740
+	设置DIV随滚动条滚动而滚动(margin:0px auto;position:fixed;top:50%;left:50%;)
+	https://www.cnblogs.com/Keteven/p/4354684.html
+    */
+    #toastWaka {
+        position: fixed;
+        display: none;
+        left: 50%;
+        top: 50%;
+        z-index: 99999;
+        margin: 0 auto;
+        -webkit-transform: translate(-50%);
+        transform: translate(-50%);
+        width: 90%;
+        height:auto;
+        #height:20%;
+		#height:80px;
+		#height:100%;
+        border-radius: 5px;
+        text-align: center;
+        color: #fff;
+        background-color: rgba(000,000,000,0.5);
+		#border:#00ffff solid 1px;
+		zoom:1;
+		overflow:hidden;
+		padding:10px;
+    }
+
+    #toastWaka .text{
+        color: #fff;
+        display: block;
+		height:auto;
+        #line-height: 80px;
+        vertical-align:middle;
+        font-size: 14px;
+        position: absolute;
+        top:0;
+        bottom:0;
+        right:0;
+        left:0;
+		#border:red solid 1px;
+		#background-color: rgba(000,000,000,0.5);
+
+    }
+	
+    </style>
+	<!-- 20241224
+	<SCRIPT src="quickpotato.matchx.template-5.0.js"></SCRIPT>	
+	-->
+	<SCRIPT src="quickpotato.matchx.template.js"></SCRIPT>
+	<!-- 20221120-->
+	<SCRIPT src="MultipleChoiceUtil.js"></SCRIPT>
+	<script type="text/javascript" src="toast.js"></script>
+	<script type="text/javascript" src="text2speech.js"></script>
+	<script src="eruda.js"></script>
+
+</head> 
+
+<body id="TheBody" onload="loadAll();TimerStartUp();installFullScreen();" > 
+<!-- mfunction(); -->
+<!-- BeginTopNavButtons -->
+<!-- EndTopNavButtons -->
+
+<div class="Titles">
+	<h2 class="ExerciseTitle"></h2>
+	<h3 class="ExerciseSubtitle">  </h3>
+</div>
+
+<div id="InstructionsDiv" class="StdDiv">
+	<div id="Instructions">Android: Click the right column and then click the left column; 
+	Desktop:Match each pair, and then click the Check button.</div>
+</div>
+
+<div id="StatusDiv" class="StdDiv" style="display: flex;">
+	<div style="float:left;padding:3px;">Current</div>
+	<div id="current" style="float:left;padding:3px;">0</div>
+	<div style="float:left;padding:3px;">Total</div>
+	<div id="total" style="float:left;padding:3px;">0</div>
+	<div style="float:left;padding:3px;">Group</div>
+	<div id="group" style="float:left;padding:3px;">0</div>
+	<div style="float:left;padding:3px;">Correct</div>
+	<div id="correct" style="float:left;padding:3px;">0</div>
+	<div style="float:left;padding:3px;">Rate</div>
+	<div id="rate" style="float:left;padding:3px;">0</div>
+</div>
+
+<div id="CheckButtonDiv" class="StdDiv">
+
+Book
+<select id="books">
+	<option value="1">1</option>
+	<option value="2" selected="selected">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+	<option value="8">8</option>
+	<option value="9">9</option>
+	<option value="10">10</option>
+</select>
+
+Unit
+<select id="units">
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3" selected="selected">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+</select>
+
+<button id="CheckButton1" class="FuncButton" onmouseover="FuncBtnOver(this)" onfocus="FuncBtnOver(this)" onmouseout="FuncBtnOut(this)" onblur="FuncBtnOut(this)" onmousedown="FuncBtnDown(this)" onmouseup="FuncBtnOut(this)" onclick="loadAll();TimerStartUp();" title="Click Next and Start Button to switch to next group">&nbsp;Start&nbsp;</button>
+
+<button id="CheckButton1" class="FuncButton" onmouseover="FuncBtnOver(this)" onfocus="FuncBtnOver(this)" onmouseout="FuncBtnOut(this)" onblur="FuncBtnOut(this)" onmousedown="FuncBtnDown(this)" onmouseup="FuncBtnOut(this)" onclick="document.getElementById('group').innerHTML =(++group+1);" title="Click Next and Start Button to switch to next group">&nbsp;Next&nbsp;</button>
+
+<button id="CheckButton1" class="FuncButton" onmouseover="FuncBtnOver(this)" onfocus="FuncBtnOver(this)" onmouseout="FuncBtnOut(this)" onblur="FuncBtnOut(this)" onmousedown="FuncBtnDown(this)" onmouseup="FuncBtnOut(this)" onclick="CheckAnswers()">&nbsp;Check&nbsp;</button>
+
+<button id="fullscreenBtn" class="FuncButton" onclick="toggleFullScreen()" >Enter Fullscreen</button>
+
+</div>
+
+<form>
+
+
+<script type="text/javascript">
+//<![CDATA[
+<!--
+	/*
+	webview-matchx.html匹配测试页面：
+
+	引用文件：
+	quickpotato.matchx.template.js
+	MultipleChoiceUtil.js
+	text2speech.js
+	eruda.js
+
+
+	调用逻辑：
+	onload="loadAll();TimerStartUp()"
+	loadAll()
+		∟Init();
+	TimerStartUp()
+		∟StartUp()
+
+	版本历史
+
+	v10.4 20250112
+	增加：全屏模式功能，点击Enter Fullscreen按钮进入全屏，点击Exit Fullscreen按钮退出全屏。参考：
+	installFullScreen()
+	isFullscreen(fn)
+	toggleFullScreen()
+
+
+	v10.3 20241231
+	修正：卡片文字含有单引号导致语音朗读失效页面崩溃的问题。必须调用.replaceAll("'",'&#39')方法。参考：
+	CardContent ='<input type=button  id="FB' + i + '"  style="border:0px;background: transparent;width=300px;word-wrap: break-word;word-break: normal;white-space: normal;text-align:left;"  onclick=\'myclick(event, ' + F[i][1] + ', 1, '+i+', "'+F[i][0].replaceAll("'",'&#39')+'")\'  title="'+F[i][0]+'" value="'+F[i][0]+'"></input>';//+ F[i][0];if('+voiceMode+'==1)speakText(\''+F[i][0]+'\');
+
+	CardContent = '<input type=button id="DB' + i + '"  style="border:0px;background: transparent;width=300px;word-wrap: break-word;word-break: normal;white-space: normal;text-align:left;"  onclick=\'myclick(event, ' + D[i][1] + ', 2, '+i+',"'+D[i][0].replaceAll("'",'&#39')+'")\' title="'+D[i][0]+'" value="'+D[i][0]+'"></input>';//+ D[i][0];if('+voiceMode+'==1)speakText(\''+D[i][0].replaceAll("'",'&#39')+'\');
+
+	*myclick()方法增加text参数，用于语音朗读，同时，把语音朗读代码移到myclick()方法内。参考：
+	function myclick(event, index, column, seq, text)
+
+	*原StartUp()方法内的这段ReduceItems2()及Shuffle(D)代码移到loadAll()方法内，已解决界面D0和DB0文字不一致的问题。
+
+	//Reduce array if required
+	if (QsToShow < F.length){
+		if (groupMode==1)ReduceItems2();//20241224 groupMode全局变量
+	}
+	
+	//Shuffle the left items if required
+		if (ShuffleQs == true){
+			F = Shuffle(F);
+		}
+
+	//Shuffle the items on the right
+		D = Shuffle(D);
+
+	v10.2 20241224
+	修改：quickpotato.matchx.template-5.0.js统一改为quickpotato.matchx.template.js，自此版本开始，带数字的为备份，且html与js文件的备份版本数字相同，如都为10.2。
+	增加：页面参数groupMode:1-每轮QsToShow个题项，每轮用ReduceItems2()方法随机删除一些项目，直到显示的项目数等于QsToShow；2-每轮QsToShow个题项，按顺序提取题项；可以在URL中用groupMode=设置参数值，如webview-matchx.html?groupMode=2&voice=1&items=hx.template.js
+	修改：界面Group标签的更新代码移到StartUp()：document.getElementById("group").innerHTML =(group+1);//20241224
+	参考：
+	loadAll()：if (groupMode==2){
+	StartUp()：if (groupMode==1)ReduceItems2();//20241224 groupMode全局变量
+
+
+	v10.1 20241217
+	增加：页面参数voice:0-点击卡片时不播放卡片文字的语音；1-点击卡片时播放卡片文字的语音；默认值为1；
+	可以在URL中用mode=设置参数值，如webview-matchx.html?voice=1&items=
+
+	v10.0 20241204
+	修改：20241204 key改为数组，可以有多个正确答案（用于classify题型和多个正确选项的多选题），第一个正确答案为key[0]
+
+	v9.0 20241203
+	修改：webview-matchx-9.0.html统一改为webview-matchx.html，带版本数字的为备份。
+	修改：增加组内正确计数correctCount，代替groupCount，因同一项目多次匹配成功时groupCount累计增加，会造成未完成本组10题提前进入下一组
+	相应地，myclick方法增加seq参数，参考myclick(event, index, column, seq)
+
+	v8.0 20241030
+	增加：点击卡片时当前卡片显示红色边框，1秒后隐藏红色边框。
+	增加：匹配错误时弹出Toast提示。
+	缩小了卡片内的Padding，参见quickpotato.matchx.template.css->div.CardStyle {padding: 1px;
+	修正了一些小错误: 。
+	if(CurrLeft !=-1){
+		console.log('myclick CurrLeft=', CurrLeft,' CurrRight=',CurrRight);
+		//
+		alert("You have already  clicked the left column!");
+		CurrLeft = -1;
+	}else{
+		if(CurrRight==-1){
+			alert("Please click the right column first!");
+		}
+	}
+
+	v7.1 20230729
+	不添加题号(i+1)+". "+ 
+
+	v7.0 20221120
+	由参数items传入测试数据
+
+	webview-matchx-5.0（webview-matchx-template）
+	* 单词来源改为Android WebView与 JS 的交互方式，因为单纯网页js直接操作sqlite失效
+
+	webview-matchx-4.0
+	*实现分组控制、结果存入数据库和反馈。
+	*适配Android手机无法拖放的问题：改为先点击右边项目，再点击左边项目实现匹配，参考quickpotato.matchx.template-4.0.js；
+
+	webview-matchx-3.0
+	*增加Book,Unit下拉列表和Start按钮，用来按单元查词；按Start按钮开始。 
+	*实现分组，通过SQLite的LIMIT和OFFSET，每次查询10个单词参考：
+	tx.executeSql('select * from glossary where book='+v1+' and unit='+v2+'  limit 10  OFFSET '+(group*10),[],function(tx,rs)。
+
+	webview-matchx-2.0
+	*实现数据库移植。
+
+	webview-matchx-1.0
+	*实现点击（Android）和拖放（桌面）匹配。
+
+	*/
+
+	//web 调试神器 eruda网址//cdn.jsdelivr.net/npm/eruda
+	//Eruda是一款专为前端移动端设计的调试面板，具备捕获console日志、检查元素状态、显示性能指标等功能，类似于Chrome DevTools的迷你版。支持动态加载、URL链接控制等多种使用方式，适用于调试移动端网页。
+	eruda.init();
+
+/////////////////////////////////////////////////////////////
+//
+//单词分为10个一组
+var group=0;//小组下标(单词分为10个一组)，使用参见quickpotato.matchx.template-5.0.js
+//var groupCount=-1;//2024120 被correctCount代替，组内正确当前下标，使用参见quickpotato.matchx.template-5.0.js
+
+var current=-1, wrong=0, total=0;
+/////////////////////////////////////////////////////////////
+	var voiceMode=1;//20241217
+	//var workMode=1;//20241210 1-TEST严格考试模式，点击Reset或Hint将视为该题项错误；2-QUIZ宽松测试，只有最终提交错误才算错误。
+	var groupMode=1;//20241224 页面参数groupMode:1-每轮QsToShow个题项，每轮用ReduceItems2()方法随机删除一些项目，直到显示的项目数等于QsToShow；2-每轮QsToShow个题项，按顺序提取题项；可以在URL中用groupMode=设置参数值，如webview-matchx.html?groupMode=2&voice=1&items=
+
+	//先必须通过SCRIPT标签引入MultipleChoiceUtil.js
+	var multipleChoiceUtil=new MultipleChoiceUtil('MultipleChoiceUtil');
+	var DCopy=null,FCopy=null;//20241224 
+
+	/*
+	android与JS交互,互相调用方法,跳转到网页
+	原文链接：https://blog.csdn.net/thw_m/article/details/78583922
+	
+	//这个方式是被java调用的
+	function androidCallJs(){
+		 alert("android界面按钮启动：java调用js弹窗(AddJavascriptInterface)");
+	}*/
+        	
+	/*
+	matchxx 20181113 cemike@126.com
+	js 将json字符串转换为json对象的方法解析：
+	https://www.cnblogs.com/guoziyi/p/6003752.html
+	*/
+	function Init(){
+		//console.log("Init");
+		Toast.init();
+		//multipleChoiceUtil.speak();
+		//JSON字符串:
+		//var str = '[{ "stem": "1. There are plans to split the corporation into a number of smaller ____ (adj.) companies.", "answer": "independent" },{ "stem": "2. The house was surrounded by trees and ____ (adj.) from the road.", "answer": "invisible" },{ "stem": "3. Without the right date stamped on it, your ticket will be ____ (adj.).", "answer": "invalid" }]';
+		//multiplechoice 
+		//var str2 = '[{"id":1, "kid":1, "content": "1.The question is {~if# ~what# =whether#考察whether引导的表语从句 ~how#h} the film is worth seeing. "},{"id":2, "kid":1, "content": "5. {~That# =Whether#考察whether引导的主语从句 ~If# ~Even if#} his dream of going to college will come true is uncertain."}]';
+		//cloze
+		//var str2 = '[{"id":1,"kid":10007,"point":1, "content": "Nowadays {=the#互联网the Intenet是万维网www的特殊实例（目前世界唯一）要用定冠词}Intenet is becoming increasingly popular and a new high speed broadband network has recently started. "},{"id":2,"kid":10007,"point":1,  "content": "While {=the#此处music是特指后面the TV play的音乐，用定冠词；不同于listen to music泛指听音乐；} music is just so-so, the story in this TV play is quite moving. "}]';
+		
+		//var str2 = '[{"id":1,"kid":10007,"point":1, "content": "Nowadays {=the#互联网the Intenet是万维网www的特殊实例（目前世界唯一）要用定冠词}Intenet is becoming increasingly popular and a new high speed broadband network has recently started. "},{"id":2,"kid":10007,"point":1,  "content": "While {=the#此处music是特指后面the TV play的音乐，用定冠词；不同于listen to music泛指听音乐；} music is just so-so, the story in this TV play is quite moving. "},{"id":3, "kid":1, "content": "5. {~That# =Whether#考察whether引导的主语从句 ~If# ~Even if#} his dream of going to college will come true is uncertain."}]';
+	/*
+    用户在编辑器编辑时用=#包围答案以保证与其他平台的一致性；
+    因为作为url参数?param=value方式传递，而js时通过=判断解析参数；因此传递时=#分别替换为@$，见org.cj.myoral.Fragment.Fragment3#getEditorText;
+    但在解析完成后最终还是转换回=#，见QuickPotato.Android\app\src\main\assets\quickpotato.clozexa.template.js#function Init()；
+	注意：getParam(paramName)是自定义函数，用于获取指定的URL参数值 
+     */
+
+	//var voiceMode_ = getParam('voice');
+	//if (voiceMode_!=null)voiceMode=voiceMode_;
+	//console.log('voiceMode', voiceMode);
+
+	 var items = getParam('items');//注意：getParam(paramName)是自定义函数，用于获取指定的URL参数值 
+	 if(items!=null)
+		 items =items.replace(/@/gi,'=').replace(/\$/gi,'#');
+	 else
+		 items ='[{"id":1,"kid":10007,"point":1, "content": "调查；测验 vt. n. {=survey#}"},{"id":2,"kid":10007,"point":1,  "content": "心烦的，苦恼的 adj.{=upset#}"},{"id":3, "kid":10101, "content": "不理睬，忽视{=ignore#}"},{"id":4, "kid":10101, "content": "（使） 平静，镇静，安静;{=calm … down#}"},{"id":5, "kid":10101, "content": "松散的， 宽松的{=loose#}"}]';
+	//document.getElementById('Instructions').innerHTML=items;
+		
+		//JSON对象
+		quiz = eval('{groups: [];answers:[]}');
+		//var jsonObj= eval('(' + str2 + ')');
+		//var jsonObj= JSON.parse(str2);
+		//var jsonObj= eval('(' + str + ')');
+		quiz.groups=multipleChoiceUtil.getItems(items);//str2
+		console.log('groups', quiz.groups);//
+
+	/*	每个题目quiz.groups[i](Item)包含以下 属性：
+	id			int		唯一标识
+	kid		int		题目考点对应的KnowledgeID，如'冠词'
+	type		int		1-cloze;2-multiplechoice
+	stem		String	题干(要填的空替换为下划线)
+	key		String	答案(选择题答案也是选项的文本而不是ABCD)
+	generalExplanation		String	整个题的解析（填空题等同于答案的解析）
+	choices Array	包括一个（单选题的空）或多个元素（多选题的选项），每个元素为一个json对象，
+	包括以下属性{'answer':answer,'explanation':explanation}
+	具体如下：
+	answer	String	（填空题）用户输入的文字；（选择题）用户最后选择的项目索引（0-3,不是ABCD）
+	explanation		String	（选择题）备选项对应显示给学习者的解析
+	status				int		状态（用于统计错题等）：0-初始化；1-显示；2-答题正确；3-答题错误；4-查看解析；5-复习；//20200417
+	*/
+	
+		/*
+		js 禁止chrome刷新
+		在JavaScript中，可以通过监听beforeunload事件来阻止用户刷新或关闭页面。但是，出于安全考虑，现代浏览器不允许脚本完全阻止页面的关闭。你可以显示一个确认框，询问用户是否真的想要离开页面，但是你不能完全阻止这个过程。
+		注意，这段代码在某些现代浏览器中可能不会完全阻止关闭操作，但会显示一个确认对话框，允许用户选择留在当前页面或离开。
+		对于Chrome浏览器，即使设置了returnValue，用户也可以选择离开页面，而不会显示你设置的消息。
+		*/
+		window.addEventListener('beforeunload', function (event) {
+			const confirmationMessage = "确定要离开此页面吗？您所做的更改可能不会被保存。";
+			console.log("用户刷新页面：",event.toString());
+			event.preventDefault();
+			event.returnValue = confirmationMessage; 
+			return confirmationMessage;
+		});
+
+	}
+	/** 
+	 * 获取指定的URL参数值 
+	 * URL:http://www.quwan.com/index?name=tyler 
+	 * 参数：paramName URL参数 
+	 * 调用方法:getParam("name") 
+	 * 返回值:
+	 * 注意：用unescape()解码会导致中文乱码，用decodeURI()解码就能保证中文不出现乱码
+	 *
+	 */ 
+	function getParam(paramName) { 
+		paramValue = "", isFound = !1; 
+		if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+			//用unescape()解码会导致中文乱码，用decodeURI()解码就能保证中文不出现乱码
+			arrSource = decodeURIComponent(this.location.search).substring(1, this.location.search.length).split("&"), i = 0; 
+			while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++ 
+		} 
+		return paramValue == "" && (paramValue = null), paramValue 
+	}
+
+	/*
+	加载匹配题基础数据
+	*/
+	function loadAll(){
+
+		//20241224 
+		var voiceMode_ = getParam('voice');
+		if (voiceMode_!=null)voiceMode=voiceMode_;//voiceMode定义于webview-matchx.html
+		console.log('voiceMode', voiceMode);
+		var groupMode_ = getParam('groupMode');
+		if (groupMode_!=null)groupMode=groupMode_;//groupMode定义于webview-matchx.html
+		console.log('groupMode', groupMode);
+
+		//20241224 workMode参数尚未实现
+		//var workMode_ = getParam('mode');
+		//if (workMode_!=null)workMode=voiceMode_;//workMode定义于webview-matchx.html
+		//console.log('workMode', workMode);
+
+
+		Init(); 
+	    var list = document.getElementById("list");  
+	    var list2 = document.getElementById("list2");  
+	    var v1 = document.getElementById("books").value;//此方法兼容性好
+	    var v2 = document.getElementById("units").value;//此方法兼容性好
+	    //console.log("webview-matchx-7.0.html loadAll() book=",v1,"unit=",v2);
+	    
+		
+		/*
+		F二维数组，D二维数组，FC对象数组，DC对象数组定义参见quickpotato.matchx.template-5.0.js
+
+		F二维数组存储左边卡片相关信息，D二维数组存储右边卡片相关信息
+		FC数组存储左边卡片对象，DC数组存储右边卡片对象（参考Card对象定义function Card(ID, OverlapTolerance)）
+		onEndDrag()方法->D[CurrDrag][2] = F[DropTarget][1];拖放结束时，将当前拖动的右边卡片的D[CurrDrag][2]数组元素值赋值为左边卡片拖放目标卡片F[DropTarget][1]的值（起始编号），如果D[CurrDrag][2]==D[DropTarget][1]且这个值>0(0为未拖放前的初始值)则匹配正确
+
+		F = new Array();//F二维数组存储左边卡片相关信息
+		D = new Array();//D二维数组存储右边卡片相关信息，D[i][1]==F[i][1]==DC[i].index
+
+		//Fixed and draggable card arrays
+		FC = new Array();//左边栏固定卡片数组，存储Card对象（参考Card对象定义function Card(ID, OverlapTolerance)）
+		DC = new Array();//右边栏可拖放卡片数组，存储Card对象（参考Card对象定义function Card(ID, OverlapTolerance)），D[i][1]==F[i][1]==DC[i].index
+		*/
+
+
+
+		var len=quiz.groups.length;
+		//console.log("quiz.groups.length=",len);
+
+		if(len>0){  
+			var result = "";  
+		/*
+
+		*/
+		for (var i = 0; i < len; i++) {
+			var row = quiz.groups[i];  
+			//console.log('quiz.groups[i]: ', row);
+			/*
+			onEndDrag()方法->D[CurrDrag][2] = F[DropTarget][1];拖放结束时，将当前拖动的右边卡片的D[CurrDrag][2]数组元素值赋值为左边卡片拖放目标卡片F[DropTarget][1]的值（起始编号），如果D[CurrDrag][2]==D[DropTarget][1]且这个值>0(0为未拖放前的初始值)则匹配正确
+			*/
+			F[i] = new Array();
+			F[i][0] =row.stem;//20230729 不添加题号(i+1)+". "+ 
+			F[i][1] = i+1;
+			D[i] = new Array();
+			D[i][0] =row.key[0];//20241204 key改为数组，可以有多个正确答案（用于classify题型和多个正确选项的多选题），第一个正确答案为key[0]
+			D[i][1] =i+1;//D[i][1]和F[i][1]都是起始编号，即使卡片打乱顺序显示，这个值不会变，用来指示答案，参见CheckAnswers()方法
+			D[i][2] = 0;//右边栏卡片拖放停泊时被赋值（不管是否匹配正确）为F[DropTarget][1](大于0的值)
+			D[i][3] = 0;//20241203 新增D[i][3]用于统计每组中已经匹配正确的题项，只在匹配正确后被赋值
+		                     
+		}
+		
+		//DCopy=D;//20241224 
+		//FCopy=F;//20241224 
+
+		if (groupMode==2){//20241224 groupMode全局变量
+			var start=(group*QsToShow)%F.length;//20241224 
+			var end=start+QsToShow;
+			D=D.slice(start, end);//20241224 如果end>D.length则此轮题项数<QsToShow
+			F=F.slice(start, end);
+			console.log('loadAll() slice: D', D);
+
+
+		}
+	
+//Reduce array if required
+	if (QsToShow < F.length){
+		if (groupMode==1)ReduceItems2();//20241224 groupMode全局变量
+	}
+	
+//Shuffle the left items if required
+	if (ShuffleQs == true){
+		F = Shuffle(F);
+	}
+
+//Shuffle the items on the right
+	D = Shuffle(D);
+
+		total=D.length; 
+		document.getElementById("total").innerHTML =(total);
+		for (var i=0; i<D.length; i++){
+			result += '<div id="F' + i + '" class="CardStyle" ></div>';
+		}
+
+		for (var i=0; i<D.length; i++){
+		//for (var i=0; i<QsToShow; i++){
+		//var curentGroupIndex=(group*QsToShow+i)%F.length;//20241224 
+			//F开头的是左边的卡片，D开头的是右边的卡片 type=button 
+			result += '<div id="D' + i + '" class="CardStyle" onmousedown="beginDrag(event, ' + i + ')"  title="'+D[i][0]+'" value="'+D[i][0]+'" ></div>';
+		}
+		/*
+		for (var i=0+group*10;i<(group+1)*10 &&  i<D.length; i++){
+			result += '<div id="F' + i + '" class="CardStyle" ></div>';
+		}
+
+		for (var i=0+group*10;i<(group+1)*10 &&   i<D.length; i++){
+			result += '<div  type=button id="D' + i + '" class="CardStyle" onmousedown="beginDrag(event, ' + i + ')"  title="'+D[i][0]+'" value="'+D[i][0]+'" ></div>';
+		}*/
+
+		list2.innerHTML = result; 
+
+		}else{  
+			list2.innerHTML = "目前数据为空";  
+		}   
+
+
+	}//loadAll()
+
+var cardClicked=null;
+
+//格式化时间的format函数
+Date.prototype.format = function(format)  
+{  
+    var o = {  
+    "M+" : this.getMonth()+1, //month  
+    "d+" : this.getDate(),    //day  
+    "h+" : this.getHours(),   //hour  
+    "m+" : this.getMinutes(), //minute  
+    "s+" : this.getSeconds(), //second  
+    "q+" : Math.floor((this.getMonth()+3)/3),  //quarter  
+    "S" : this.getMilliseconds() //millisecond  
+    }  
+    if(/(y+)/.test(format)) format=format.replace(RegExp.$1,  
+    (this.getFullYear()+"").substr(4 - RegExp.$1.length));  
+    for(var k in o)if(new RegExp("("+ k +")").test(format))  
+    format = format.replace(RegExp.$1,  
+    RegExp.$1.length==1 ? o[k] :  
+    ("00"+ o[k]).substr((""+ o[k]).length));  
+    return format;  
+}  
+/*
+
+*/
+
+/**
+ * @description: 是否支持全屏+判断浏览器前缀
+ * @param {Function} fn 不支持全屏的回调函数 这里设了一个默认值
+	被installFullScreen()方法调用。
+ */
+function isFullscreen(fn) {
+  let fullscreenEnabled;
+  // 判断浏览器前缀
+  if (document.fullscreenEnabled) {
+    fullscreenEnabled = document.fullscreenEnabled;
+  } else if (document.webkitFullscreenEnabled) {
+    fullscreenEnabled = document.webkitFullscreenEnabled;
+    this.prefixName = 'webkit';
+  } else if (document.mozFullScreenEnabled) {
+    fullscreenEnabled = document.mozFullScreenEnabled;
+    this.prefixName = 'moz';
+  } else if (document.msFullscreenEnabled) {
+    fullscreenEnabled = document.msFullscreenEnabled;
+    this.prefixName = 'ms';
+  }
+  if (!fullscreenEnabled) {
+    if (fn !== undefined) fn(); // 执行不支持全屏的回调
+    this.isFullscreenData = false;
+  }
+
+  return fullscreenEnabled;
+}
+
+
+/*
+安装全屏功能，调用方法<body onload="installFullScreen();">。
+现代浏览器不能直接调用js代码进入全屏模式，而必须由用户点击动作进入全屏模式，所以用此方式。
+先检查浏览器是否支持 Fullscreen API；
+如果支持，则给fullscreenBtn按钮安装监听器；
+用户点击按钮时监听器调用toggleFullScreen()方法实现进入和退出全屏。
+*/
+function installFullScreen(){
+
+	//检查浏览器是否支持 Fullscreen API
+	if (!isFullscreen()){
+		console.log('FullScreen not supported');
+	  // 如果浏览器不支持 Fullscreen API，则隐藏全屏按钮或显示提示信息
+	  //document.getElementById('fullscreenBtn').style.display = 'none';
+	  // 或者显示提示信息
+	  // alert('Your browser does not support fullscreen mode.');
+	  return 0
+	}
+
+		document.getElementById('fullscreenBtn').addEventListener('click', function() {
+
+			if (document.documentElement && document.documentElement.requestFullscreen) {
+				toggleFullScreen();
+				/*document.documentElement.requestFullscreen().then(() => {
+					console.log('Entered fullscreen mode');
+				}).catch(err => {
+					console.log('Failed to enter fullscreen mode', err);
+				});*/
+			}
+		});
+
+	  // 监听全屏变化事件
+	  document.addEventListener('fullscreenchange', function() {
+		if (document.fullscreenElement) {
+		  document.getElementById('fullscreenBtn').textContent = 'Exit Fullscreen';
+		} else {
+		  document.getElementById('fullscreenBtn').textContent = 'Enter Fullscreen';
+		}
+	  });
+
+	  // 对于 Firefox，还需要监听 mozfullscreenchange 事件
+	  document.addEventListener('mozfullscreenchange', function() {
+		if (document.mozFullScreenElement) {
+		  document.getElementById('fullscreenBtn').textContent = 'Exit Fullscreen';
+		} else {
+		  document.getElementById('fullscreenBtn').textContent = 'Enter Fullscreen';
+		}
+	  });
+
+	  // 对于 WebKit 浏览器，还需要监听 webkitfullscreenchange 事件
+	  document.addEventListener('webkitfullscreenchange', function() {
+		if (document.webkitFullscreenElement) {
+		  document.getElementById('fullscreenBtn').textContent = 'Exit Fullscreen';
+		} else {
+		  document.getElementById('fullscreenBtn').textContent = 'Enter Fullscreen';
+		}
+	  });
+
+	  // 对于 IE/Edge，还需要监听 msfullscreenchange 事件
+	  document.addEventListener('msfullscreenchange', function() {
+		if (document.msFullscreenElement) {
+		  document.getElementById('fullscreenBtn').textContent = 'Exit Fullscreen';
+		} else {
+		  document.getElementById('fullscreenBtn').textContent = 'Enter Fullscreen';
+		}
+	  });
+
+
+}
+/*
+被installFullScreen()方法调用，切换进入和退出全屏。
+*/
+function toggleFullScreen(){
+	console.log('toggleFullScreen()');
+	if (document.fullscreenElement === null) {//当前没有元素在全屏状态
+		//document.getElementById('fullscreenBtn').addEventListener('click', function() {
+			var elem = document.documentElement; // 例如，使整个页面进入全屏
+			if (elem.requestFullscreen) {
+				elem.requestFullscreen();//Uncaught (in promise) TypeError: Permissions check failed
+			} else if (elem.mozRequestFullScreen) { /* Firefox */
+				elem.mozRequestFullScreen();
+			} else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+				elem.webkitRequestFullscreen();
+			} else if (elem.msRequestFullscreen) { /* IE/Edge */
+				elem.msRequestFullscreen();
+			}
+		//https://blog.csdn.net/jieyucx/article/details/140618971
+		//});
+
+
+		/*
+	  */
+
+
+		/*
+	  document.getElementById('fullscreenBtn').addEventListener('click', function() {
+		if (document.documentElement.requestFullscreen) {
+			//Failed to execute 'requestFullscreen' on 'Element': API can only be initiated by a user gesture.
+		  document.documentElement.requestFullscreen();
+		} else if (document.documentElement.mozRequestFullScreen) { // Firefox
+		  document.documentElement.mozRequestFullScreen();
+		} else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari & Opera
+		  document.documentElement.webkitRequestFullscreen();
+		  // 注意: 对于旧版本的 Safari，可能需要添加 "allowfullscreen" 属性到 <iframe> 或 <video> 元素上
+		} else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+		  document.documentElement.msRequestFullscreen();
+		}
+	  });
+	  */
+
+	} else {//当前已有元素在全屏状态
+		  //https://blog.csdn.net/qq_27829333/article/details/135730013
+		  if (document.exitFullScreen) {
+			document.exitFullScreen();
+		  } else if (document.mozCancelFullScreen) {
+			document.mozCancelFullScreen();
+		  } else if (document.webkitExitFullscreen) {
+			document.webkitExitFullscreen();
+		  } else if (document.msExitFullscreen) {
+			document.msExitFullscreen();
+		  }
+	
+	}
+
+}//toggleFullScreen()
+
+// 绑定一个按钮点击事件来切换全屏
+//document.getElementById('fullscreenBtn').addEventListener('click', toggleFullScreen);
+ 
+//-->
+//]]>
+</script>
+
+</form>
+
+<div class="Feedback" id="FeedbackDiv">
+	<div class="FeedbackText" id="FeedbackContent"></div>
+	<button id="FeedbackOKButton" class="FuncButton" onfocus="FuncBtnOver(this)" onblur="FuncBtnOut(this)" onmouseover="FuncBtnOver(this)" onmouseout="FuncBtnOut(this)" onmousedown="FuncBtnDown(this)" onmouseup="FuncBtnOut(this)" onclick="HideFeedback(); return false;">&nbsp;OK&nbsp;</button>
+</div>
+
+<div id="list"> </div>
+<div id="list2"> </div>
+
+<!-- BeginBottomNavButtons -->
+
+<!-- EndBottomNavButtons -->
+
+<!-- BeginSubmissionForm -->
+
+<!-- EndSubmissionForm -->
+
+
+
+
+</body>
+</html>

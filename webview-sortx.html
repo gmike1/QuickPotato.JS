@@ -1,0 +1,357 @@
+<html>
+	<head>
+    <meta charset="UTF-8"> 
+    <title>Sort</title> 
+    <style> 
+	/*容器的居中*/	
+	/*
+	css布局中margin为0,页面依然与浏览器顶部有一个间隙的问题：
+	注意：顶部第一行不能有<!DOCTYPE HTML>否则高度不能撑开。
+	*/
+	body{
+		margin:0px;padding:0;
+		font-family:微软雅黑, "Times New Roman",Georgia,Serif, Fantasy;/**/
+	}
+
+	div.container{
+		margin:0 auto; 
+		/*
+		注意：顶部第一行不能有<!DOCTYPE HTML>否则高度不能撑开。
+		背景色豆沙绿：background-color:#C7EDCC;
+		*/
+		width:100%;border:0px solid gray;line-height:150%;background-color:#C7EDCC;
+	}
+	/*
+	div.content的width:90%;
+	必须与div.left,div.right的width:4%;呼应，即
+	div.content的width+div.left的width+div.right的width小于100%，
+	不能等于或大于100%，否则内容挤不见。
+	*/
+	div.content{width:90%;padding:1.5em;border:0px solid gray;float:left;}
+	div.header,div.footer{color:black;clear:left;height:30px;}
+	div.left,div.right{float:left;width:4%;height:100%;border:0px solid red;background-color:#C7EDCC;}
+	h1.header{padding:0;margin:0;}
+	
+	/*--------------------------------------------------------------------------------- */
+
+
+        #contentarea > div { 
+            //height: 60px; 
+        } 
+    </style> 
+		
+		
+
+
+<script src="jquery-3.3.1.min.js"></script>
+
+<SCRIPT src="MultipleChoiceUtil.js"></SCRIPT>
+
+<script src="eruda.js"></script>
+
+<script type="text/javascript">
+
+	/*
+	Emulator 
+
+	版本历史
+
+	v3.0 20241204
+	key改为数组，可以有多个正确答案（用于classify题型和多个正确选项的多选题），第一个正确答案为key[0]
+
+	v2.0 20241110
+	修正：答案中有转义'单引号"双引号<小于号>大于号&逻辑与运算符引起的错误
+    //replace("&", "&amp")必须放在第一处转换
+	
+	v1.0 20241108
+	基础版，移植于：英语单词句子排序练习demo - javascript / html / css
+https://www.jianshu.com/p/574c7aa5cc84
+	
+	
+	*/
+	//web 调试神器 eruda网址//cdn.jsdelivr.net/npm/eruda
+	//Eruda是一款专为前端移动端设计的调试面板，具备捕获console日志、检查元素状态、显示性能指标等功能，类似于Chrome DevTools的迷你版。支持动态加载、URL链接控制等多种使用方式，适用于调试移动端网页。
+	eruda.init();
+
+
+	//先必须通过SCRIPT标签引入MultipleChoiceUtil.js
+	var multipleChoiceUtil=new MultipleChoiceUtil('MultipleChoiceUtil');
+
+	/*
+    用户在编辑器编辑时用=#包围答案以保证与其他平台的一致性；
+    因为作为url参数?param=value方式传递，而js时通过=判断解析参数；因此传递时=#分别替换为@$，见org.cj.myoral.Fragment.Fragment3#getEditorText;
+    但在解析完成后最终还是转换回=#，见QuickPotato.Android\app\src\main\assets\quickpotato.clozexa.template.js#function Init()；
+	注意：getParam(paramName)是自定义函数，用于获取指定的URL参数值 
+     */
+	 var items = getParam('items');//注意：getParam(paramName)是自定义函数，用于获取指定的URL参数值 
+	 if(items!=null)
+		 items =items.replace(/@/gi,'=').replace(/\$/gi,'#');
+	 else
+		 items ='[{\"id\":1,\"kid\":10005,\"point\":1, \"content\":\"1.把下列单词排列成一个正确的句子。 {=The∧fish∧can∧swim∧fast∧.}\"},{\"id\":2,\"kid\":10005,\"point\":1, \"content\":\"2.把下列单词排列成一个正确的句子。{=My mother∧is∧beatiful∧with∧long∧hair∧.}\"}]';
+
+	//JSON对象
+	quiz = eval('{groups: [];answers:[]}');
+	quiz.groups=multipleChoiceUtil.getItems(items);//str2
+	//console.log('groups', quiz.groups);
+
+	/*	每个题目quiz.groups[i](Item)包含以下 属性：
+	id			int		唯一标识
+	kid		int		题目考点对应的KnowledgeID，如'冠词'
+	type		int		1-cloze;2-multiplechoice
+	stem		String	题干(要填的空替换为下划线)
+	key		String	答案(选择题答案也是选项的文本而不是ABCD)
+	generalExplanation		String	整个题的解析（填空题等同于答案的解析）
+	choices Array	包括一个（单选题的空）或多个元素（多选题的选项），每个元素为一个json对象，
+	包括以下属性{'answer':answer,'explanation':explanation}
+	具体如下：
+	answer	String	（填空题）用户输入的文字；（选择题）用户最后选择的项目索引（0-3,不是ABCD）
+	explanation		String	（选择题）备选项对应显示给学习者的解析
+	status				int		状态（用于统计错题等）：0-初始化；1-显示；2-答题正确；3-答题错误；4-查看解析；5-复习；//20200417
+	*/
+
+var current=-1;//20241103 当前题目下标
+
+
+/*
+英语单词句子排序练习demo - javascript / html / css
+https://www.jianshu.com/p/574c7aa5cc84
+*/
+var question = 'Welcome to macdonals, how can i help you?'; 
+var native = 'Emm.. big mac burger, please.'; 
+//var wordsRow = []; 
+var words = []; 
+//var dup = []; 
+//var indexSort = []; 
+var select = []; 
+var user = ""; 
+//wordsRow = native.split(/[ ]/);
+
+
+function init(){//20241103 
+	//
+	
+
+	retry();
+}
+
+function creatButtons() { 
+    var buttonList = ""; 
+    for (var i = 0; i < words.length;) { 
+        var randomIndex = Math.floor(Math.random() * words.length); 
+        if (dup.indexOf(randomIndex) === -1) { 
+            dup.push(randomIndex); 
+            indexSort.push(i); 
+            //alert(words[randomIndex]); 
+            var wrd=words[randomIndex].replace("&", "&amp").replace("\'", "&#39").replace('\"', "&#34").replace("<", "&lt").replace(">", "&lt");
+            //alert(wrd+','+words[randomIndex]); 
+            //console.log("words[randomIndex]:",words[randomIndex],"wrd:",wrd);
+    
+            buttonList += "<button id='button" + i + "' style='font-size:20px;' value='" + wrd + "' onclick='createSentence(this.value, this)'>"; 
+            buttonList += words[randomIndex] + "</button> "; 
+            i++; 
+        } 
+    } 
+    $("#words").html(buttonList); 
+} 
+/*
+用用户点击的单词按钮上的单词拼句子（添加到已存在内容的后面）。
+参数：
+value-用户点击的单词按钮上的单词
+obj-用户点击的单词按钮（button）
+*/
+function createSentence(value, obj) { 
+if (obj.parentNode.children.length <= words.length) { 
+        $('#cancel').css("display", ""); 
+    } 
+    //console.log("value:",value);  
+    select.push(value); 
+    
+    //转义'单引号"双引号<小于号>大于号&逻辑与运算符
+    //replace("&", "&amp")必须放在第一处转换
+	//https://blog.csdn.net/allway2/article/details/124925774
+	value =value.replace("&", "&amp").replace("'", "&#39").replace('"', "&#34").replace("<", "&lt").replace(">", "&lt");
+	//console.log("value.replace:",value);  
+    
+    user = user + value; 
+    //console.log("user:",user);
+    $("#user").html(user); 
+
+    if (obj.parentNode.children.length === 1) { 
+        setTimeout(function () {
+
+			console.log("(user).trim():",(user).trim(), "native:",native);
+			var native2=native.replace("&", "&amp").replace("\'", "&#39").replace('\"', "&#34").replace("<", "&lt").replace(">", "&lt");
+            if ((user).trim() === native2) { 
+                $('#cancel').css("display", "none"); 
+                $("#sentence").text(native); 
+                alert('You are right!'); 
+            } else { 
+                $('#cancel').css("display", "none"); 
+                $("#sentence").text(native); 
+                alert('You are wrong!'); 
+            }
+			setTimeout(function () {
+				++current;//20241103 
+				//retry();//20241103
+			}, 2000)
+        }, 100) 
+    } 
+    obj.parentNode.removeChild(obj); 
+} 
+/*
+
+*/
+function retry() {
+
+    dup = []; 
+    indexSort = [];
+	wordsRow = [];
+	select = [];
+	words = []; 
+
+    user = ""; 
+    $("#user").html(user); 
+    $("#sentence").text(""); 
+	//$("#words").html("");
+
+	if(current==-1||current==quiz.groups.length)current=0;
+	question =quiz.groups[current].stem;
+	$("#question").text(question);
+
+	//console.log("key:",quiz.groups[current].key[0]);
+	//20241204 key改为数组，可以有多个正确答案（用于classify题型和多个正确选项的多选题），第一个正确答案为key[0]
+	native =quiz.groups[current].key[0].replace(/∧/gi,' ');//替换分隔符∧为空格。^
+	
+	var wordsRow = quiz.groups[current].key[0].split(/[∧]/); //排序题各元素之间用∧分隔
+	for (var i = 0; i < wordsRow.length; i++) { 
+		if (wordsRow[i].trim().length !== 0) { 
+			words[i] = wordsRow[i] + " ";//不要.trim()，因有的输入各项之间会无意插入多余空格
+			//console.log("words",i,": ",words[i]);
+		} 
+	} 
+	console.log("wordsRow:",wordsRow, "words:",words);
+	creatButtons();
+
+} 
+
+function delete_() { 
+    user = user.split(select[select.length - 1])[0]; 
+    $("#user").html(user); 
+    var index = Number(words.indexOf(select[select.length - 1])); 
+    for (var i = 0; i < dup.length; i++) { 
+        if (dup[i] === index) { 
+            if (indexSort[i] - 1 >= 0) { 
+                var reforeNode = $("#button" + (indexSort[i] - 1)); 
+                for (var j = 1; j <= indexSort[i];) { 
+                    if (reforeNode.length === 1) { 
+                        var buttonList = ""; 
+                        buttonList += "<button id='button" + indexSort[i] + "' value='" + words[dup[i]] + "' onclick='createSentence(this.value, this)'>"; 
+                        buttonList += words[dup[i]] + "</button> "; 
+                        reforeNode.after(buttonList); 
+                        break; 
+                    } else if (j === indexSort[i]) { 
+                        var buttonList = ""; 
+                        buttonList += "<button id='button" + indexSort[i] + "' value='" + words[dup[i]] + "' onclick='createSentence(this.value, this)'>"; 
+                        buttonList += words[dup[i]] + "</button> "; 
+                        $("#words").prepend(buttonList); 
+                        break; 
+                    } else { 
+                        j++; 
+                        reforeNode = $("#button" + (indexSort[i] - j)); 
+                    } 
+                } 
+            } else { 
+                var buttonList = ""; 
+                buttonList += "<button id='button" + indexSort[i] + "' value='" + words[dup[i]] + "' onclick='createSentence(this.value, this)'>"; 
+                buttonList += words[dup[i]] + "</button> "; 
+                $("#words").prepend(buttonList); 
+            } 
+        } 
+    } 
+    select.splice(select.length - 1, 1); 
+    if (select.length === 0) { 
+        $('#cancel').css("display", "none"); 
+    } 
+}
+
+	/** 
+	 * 获取指定的URL参数值 
+	 * URL:http://www.quwan.com/index?name=tyler 
+	 * 参数：paramName URL参数 
+	 * 调用方法:getParam("name") 
+	 * 返回值:
+	 * 注意：用unescape()解码会导致中文乱码，用decodeURI()解码就能保证中文不出现乱码
+	 *
+	 */ 
+	function getParam(paramName) { 
+		paramValue = "", isFound = !1; 
+		if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+			//用unescape()解码会导致中文乱码，用decodeURI()解码就能保证中文不出现乱码
+			arrSource = decodeURIComponent(this.location.search).substring(1, this.location.search.length).split("&"), i = 0; 
+			while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++ 
+		} 
+		return paramValue == "" && (paramValue = null), paramValue 
+	}
+
+
+	//web 调试神器 eruda网址//cdn.jsdelivr.net/npm/eruda
+	//Eruda是一款专为前端移动端设计的调试面板，具备捕获console日志、检查元素状态、显示性能指标等功能，类似于Chrome DevTools的迷你版。支持动态加载、URL链接控制等多种使用方式，适用于调试移动端网页。
+	//eruda.init();
+
+	/*
+	移动端实现拖拽
+	原文链接：https://blog.csdn.net/weixin_44350560/article/details/118636732
+
+	*/
+
+</script>
+
+	</head>
+	<body onload=init()>
+		<div class="container">
+		<div class="header"><h1 class="header">&nbsp;&nbsp;&nbsp;&nbsp;</h1></div>
+		<div class="left"></div>
+		<div class="content">
+
+
+		<div id="top" class="top">
+		排序题 | 
+		</div>
+		<br/>
+
+		<div id="contentarea"> 
+			<div>Question: 
+				<div id="question"></div> 
+			</div> 
+			<br> 
+			<div>Hints: 
+				<div id="words"></div> 
+			</div> 
+			<br> 
+			<div>Your Answer: 
+				<div id="user"></div> 
+			</div> 
+			<br> 
+			<button id="cancel" onclick="delete_()" style="display: none">delete</button> 
+			<br> 
+			<div>Rigth Answer: 
+				<div id="sentence"></div> 
+			</div> 
+		</div>
+		<div id="options"> 
+			<button onclick="retry()"  style='font-size:20px;'>retry</button> 
+		</div> 
+
+
+
+
+
+  </div>
+  <!-- content end -->
+  <div class="right"></div>
+  <div class="footer" style="text-align:center;">Copyright 2019-2020</div>
+  </div>    
+  <!--container end--->
+
+</body>
+</html>
