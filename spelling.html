@@ -1,0 +1,1945 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Spelling</title>
+	<style>
+	/*容器的居中*/
+	/*css布局中margin为0,页面依然与浏览器顶部有一个间隙的问题*/
+	body{
+		margin:0px;padding:0;
+		font-size: 50%;
+		/*font-family:Fantasy;*/
+	}
+
+	div.container{
+		margin:0 auto;
+		/*
+		注意：顶部第一行不能有<!DOCTYPE HTML>否则高度不能撑开。
+		背景色豆沙绿：background-color:#C7EDCC;
+		*/
+		width:100%;border:0px solid red;line-height:150%;background-color:#C7EDCC;
+	}
+
+	div.header,div.footer{color:black;clear:left;}
+	h1.header{padding:0;margin:0;}
+	div.left,div.right{
+		float:left;width:0%;height:100%;border:0px solid red;background-color:#C7EDCC;
+	}
+	div.content{
+		width:99%;background-color:#C7EDCC;padding:1.0em;border:0px solid blue;float:left;
+	}
+	div.stem{height:50px;display:inline-block;text-align:center;}
+	div.buttons{height:50px;display:block;text-align:center;}
+
+	div.expressions{
+		font-size:1.5em;
+
+	}
+
+	A:visited{TEXT-DECORATION:none;COLOR:#009999}
+	A:link{text-decoration:none}
+	A:hover{TEXT-DECORATION:COLOR:#FF0000;FONT-WEIGHT:bold;FONT-STYLE:italic}
+	A.1:link{text-decoration:none}
+	A.1:visited{TEXT-DECORATION:none;COLOR:#000000}
+	A.1:hover{TEXT-DECORATION:none;COLOR:#FFffff;FONT-WEIGHT:bold;FONT-STYLE:italic}
+
+	/* css注释：只对table td标签设置红色边框样式 */
+	table{border-collapse:collapse;border:1px solid #66CCFF;width:100%;}
+	table td{border:1px dotted #66CCFF;padding:5px;}
+
+	#main{border:0px solid #66CCFF;width:80%;clear:both;}
+	.contain {width:100%;height:50px;border:0px solid #66CCFF;margin:1px 0px;padding:0px 0px; float:left}
+	.inner_contain { border-top:1px  dotted #66CCFF;margin:10px 0px;padding:5px 0px;}
+	.lay1{ width:100%; height:450px; border:1px dotted #66CCFF; margin:1px 0px;padding:0px 0px;float:left}
+	.nav_bottom{border-top:0px solid #66CCFF;margin:10px 10px;padding:5px 0px;text-align:center;}
+
+div.StdDiv{
+	background-color: #90EE90;/*#bbbbee#66DD00	#55AA00*/
+	text-align: center;
+	font-size: 50%;
+	color: #000000;
+	padding: 0.5em;
+	border-style: solid;
+	border-width: 1px 1px 1px 1px;
+	border-color: #000000;
+	margin-bottom: 1px;
+}
+
+.css_btn_class {
+    font-size:14px;
+    font-family:Arial;
+    font-weight:normal;
+    -moz-border-radius:42px;
+    -webkit-border-radius:42px;
+    border-radius:42px;
+    border:1px solid #dcdcdc;
+    padding:6px 18px;
+    text-decoration:none;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(5%, #ededed), color-stop(100%, #dfdfdf) );
+    background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+    background:-ms-linear-gradient( top, #ededed 5%, #dfdfdf 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+    background-color:#ededed;
+    color:#777777;
+    display:inline-block;
+    text-shadow:1px 1px 0px #ffffff;
+    -webkit-box-shadow:inset 1px 1px 0px 0px #ffffff;
+    -moz-box-shadow:inset 1px 1px 0px 0px #ffffff;
+    box-shadow:inset 1px 1px 0px 0px #ffffff;
+}
+.css_btn_class:hover {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(5%, #dfdfdf), color-stop(100%, #ededed) );
+    background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+    background:-ms-linear-gradient( top, #dfdfdf 5%, #ededed 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+    background-color:#dfdfdf;
+}
+.css_btn_class:active {
+    position:relative;
+    top:1px;
+}
+
+
+	h2{text-align:center;}
+	h3{text-align:center;}
+
+
+
+ol.QuizQuestions{
+	text-align: left;
+	list-style-type: none;
+}
+
+li.QuizQuestion{
+	padding: 0.5em;
+	/*border-style: solid;*/
+	border-width: 0px 0px 1px 0px;
+	list-style-type: none;
+}
+
+.FuncButton {
+	text-align: center;
+	border-style: solid;
+
+	border-left-color: #ddddf6;
+	border-top-color: #ddddf6;
+	border-right-color: #5d5d77;
+	border-bottom-color: #5d5d77;
+	color: #000000;
+	background-color: #bbbbee;
+
+	border-width: 2px;
+	padding: 3px 6px 3px 6px;
+	cursor: pointer;
+}
+
+.FuncButtonUp {
+	color: #bbbbee;
+	text-align: center;
+	border-style: solid;
+
+	border-left-color: #ddddf6;
+	border-top-color: #ddddf6;
+	border-right-color: #5d5d77;
+	border-bottom-color: #5d5d77;
+
+	background-color: #000000;
+	color: #bbbbee;
+	border-width: 2px;
+	padding: 3px 6px 3px 6px;
+	cursor: pointer;
+}
+
+.FuncButtonDown {
+	color: #bbbbee;
+	text-align: center;
+	border-style: solid;
+
+	border-left-color: #5d5d77;
+	border-top-color: #5d5d77;
+	border-right-color: #ddddf6;
+	border-bottom-color: #ddddf6;
+	background-color: #000000;
+	color: #bbbbee;
+
+	border-width: 2px;
+	padding: 3px 6px 3px 6px;
+	cursor: pointer;
+}
+
+
+    /*toast样式：宽高等在此处设置
+    js封装toast组件——常用工具函数
+	https://segmentfault.com/a/1190000018012740
+	设置DIV随滚动条滚动而滚动(margin:0px auto;position:fixed;top:50%;left:50%;)
+	https://www.cnblogs.com/Keteven/p/4354684.html
+    */
+    #toastWaka {
+        position: fixed;
+        display: none;
+        left: 50%;
+        top: 50%;
+        z-index: 99999;
+        margin: 0 auto;
+        -webkit-transform: translate(-50%);
+        transform: translate(-50%);
+        width: 90%;
+        height:80px;
+        border-radius: 5px;
+        text-align: center;
+        color: #fff;
+        background-color: rgba(000,000,000,0.5);
+    }
+
+    #toastWaka .text{
+        color: #fff;
+        display: inline-block;
+        line-height: 80px;
+        vertical-align:middle;
+        font-size: 14px;
+        position: absolute;
+        top:0;
+        bottom:0;
+        right:0;
+        left:0;
+    }
+
+	</style>
+</head>
+<SCRIPT src="MultipleChoiceUtil.js"></SCRIPT>
+<SCRIPT src="Catelogue.js"></SCRIPT>
+<script type="text/javascript" src="toast.js"></script>
+<script type="text/javascript" src="text2speech.js"></script>
+<script src="eruda.js"></script>
+
+<script type="text/javascript">
+	/*
+	spelling.html单词短语拼写页面：点击选项按钮完成单词或短语拼写，单词拼写的选项为字母，短语拼写的选项为单词。含有空格、中英文逗号、中英文括号、\、/、方括号[、]等分隔符的被当做短语。
+
+	引用文件：
+	MultipleChoiceUtil.js
+	Catelogue.js
+	toast.js
+	text2speech.js
+	eruda.js
+
+
+
+	调用逻辑：
+	nextSpelling()
+		∟computeChoiceList(word)
+		∟initSpelling(word)
+				∟computeButtonList()
+				∟computeStem();
+
+	版本历史
+
+	v6.3 20250112
+	增加：动态调整字体功能。参考：adjustFontSize()
+
+
+	v6.2 20250112
+	增加：全屏模式功能，点击Enter Fullscreen按钮进入全屏，点击Exit Fullscreen按钮退出全屏。参考：
+	installFullScreen()
+	isFullscreen(fn)
+	toggleFullScreen()
+
+
+	
+	v6.1 20241231
+	修正：文字含有单引号导致语音朗读失效页面崩溃的问题。必须调用.replaceAll("'",'&#39')方法。参考：
+	computeStem()
+	fillInLetter(buttonIndex)
+
+	v6.0 20241223
+	*修正：题项有3个元素时，由原来的中间1个元数素为选择项，改为3个元数素均为选择项。参考：
+	nextSpelling()
+	initSpelling(word)
+	computeChoiceList(word)
+	computeButtonList()
+	computeStem();
+
+
+	v5.9 20241220
+	*增加：复杂短语支持say（said,said）识别为短语
+	*修正：diag()方法手动创建json对象更新：1. key改为字符串数组。2.{'answer':answer,'explanation':explanation}改为{'choiceText':choiceText,'explanation':explanation}
+	*修正：phrase变量判定代码统一移到nextSpelling()方法
+	
+	v5.8 20241215 
+	*增加：去掉重复题项。参考：removeDuplicates(arr)
+	
+	v5.7 20241213
+	*修正：短语以单词为单位时拼写时的错误。参考：
+	initSpelling(word)计算phrase为true还是false
+	computeChoiceList(word)计算phrase为true还是false
+	nextSpelling()方法中增加短语支持，去掉题项中有空格时跳过的判断
+	fillInLetter(buttonIndex)跳到下一题的逻辑
+	computeButtonList()
+	*修正：showResult(mode)方法显示在页面上的SQL结尾有多余逗号的问题。
+
+	当前算法：题项只有1个元素时跳过。题项有2个元素时，2个元数素均为选择项，没有首尾元素提示。题项有3个元素时，中间元数素为选择项，同时增加一个干扰项，有首尾元素提示。题项有4个及以上元素时，有首尾元素提示，中间元数素均为选择项。
+
+	v5.6 20241213 调试版本可能运行错误
+	v5.5 20241212
+	*增加：短语时以单词为单位phrase=true。参考computeChoiceList(word)方法。	
+	
+	v5.4 20241210
+	*修正：彻底解决点击Revise按钮jsonItemsWrong数组为空的问题。原因在于之代码中中间调用reset()或hint()方法，只要最后提交时(填空最后一空)拼写正确此题项都不算错，错题也不会加入jsonItemsWrong数组，只有最终提交时拼写错误才算错误。修正后增加workMode参数，默认为值1即严格考试模式，2为宽松测验模式。考试模式中，点击Reset或Hint将视为该题项错误；错题加入jsonItemsWrong数组。参考revise()方法hint()方法。
+	
+	*增加workMode=1;//参数 1-TEST严格考试模式，点击Reset或Hint将视为该题项错误；2-QUIZ宽松测验模式，只有最终提交错误才算错误。默认值为1；可以在URL中用mode=设置参数值，spelling.html?mode=1&items=
+	
+	*showResult()方法更新为showResult(mode)方法。
+	
+	v5.3 20241210 调试版本可能运行错误
+	v5.2 20241210 调试版本可能运行错误
+	
+	v5.1 20241210
+	*修正：再次修正点击Revise按钮出错的问题。参考revise()方法。
+
+	v5.0 20241204
+	*文件名统一为spelling.html，带数字的版本为备份
+	*MultipleChoiceUtil.js->Item成员key改为数组，可以有多个正确答案（用于classify题型和多个正确选项的多选题），第一个正确答案为key[0]
+	*修正：revise()方法中引用spelling-4.0.html统一为spelling.html
+
+	v4.0
+	20241128 增加文本转语音功能。参考:
+	text2speech.js->function speakText(text) 
+
+	v3.1
+	20230728修正只有一个错单词无法复习的问题：jsonItems初始化移到括号外面
+	20230728 修正只有一个错单词无法复习的问题：JS数组下标从0开始
+
+	spelling-2.0 调用逻辑
+	注： 
+	v 1.0 workingWordList是字符串数组；
+	v 2.0 workingWordList是字json对象数组，数组结构参照：
+	items='[{"id":1,"entry":"view","pos":"n.", "meaning": "风景；观点", "score":0,"state":0},{"id":2,"entry":"citizen","pos":"n.", "meaning": "市民", "score":0,"state":0},{"id":3,"entry":"comfortable","pos":"adj.", "meaning": "舒服的", "score":0,"state":0}]';
+	
+	
+	1. 点击Start按钮，调用js方法load()，通过以下语句跳转到org.cj.myoral.activity.QuizActivity进行android处理：
+	window.location.href="js://webview?act=3&book="+v1+"&unit="+v2;
+
+	2. android获取测试数据后让webview跳转到
+	url ="file:///android_asset/vocabulary-quiz.html?items=" +value;
+	webView.loadUrl(url);
+
+	3. <body onload="TimerStartUp()">调用js方法TimerStartUp()；
+	在TimerStartUp()内部先调用Init()方法初始化json数据结构;然后调用StartUp()方法；
+	StartUp()方法调用nextItem()方法正式进入测试；
+
+	*/
+
+	//web 调试神器 eruda网址//cdn.jsdelivr.net/npm/eruda
+	//Eruda是一款专为前端移动端设计的调试面板，具备捕获console日志、检查元素状态、显示性能指标等功能，类似于Chrome DevTools的迷你版。支持动态加载、URL链接控制等多种使用方式，适用于调试移动端网页。
+	eruda.init();
+
+
+
+	/*Java-Javascript Interaction In Android*/
+	/*
+	本地js动态生成人教版高中英语单元单词拼写测试页面（从QuickPotato.Android安卓应用“我”>“选择测试”（应该改为“填空测试”）进入）。参考d:\LeanCloud\matchxx-2.0\quickpotato.match.target-example.html
+	*/
+	//var jsonString = '<?php echo json_encode($quiz);?>';//传递php中的数据给js
+	/*var quiz = JSON.parse(jsonString); //将json字符串转化为js中的json对象
+	//var quiz = json_parse(jsonString);//将json字符串转化为js中的json对象
+	//vartquiz = jsonString.parseJSON(); //将json字符串转化为js中的json对象
+	var target=quiz.groups[current].target;
+	*/
+
+
+
+	var quiz=null;
+	var current=-1;
+	var kid=10001;
+	var  score="0%";
+	
+	var workMode=1;//20241210 1-TEST严格考试模式，点击Reset或Hint将视为该题项错误；2-QUIZ宽松测试，只有最终提交错误才算错误。默认值为1；
+	
+
+	//20200825
+	var wordList=null;
+	var sqlStatement='';
+	
+	//20241210
+	var itemsfilteredGlobal="[";
+
+	var choiceList;//20241223 当前题项解析得到的所有元素数组（从开头到结尾）
+
+	//先必须通过SCRIPT标签引入MultipleChoiceUtil.js
+	var multipleChoiceUtil=new MultipleChoiceUtil('MultipleChoiceUtil');
+	//先必须通过SCRIPT标签引入Catelogue.js
+	var catelogueUtil=new Catelogue('Catelogue');
+
+	var CorrectIndicator = '&nbsp;&nbsp;:)&nbsp;&nbsp;';//'√';
+	var IncorrectIndicator = '&nbsp;&nbsp;X&nbsp;&nbsp;';
+	var Feedback='';
+
+	/*var workingWordList=['manufacture', 'pedal', 'greed', 'settlement'];*/
+	var wrongWordList=[];
+	//20221126 2.0版currentWord是对象，有entry属性；.key[0]版currentWord是字符串
+	var currentWord='comfortable';
+	//itemCount当前第几题，数组下标从0开始
+	var itemCount=-1, correctCount=0, countRate=0.0;//countRate正确率
+	/*
+	buttonNumber备选按钮总数
+	*/
+	var fillingIndex=-1, fillingListLength=0, buttonNumber=-1,grade=-1;
+	var start=-1, end=-1, spellingListLength=0, answerCount=0;
+
+	/*
+	candidateChoiceArray用户填入的选项数组，correctChoiceArray正确选项数组（要填的空<3时有多余项，>3时正好），candidateChoiceArray均在 initSpelling(word)中被填充
+	*/
+	var correctChoiceArray=[],candidateChoiceArray=[],buttonList=[];
+	var html1="<div style=\"padding-left:1px;\"><font size=\"3\" color=\"green\">" +
+            ":)</font></div>";
+    var html2="<div style=\"padding-left:1px;\"><font size=\"3\" color=\"red\">" +
+            ":(</font></div>";
+	var phrase=false;
+	var jsonItems=[];
+	var jsonItemsWrong=[];
+
+
+	/*
+	android与JS交互,互相调用方法,跳转到网页
+	原文链接：https://blog.csdn.net/thw_m/article/details/78583922
+
+	//这个方式是被java调用的
+	function androidCallJs(){
+		 alert("android界面按钮启动：java调用js弹窗(AddJavascriptInterface)");
+	}*/
+
+	/*
+	matchxx 20181113 cemike@126.com
+	js 将json字符串转换为json对象的方法解析：
+	https://www.cnblogs.com/guoziyi/p/6003752.html
+	*/
+	function Init(){
+		//alert("a")
+		console.log("Init");
+		Toast.init();
+		//workingWordList=[];
+		wrongWordList=[];
+		itemsfilteredGlobal="[";//20241210
+		
+		workMode_=getParam('mode');//
+		if (workMode_!=null)workMode=workMode_;//
+		console.log('workMode', workMode);
+		
+		/*
+		用户在编辑器编辑时用=#包围答案以保证与其他平台的一致性；
+		items格式范例：
+		'[{"id":1,"kid":10007,"point":1, "content": "调查；测验 vt. n. {=survey#}"},{"id":2,"kid":10007,"point":1,  "content": "心烦的，苦恼的 adj.{=upset#}"},{"id":3, "kid":10101, "content": "不理睬，忽视{=ignore#}"},{"id":4, "kid":10101, "content": "（使） 平静，镇静，安静;{=calm … down#}"},{"id":5, "kid":10101, "content": "松散的， 宽松的{=loose#}"}]'
+		//deprecated:
+		'[{"id":1,"entry":"view","pos":"n.", "meaning": "风景；观点", "score":0,"state":0},{"id":2,"entry":"citizen","pos":"n.", "meaning": "市民", "score":0,"state":0},{"id":3,"entry":"comfortable","pos":"adj.", "meaning": "舒服的", "score":0,"state":0}]';
+		因为作为url参数?param=value方式传递，而js时通过=判断解析参数；因此传递时=#分别替换为@$，见org.cj.myoral.Fragment.Fragment3#getEditorText;
+		但在解析完成后最终还是转换回=#，见QuickPotato.Android\app\src\main\assets\quickpotato.clozexa.template.js#function Init()；
+		注意：getParam(paramName)是自定义参数，用于获取指定的URL参数值
+		 */
+		 var items = getParam('items');//注意：getParam(paramName)是自定义参数，用于获取指定的URL参数值
+		 if(items!=null)
+			items =items.replace(/@/gi,'=').replace(/\$/gi,'#');
+		 else{
+			
+			//document.getElementById('Instructions').innerHTML=items;
+			 items ='[{"id":0, "kid":10101, "content": "说{=say(said,said)#}"},{"id":1,"kid":10007,"point":1, "content": "舞狮{=lion dance#}"},{"id":2,"kid":10007,"point":1,  "content": "放爆竹{=set off firecrackers#}"},{"id":3, "kid":10101, "content": "让某人做某事{=make sb. do sth.#}"},{"id":3, "kid":10101, "content": "不理睬，忽视{=ignore#}"},{"id":4, "kid":10101, "content": "（使） 平静，镇静，安静;{=calm … down#}"},{"id":5, "kid":10101, "content": "松散的， 宽松的{=loose#}"}]';
+			//items='[{"id":1,"entry":"view","pos":"n.", "meaning": "风景；观点", "score":0,"state":0},{"id":2,"entry":"citizen","pos":"n.", "meaning": "市民", "score":0,"state":0},{"id":3,"entry":"comfortable","pos":"adj.", "meaning": "舒服的", "score":0,"state":0}]';
+		}
+		console.log('items', items);
+		//20230728修正只有一个错单词无法复习的问题：jsonItems初始化移到括号外面
+		//eval("("+data+")")可以将其转换为json对象，和JSON.parse的功能一样
+		//https://www.cnblogs.com/yogic/p/9331078.html
+		jsonItems=JSON.parse(items);
+		//20241215 去掉重复题项
+		jsonItems=removeDuplicates(jsonItems);
+		//jsonItems=Array.from(new Set(jsonItems));//20241215 去掉重复元素，对Object数组无效
+		console.log('jsonItems', jsonItems);
+
+		
+		//workingWordList = JSON.parse(items); //20221126改为使用通用的quiz.groups
+		//console.log('workingWordList: ', workingWordList);
+		//currentWord=workingWordList[0%workingWordList.length];//.entry;
+		//console.log('currentWord: ', currentWord);
+		//
+		/*
+		eval()把将JSON格式的字符串转换为JSON对象
+		eval()把json格式字符串转换为json对象要加圆括号。
+		加上圆括号的目的是迫使eval函数在评估JavaScript代码的时候强制将括号内的表达式（expression）
+		转化为对象，而不是作为语句（statement）来执行。
+		https://blog.csdn.net/weixin_45707610/article/details/125683916
+		*/
+		quiz = eval('({groups: [], answers:[]})');
+		console.log('quiz.quiz', quiz);
+		//var jsonObj= eval('(' + str2 + ')');
+		//var jsonObj= JSON.parse(str2);
+		//var jsonObj= eval('(' + str + ')');
+		//20241215 去掉重复题项
+		quiz.groups=multipleChoiceUtil.getItems(JSON.stringify(jsonItems));//将GIFT格式字符串解析为JSON对象
+		//quiz.groups=multipleChoiceUtil.getItems(items);//将GIFT格式字符串解析为JSON对象
+		console.log('groups', quiz.groups);
+		/*
+		每个题目(Item/quiz.groups[i])包含以下 属性：
+		id			int		唯一标识
+		kid		int		题目考点对应的KnowledgeID，如'冠词'
+		type		int		1-cloze;2-multiplechoice
+		stem		String	题干(要填的空替换为下划线)
+		key		String[]	答案(选择题答案也是选项的文本而不是ABCD)；20241204 改为字符串数组可以有多个正确答案（用于classify题型和多个正确选项的多选题），第一个正确答案为key[0]。目前Cloze填空题型仍只能有一个答案，不支持多个备选正确答案，否则会被识别为MultipleChoice选择题型。
+		generalExplanation		String	整个题的解析（填空题等同于答案的解析）
+		choices Array	包括一个（单选题的空）或多个元素（多选题的选项），每个元素为一个json对象，
+		包括以下属性{'choiceText':choiceText,'explanation':explanation}注意：{'answer':answer,'explanation':explanation}改为{'choiceText':choiceText,'explanation':explanation}
+		具体如下：
+		answer	String	（填空题）用户输入的文字；（选择题）用户最后选择的项目索引（0-3,不是ABCD）
+		explanation		String	（选择题）备选项对应显示给学习者的解析
+		status				int		状态（用于统计错题等）：0-初始化；1-显示；2-答题正确；3-答题错误；4-查看解析；5-复习；//20200417
+		
+		
+		//quiz.groups=jsonObj;
+		document.getElementById("total").innerHTML =quiz.groups.length;
+		*/
+
+	}
+	
+	/*
+	20241215 去掉重复题项（专门针对jsonItems.content）
+	参数arr为jsonItems数组
+	
+	*/
+	function removeDuplicates(arr) {
+    var uniqueArray = [];
+  for (let i = 0; i < arr.length; i++) {
+    console.log('removeDuplicates:',i,arr[i].content);
+if(i<1){
+uniqueArray.push(arr[i]);
+}else{
+	var r=0;
+	for (let j = i+1; j< arr.length; j++) {
+    if (arr[j].content==arr[i].content) {
+    	console.log('Duplicate:',i,arr[i].content);
+    r=1;
+    }else{
+      
+    } 
+    }
+    if (r==0)uniqueArray.push(arr[i]);
+}    
+  }
+  return uniqueArray;
+}
+	
+	
+	function load(){
+		//var sql=sqlStatement;
+		/*
+		var sql=document.getElementById("sqlTextArea2").value;
+		console.log('load: sql', sql);//
+	    var v1 = document.getElementById("books").value;   //此方法兼容性好
+	    var v2 = document.getElementById("units").value;   //此方法兼容性好
+		//var sql='select * from glossary where book='+v1+' and unit='+v2+'  order by seq  ';
+		act=3参考org.cj.myoral.activity.QuizActivity中的
+		android.webkit.WebViewClient.shouldOverrideUrlLoading(android.webkit.WebView, java.lang.String)
+		*/
+		if(sql!=null && sql.length>0){
+			;
+		}else{
+			console.log('load: malformed sql', sql);//
+			sql=sqlStatement;
+		}
+		window.location.href="js://webview?act=5&query="+sql;
+	}
+/**
+ * 获取指定的URL参数值
+ * URL:http://www.quwan.com/index?name=tyler
+ * 参数：paramName URL参数
+ * 调用方法:getParam("name")
+ * 返回值:参数值，没有指定参数时返回null
+ * 注意：用unescape()解码会导致中文乱码，用decodeURI()解码就能保证中文不出现乱码
+ *
+ */
+	function getParam(paramName) {
+		paramValue = "", isFound = !1;
+		if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+			//用unescape()解码会导致中文乱码，用decodeURI()解码就能保证中文不出现乱码
+			arrSource = decodeURIComponent(this.location.search).substring(1, this.location.search.length).split("&"), i = 0;
+			while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0),i++;
+		}
+		return paramValue == "" && (paramValue = null), paramValue
+	}
+
+	function StartUp(){
+		nextSpelling();
+		//initSpelling(currentWord)
+	}
+	/**/
+	function TimerStartUp(){
+		Init();
+		setTimeout('StartUp()', 300);
+	}
+	
+	
+    /**
+     先检查上一个单词拼写是否得分,再进入下一个单词拼写
+	 被StartUp()调用
+	增加短语支持，去掉题项中有空格时跳过的判断
+     */
+    function nextSpelling(){
+    	console.log("nextSpelling() grade=",grade);
+    	
+        //先检查上一个单词拼写是否得分
+        if(grade>-999){
+        	
+            if(grade==0){doWrong();}else if(grade==1){doCorrect();}
+         }
+        //故意延迟几秒是为了显示正确与错误的反馈，否则用户看不到反馈界面即跳转到下一单词
+        //sleep(1000);//1秒
+        
+        itemCount++;
+        if(itemCount<1){
+			document.getElementById("statisticArea").innerHTML="Current "+(itemCount+1)+" | Total "+quiz.groups.length+" | Correct "+" | Wrong | Rate " + "%";
+         }
+        //ArrayList<Word>  wwl= MultipleChoiceTestItemProvider.getInstance().getWorkingWordList();
+        if(itemCount>=quiz.groups.length){
+			for(let index in buttonList) {
+				var  btn=document.getElementById("btn"+index);
+				//console.log("btn.id",btn.id,"btn.style.display:", btn.style.display);
+				btn.style.display='none';
+			}
+			Toast.init();
+			Toast.show('End of the test.', 'success', 1000);
+			setTimeout(function () {
+				Toast.hide();
+			}, 1000);
+			showResult(1);
+//            forward.setEnabled(false);
+//            review();
+//            exportUserLearningDataSQL();
+
+            //if(!savedUserLearningData)saveUserLearningData();
+            return;
+        }
+		//currentWord=workingWordList[itemCount%workingWordList.length];
+		currentWord=quiz.groups[itemCount%quiz.groups.length].key[0];//20221126
+		//增加短语支持，去掉题项中有空格时跳过的判断
+        /*if(currentWord.indexOf("/") != -1 || currentWord.indexOf("(") != -1){// || currentWord.indexOf(" ") != -1
+        	console.log("过滤复杂长单词");
+            grade=-999;//跳过的不播报
+            nextSpelling();//过滤复杂长单词
+        }*/
+
+		document.getElementById("emoj").innerHTML="";
+        //console.log("Next spelling",currentWord.entry.toString()+"");       
+		
+		console.log('test',/[ ,，\(\)（）]+/.test(currentWord));
+		if(/[ ,，\(\)（）]+/.test(currentWord)==false){
+		//if(currentWord.indexOf(' ')<0){
+			phrase=false;
+		}else{
+			phrase=true;
+        }
+		console.log('nextSpelling phrase=',phrase);
+
+        choiceList=computeChoiceList(currentWord);//20241223 choiceList全局变量，避免调用computeChoiceList(word)两次
+		//if(phrase==false)
+        if(choiceList.length<2){
+            grade=-999;//跳过的不播报
+            nextSpelling();//过滤组成部分少于3的
+        }        
+        
+		document.getElementById("caption").innerHTML=quiz.groups[itemCount%quiz.groups.length].stem;//+":)"
+        initSpelling(currentWord);
+    }
+
+	/*
+	被nextSpelling()调用
+	*/
+	function initSpelling(word){
+		fillingIndex=-1;
+		answerCount=0;
+		//choiceList=computeChoiceList(word);//20241223 
+		spellingListLength=choiceList.length;//当前题项解析得到的所有元素数组（从开头到结尾）
+
+		/*if(/[ ,，\(\)（）]+/.test(word)==false){
+		//if(word.indexOf(' ')<0){
+			phrase=false;
+		}else{
+			phrase=true;
+        }*/
+		console.log('initSpelling phrase=',phrase);
+		if(phrase==false)
+		if(spellingListLength<2){
+			nextSpelling();
+		}
+		fillingListLength= parseInt(spellingListLength/2);
+        start=fillingListLength-parseInt(fillingListLength/2);
+        end=fillingListLength+parseInt(fillingListLength/2);
+        buttonNumber=end-start+1;
+		//console.log('buttonNumber=',buttonNumber,'start=',start,'end=',end);//
+         if(spellingListLength==2){
+            start=0; end=1;buttonNumber=2;
+        }else if(spellingListLength==3){
+            start=0; end=2;buttonNumber=3;//20241223
+            //start=1; end=2;buttonNumber=2;
+        }else if(spellingListLength==4){
+            start=1; end=2;buttonNumber=2;
+        }
+		correctChoiceArray=[],candidateChoiceArray=[];
+		/*chosenCharArray = new String[buttonNumber];*/
+        for(var j=0;j<buttonNumber;j++){
+            candidateChoiceArray[j]=" _ ";
+        }
+        if(spellingListLength<3){//20241223 <=改为<
+            candidateChoiceArray= [];
+            candidateChoiceArray[0]=" _ ";
+        }
+		//console.log('candidateChoiceArray:',candidateChoiceArray);
+
+        computeButtonList();
+        //console.log("CorrectChoiceArray:",correctChoiceArray);
+        computeStem();
+
+
+		
+	}
+	
+	/*
+	把输入字符串拆分为元素，单词拆分成字母，短语拆分成单词。
+	被initSpelling(word)，nextSpelling()方法调用
+	返回值：当前题项解析得到的所有元素数组（从开头到结尾）
+	*/
+	function computeChoiceList(word){
+		var choiceList=[];//不能为全局变量，或者必须每次在此方法内初始化清空数组，否则上一轮结果会影响下一轮
+		
+		if(phrase==false){//20241213
+		//if(word.indexOf(' ')<0){
+			phrase=false;
+			for(var i=0;i<word.length;i++){
+					choiceList[i]=word.charAt(i)+"";
+			}
+		}else{
+			phrase=true;
+			//filter(Boolean)过滤
+			var wfs=word.split(/[ ,，\(\)（）]+/).filter(Boolean);//' '/\\s+/regex:/[,， ]+|\\t+|\\s+/分隔符可以是：空格，逗号，逗号+空格，跳格
+			//wfs=word.split(/\\t+|\\s/);//regex:/[,， ]+|\\t+|\\s+/分隔符可以是：空格，逗号，逗号+空格，跳格
+			console.log('wfs',wfs);
+
+			for(var i=0;i<wfs.length;i++){
+					choiceList[i]=wfs[i]+"";
+			}		
+		}
+		console.log('computeChoiceList phrase=',phrase, ' choiceList:',choiceList);//		console.log();
+
+		return choiceList;
+	}
+	
+		
+	/*
+	被initSpelling(word)，reset()方法调用
+	*/
+	function computeButtonList(){
+		buttonList=[];
+		for(var i=start;i<=end;i++){
+            correctChoiceArray[i-start]=choiceList[i];
+            var bt=correctChoiceArray[i-start];
+            //buttonList[i-start]=new Button(this);
+            buttonList[i-start]=bt;
+            //Android解决Button字母默认大写的问题https://blog.csdn.net/zhe_ge_sha_shou/article/details/78179649
+            //buttonList[i-start].setAllCaps(false);
+
+        }
+		console.log('correctChoiceArray:', correctChoiceArray);
+
+		/*
+		JS实现clone()方法，对五种主要数据类型进行值复制
+		https://www.cnblogs.com/dll-ft/p/5846027.html
+		JS 数组克隆
+		https://www.cnblogs.com/z-dl/p/8257355.html
+		*/
+        correctButtonList=buttonList.slice();//JS 数组克隆
+        var a=Math.floor((Math.random()*buttonNumber));
+        //int a=random.nextInt(buttonNumber);
+        var b=0;
+        do {
+            b=Math.floor((Math.random()*buttonNumber));
+        }while(b==a);
+
+        var btn=buttonList[a];
+        buttonList[a]=buttonList[b];
+        buttonList[b]=btn;
+        //System.out.println("a="+a+" b="+b);
+       
+        //调用addView()方法增加一个TextView到线性布局中
+        //mLayout.removeAllViews();
+		var btnHtml='';
+		//console.log('buttonNumber=',buttonNumber)
+        for(var j=0;j<buttonNumber;j++){
+			//console.log('j=',j,buttonList[j]);
+			btnHtml+='<button id="btn'+j+'" class="css_btn_class" style="" onclick="fillInLetter('+j+');">'+buttonList[j]+'</button>&nbsp;&nbsp;';
+
+//        	Button btn1=new Button(this);
+//        	btn1.setText("Button1");
+//         buttonList[j].setOnClickListener(myButtonActionListener);
+//         mLayout.addView(buttonList[j], para);
+        }
+		document.getElementById("buttons").innerHTML=btnHtml;
+		
+		
+	}
+	
+	/*
+	被initSpelling(word)，reset()方法调用
+	*/
+	function computeStem(){
+		if(choiceList.length<1)return;
+
+        var st="";
+        for(var i=0;i<start;i++)st+=choiceList[i]+(phrase?" ":"");
+        beginning=st+(phrase?" ":"");
+        var mid="";
+        for(var i=start;i<end+1;i++)mid+=" _ ";//choiceList.get(i)+(phrase?" ":"");
+        var midterm=mid;
+        //StringBuilder midterm=new StringBuilder(text.substring(start, end+1).replaceAll(".", " _ "));
+        //for(int j=0;j<buttonNumber;j++)midterm.append(candidateChoiceArray[start+j]);
+        var en="";
+		//console.log('computeStem() end=',end, ' spellingListLength=',spellingListLength);
+        for(var i=end+1;i<spellingListLength;i++){
+			en+=choiceList[i]+(phrase?" ":"");
+			//console.log('computeStem() end=',end, ' spellingListLength=',spellingListLength, ' en:',en);
+        }
+		ending=en;
+
+        if(spellingListLength==3){
+            buttonNumber=3;
+            midterm=" _ _ _ ";//20241223 一个下划线改为3个下划线
+            //ending=text.substring(2);
+            //ending=choiceList[2];//20241223
+        }else if(spellingListLength==4){
+            midterm=" _ _ ";
+        }
+        stem=beginning+midterm+ending;//
+		console.log('computeStem() beginning',beginning,' midterm:',midterm,' en:',en,' stem:',stem);
+        var html=
+                "<span><font id=\"stemText\" nowrap style=\"color:blue;font-size:40px;font-weight:bold;float:center;display:inline\">"
+                +stem
+                +"</font><button onclick='speakText(\""+currentWord.replaceAll("'",'&#39')+"\")'>▷</button></span>";//20241128
+
+        document.getElementById("stem").innerHTML=html;
+		adjustFontSize();
+	}
+	
+
+	    /**
+     * 填充每个字母时调用此方法
+     * @param buttonIndex，即用户按下的按钮编号，从0开始
+     */
+    function fillInLetter(buttonIndex){
+		var ch=buttonList[buttonIndex];
+        ++fillingIndex;//当前正在填空的下划线下标，从0开始
+		console.log("fillInLetter(buttonIndex) ch=",ch,'buttonIndex=',buttonIndex,'fillingIndex',fillingIndex);//
+        //if(candidateChoiceArray.length==1)
+        //    if(fillingIndex>0)return;
+        if(fillingIndex>=buttonNumber)return;
+        //String ch=((Button)v).getText().toString();//e.getActionCommand();
+        //////////////////////////////
+
+        candidateChoiceArray[fillingIndex]=ch;
+		console.log("candidateChoiceArray: ",candidateChoiceArray);
+        var midterm='';
+
+        if(candidateChoiceArray.length>1)
+            for(var j=0;j<buttonNumber;j++)midterm+=candidateChoiceArray[j]+(phrase?" ":"");
+        else{//aid,如果是短语，一个元素也要加空格
+            midterm+=ch+(phrase?" ":"");
+        }
+        stem="<span><font nowrap style=\"color:blue;font-size:40px;font-weight:bold;float:center;display:inline\">"
+                +beginning+"<font id=\"stemText\" style=\"color:#990066;font-size:40px;float:center;display:inline\">"
+                +midterm+"</font>"+ending+"</font><button onclick='speakText(\""+currentWord.replaceAll("'",'&#39')+"\")'>▷</button></span>";//2021128 font-style:italic;
+		document.getElementById("stem").innerHTML=stem;
+//        textView41.setText("");
+//        textView41.setText(Html.fromHtml(stem));
+//		CharSequence old=textView41.getText();
+//		textView41.setText(old.toString().replaceFirst("-", ch));
+
+        //Check
+        var correct=true;
+        if(candidateChoiceArray.length==1){//aid
+            if(candidateChoiceArray[0]!=correctChoiceArray[0])correct=false;
+        }else{
+            for(var j=0;j<=fillingIndex;j++){//buttonNumber
+                //System.out.println(correctChoiceArray[j]+" : "+candidateChoiceArray[j]);
+				//https://www.jb51.net/article/42199.htm
+                if(candidateChoiceArray[j]!=correctChoiceArray[j])correct=false;
+            }
+        }
+        //stemPane.remove(textView40);
+        //给自定义对话框带回的结果
+        grade=1;
+        if(correct){
+            if(grade==-1){//中途提示过，即使最后正确也不得分
+                grade=0;
+            }else
+                grade=1;//给自定义对话框带回的结果
+			document.getElementById("emoj").innerHTML=html1;
+			document.getElementById("hint").innerHTML="Well done!<br>Please go on.";
+			
+        }else{
+            grade=0;
+			document.getElementById("emoj").innerHTML=html2;
+
+            //v5.0 20180114
+            //boolean r=MultipleChoiceTestItemProvider.getInstance().addToWrongWordList(currentWord);
+			document.getElementById("hint").innerHTML="That is not quite right.<br>"+"Add " +currentWord+	" to WrongWordList.<br>Click reset to try again.";//+r;
+            //当前填入字母错误，请点击重置(Reset)按钮，重新开始
+			
+			//20201116只要一个字母错误就加入错词表（检查是否重复），而不等到最后一个字母才检查
+			var rst=addToWrongWordList(currentWord);
+			console.log('fillInLetter(buttonIndex) addToWrongWordList=',rst);
+		
+        }
+
+        //如果当前填入的项正确，则从备选列表按钮中去除（即使前面使有某个字母错误，只要此下标字母正确，也移除）
+        if(correctChoiceArray[fillingIndex]==ch){
+			var  btn=document.getElementById("btn"+buttonIndex);
+			//console.log("btn.id",btn.id,"btn.style.display:", btn.style.display);
+			btn.style.display='none';
+//			selectionPane.remove((Component)e.getSource());
+//			selectionPane.updateUI();
+        }/*else{//否则提示当前填入字母错误
+            document.getElementById("hint").innerHTML="当前填入字母错误，请点击重置(Reset)按钮，重新开始";
+			
+            //document.getElementById("hint").innerHTML=currentWord;
+        }*/
+		console.log("spellingListLength",spellingListLength,"buttonNumber=", buttonNumber);
+        //Android:如果已经到达最后一个字母，则自动跳转到下一单词
+        //if(fillingIndex==buttonNumber-1||candidateChoiceArray.length==1){
+		//var rt=(spellingListLength==3)?buttonNumber-1:buttonNumber-1;
+		var rt=buttonNumber-1;//20241213
+        if(fillingIndex==rt){//||candidateChoiceArray.length==buttonNumber
+            //1秒后执行方法
+			console.log("setTimeout rt",rt," fillingIndex",fillingIndex," spellingListLength",spellingListLength,"buttonNumber=", buttonNumber);
+			setTimeout(function () {
+				nextSpelling();//跳转到下一单词
+			}, 2000);
+        }
+
+		adjustFontSize()
+
+    }//fillInLetter
+
+
+	/*
+	20201116
+	加入错词表（检查是否重复）
+	返回值 1-成功添加；0-数组中已存在该元素，未添加
+	*/
+	function addToWrongWordList(currentWord){
+		if (wrongWordList.indexOf(currentWord)>=0){   //大于等于0，则数组中存在
+			console.log('addToWrongWordList(currentWord) wrongWordList数组中已存在'+currentWord);
+			return 0;
+		}
+		/*for(var i=0;i<wrongWordList.length;i++){
+	//console.log(currentWord+'<->'+wrongWordList[i]);
+			if(wrongWordList[i]==currentWord)return 0;
+		}*/
+		wrongWordList.push(currentWord);
+
+		//对应将jsonItems[itemCount]加入jsonItemsWrong，revise()方法中会用到
+		itemsfilteredGlobal+=JSON.stringify(jsonItems[itemCount])+', ';
+		jsonItemsWrong.push(jsonItems[itemCount]);
+		console.log('jsonItemsWrong', jsonItemsWrong);
+
+		return 1;
+	}
+	
+	function restart(){
+		itemCount=-1;
+		nextSpelling();
+	}
+	
+	function doCorrect(){//
+		//		status				int		状态（用于统计错题等）：0-初始化；1-显示；2-答题正确；3-答题错误；4-查看解析；5-复习；//20200417
+		quiz.groups[itemCount].status=2;//20221130
+        if(itemCount>quiz.groups.length)return;//超过题项总数的正确回答不再计算
+        var wrongCount=wrongWordList.length;
+        var totalCount=quiz.groups.length;//-wrongCount;
+        correctCount=totalCount-wrongCount;//因错误单词被附加在列表末尾，所以错词要减2次
+        countRate=parseFloat(correctCount/totalCount*100);
+        var rate2= countRate.toFixed(2);//四舍五入，保留两位小数
+        document.getElementById("statisticArea").innerHTML="Current "+(itemCount+1)+" | Total "+totalCount+" | Correct "+correctCount+" | Wrong "+wrongCount+" | Rate "+rate2 + "%";
+        document.getElementById("hint").innerHTML="Well done!";
+        // 语音反馈：鼓励
+        //app.notifyNewMessage("Well done!");
+	}
+	
+	function doWrong(){
+		console.log('doWrong');
+		//20201116加入错词表（检查是否重复）
+		var rst=addToWrongWordList(currentWord);
+		console.log('doWrong() addToWrongWordList=',rst);
+		//wrongWordList.push(currentWord);
+		/*if(rst>0){//1-成功添加；0-数组中已存在该元素，未添加
+		//20241215 添加jsonItems的代码移动至addToWrongWordList()方法内
+		itemsfilteredGlobal+=JSON.stringify(jsonItems[itemCount])+', ';
+		jsonItemsWrong.push(jsonItems[itemCount]);
+		console.log('jsonItemsWrong', jsonItemsWrong);
+		}*/
+		//		status				int		状态（用于统计错题等）：0-初始化；1-显示；2-答题正确；3-答题错误；4-查看解析；5-复习；//20200417
+		quiz.groups[itemCount].status=3;//20221130
+		//console.log("wrongWordList", wrongWordList);
+        var wrongCount=wrongWordList.length;
+        var totalCount=quiz.groups.length;//-wrongCount;
+        correctCount=totalCount-wrongCount;//因错误单词被附加在列表末尾，所以错词要减2次
+        countRate=parseFloat(correctCount/totalCount*100);
+        var rate2= countRate.toFixed(2);//四舍五入，保留两位小数
+        document.getElementById("statisticArea").innerHTML="Current "+(itemCount+1)+" | Total "+totalCount+" | Correct "+correctCount+" | Wrong "+wrongCount
+                +" | Rate "+rate2 + "%";
+        document.getElementById("hint").innerHTML="That is not quite right. The answer is [" + currentWord + "].";
+
+	}
+	
+	function doHint(){//
+		//20241210
+		if(workMode==1)doWrong();
+		var nexFillingIndex=(fillingIndex+1)%correctButtonList.length;//20190105
+        if(nexFillingIndex>=choiceList.length)return;
+		for(let index in buttonList) {
+			//console.log(index,buttonList[index]);//,buttonList,correctButtonList
+			if (buttonList[index]==correctButtonList[nexFillingIndex]){
+				fillInLetter(index);
+				grade=-1;//提示正确答案的不得分;
+				break;
+			}	
+		}; 
+		
+		
+	}
+	
+	function reset(){//
+		//20241210
+		if(workMode==1)doWrong();
+		
+	    grade=-1;//中途重置的不得分
+        for(var j=0;j<correctChoiceArray.length;j++){
+            candidateChoiceArray[j]=" _ ";
+        }
+        fillingIndex=-1;
+        computeButtonList();
+        computeStem();
+        document.getElementById("emoj").innerHTML=html1;
+	
+	}
+	/*
+	参数：mode：1-显示错误列表，；2-显示错误列表，同时显示SQL
+	*/
+	function showResult(mode){
+		//console.log('jsonItemsWrong', jsonItemsWrong);
+		var wrongListStr="WrongWordList:<br>";
+		var sqlString='SELECT entry, pos, meaning FROM glossary WHERE entry in (';
+		
+		for(var k=1;k<=wrongWordList.length;k++){
+			wrongListStr+=k+'. '+wrongWordList[k-1]+"<br>";
+			sqlString=sqlString+"'"+wrongWordList[k-1]+"', ";
+			console.log('+sqlString', sqlString);
+			
+		}
+		sqlString=sqlString.substring(0,sqlString.length-2).trim()+');';//去掉末尾多余的逗号及空格
+		console.log('-sqlString', sqlString);
+		var sqlString2='';
+		if(mode==2)sqlString2=sqlString+'<br>';
+		document.getElementById("hint").innerHTML=wrongListStr+'<br>'+sqlString2;
+	}
+	/*
+	20241210,20221130
+	点击Revise按钮重做错题（拼写错误的词）
+	根据jsonItemsWrong题项发送到本页面重新开始
+	20230728 修正只有一个错单词无法复习的问题：JS数组下标从0开始
+	spelling.html接受的参数格式：items=[{"id":1,"kid":10001,"point":1, "content":"1. There are plans to split the corporation into a number of smaller  {=independent#negative adjective needed}(depend) companies."},{"id":2,"kid":10001,"point":1, "content":"2. The house was surrounded by trees and {=invisible#negative adjective needed} (visible) from the road."}]
+	*/
+	function revise(){
+		//不包含：{"id":1,"kid":10000,"creator":"tgd","domain":"领域", "title":"标题", "preface":"前言", "orientation":"导学(可包含微课)", "sidenote":"旁注", "epilogue":"后记","updateTime":"2020-02-07 20:37:00","status":"1","factor":"1","note":"注释","content":
+		var itemsfiltered="[";
+		var sqlString='SELECT entry, pos, meaning FROM glossary WHERE entry in (';
+		//jsonItemsWrong=Array.from(new Set(jsonItemsWrong));//20241215 去掉重复元素，对Object数组无效
+		for(var k=0;k<jsonItemsWrong.length;k++){//20230728 JS数组下标从0开始
+			itemsfiltered+=JSON.stringify(jsonItemsWrong[k]);//格式{id: 1, kid: 10000, point: 1, content: '1. 和，又，而 conj.{=and#}'}
+			sqlString=sqlString+"'"+wrongWordList[k]+"' ";
+			if(k<jsonItemsWrong.length-1){itemsfiltered+=',';
+			sqlString=sqlString+', ';
+			}
+		}
+		itemsfilteredGlobal=itemsfilteredGlobal.substring(0,itemsfilteredGlobal.length-3).trim();//去掉末尾多余的逗号及空格
+		itemsfilteredGlobal+="]";//
+		itemsfiltered+="]";//
+		console.log('itemsfilteredGlobal',itemsfilteredGlobal,'<->itemsfiltered',itemsfiltered);
+		if(itemsfiltered=="[]"){
+			itemsfiltered=itemsfilteredGlobal;
+		}
+		sqlString=sqlString+');';
+		console.log('itemsfiltered',itemsfiltered);
+		console.log('sqlString',sqlString);
+		//作为网址的参数传输的时候=#有特殊含义(~不用转换)，为避免出错作如下转换，
+		//到了目标网页再反向转换回来。
+		var value=itemsfiltered.replace(/=/gi,'@').replace(/#/gi,'\$');		
+		var url='spelling.html?mode=1&items='+value;
+		window.open(url);
+	}
+	
+	
+	
+	
+	//检查填空题答案：
+	function checkClozeAnswer(){//
+		var answer=document.getElementById("gap1").value;
+		console.log("checkClozeAnswer", answer);
+		//return;
+		var msg="That a nice try!";
+		if(answer !=quiz.groups[current].key[0]){//wrong
+			msg="Please try again!";
+			var  key=quiz.groups[current].key[0];
+			document.getElementById('mark').innerHTML="&nbsp;<span nowrap style=\"color:red;font-size:20px;font-weight:bold;\">χ</span>&nbsp;<span  style=\"text-decoration:underline\">"+key+"</span><span nowrap style=\"color:green;font-size:20px;font-weight:bold;\">√</span>";
+			//document.getElementById('mark').innerHTML="χ";
+			//document.getElementById('mark').style="color:red;font-size:20px;font-weight:bold;";
+
+		}else{//right
+			msg="Good. You are right!";
+			document.getElementById('mark').innerHTML="<span nowrap style=\"color:green;font-size:20px;font-weight:bold;display:inline\">√</span>";
+			correctCount++;
+
+		}//
+		var rate=correctCount/quiz.groups.length;
+		console.log('correctCount',correctCount)
+		console.log('rate',rate)
+		document.getElementById("score").innerHTML= correctCount;//四舍五入保留1位小数
+		document.getElementById("rate").innerHTML= (rate*100).toFixed(2)+"%";//四舍五入保留1位小数
+
+		//cemike@126.com 20180815
+		var x=document.getElementById('stem');
+		//alert(x.firstChild.innerHTML);
+		Feedback = quiz.groups[current].generalExplanation;
+		x.title=Feedback;//选对选项时为正确答案的解析
+		document.getElementById('hint3').innerHTML='提示：'+Feedback;
+		//document.getElementById('hint2').innerHTML=quiz.groups[current].key[0];
+
+		//document.getElementById('feedback').innerHTML=msg;
+		//readAloud(msg);
+	}
+	//检查多选题答案：QNum问题索引, ANum选项索引（0-3）, Btn选项前的按钮
+	function CheckMCAnswer(QNum, ANum, Btn){
+		console.log('CheckMCAnswer',quiz.groups[current].choices[ANum].answer+'<->'+quiz.groups[current].key[0])
+		if (quiz.groups[current].choices[ANum].answer !=quiz.groups[current].key[0]){//wrong
+			//Mark the answer
+			Btn.innerHTML = IncorrectIndicator;
+
+		} else {//right
+			//Mark the answer
+			Btn.innerHTML = CorrectIndicator;
+
+			//Calculate the score for this question
+			//CalculateMCQuestionScore(QNum);
+
+			//cemike@126.com 20180815
+			var x=document.getElementById('stem');
+			//alert(x.firstChild.innerHTML);
+			Feedback = quiz.groups[current].generalExplanation;
+			x.title=Feedback;//选对选项时为正确答案的解析
+			document.getElementById('hint3').innerHTML='提示：'+Feedback;
+			//document.getElementById('hint2').innerHTML=quiz.groups[current].key[0];
+
+		}
+	}
+	//type 1-next;2-previous
+	/*function next(type){
+		len=quiz.groups.length;
+		if(type==1)
+			current=++current%len;
+		else
+			current=Math.abs(--current)%len;
+
+		target=quiz.groups[current].target;
+		document.getElementById("stem").innerHTML='['+(current+1)+'/'+len+']'+quiz.groups[current].wds[target].entry;
+		for(var k=0;k<len;k++){
+			if(k==current)
+				document.getElementById("group"+k).style="display:block";
+			else
+				document.getElementById("group"+k).style="display:none";
+		}
+	}*/
+
+	function FuncBtnOver(Btn){
+		if (Btn.className != 'FuncButtonDown'){Btn.className = 'FuncButtonUp';}
+	}
+
+	function FuncBtnOut(Btn){
+		Btn.className = 'FuncButton';
+	}
+
+	function FuncBtnDown(Btn){
+		Btn.className = 'FuncButtonDown';
+	}
+
+	var focusedTextArea=document.getElementById('sqlTextArea');
+
+	function setFocusedTextArea(i){
+		if(i==1){
+			focusedTextArea=document.getElementById('sqlTextArea');
+		}else{
+			focusedTextArea=document.getElementById('sqlTextArea2');
+		}
+	}
+	//移动光标到最后
+	function setPos(o){
+		if(o.setSelectionRange){//W3C
+			setTimeout(function(){
+				o.setSelectionRange(o.value.length,o.value.length);
+				o.focus();
+			},0);
+		}else if(o.createTextRange){//IE
+			var textRange=o.createTextRange();
+			textRange.moveStart("character",o.value.length);
+			textRange.moveEnd("character",0);
+			textRange.select();
+		}
+	};
+	/*在文本框插入文本*/
+	function Insert(str) {
+		var obj =focusedTextArea;
+		/*
+		var obj1 = document.getElementById('sqlTextArea');
+		var obj2 = document.getElementById('sqlTextArea2');
+		//js 判断一个bai文本框是否获得焦点。
+		if (obj1 == document.activeElement) {
+			obj =obj1;
+		}else if (obj2 == document.activeElement){
+			obj =obj2;
+		}else{//两个文本框都未获得焦点，默认让第一个文本框获得焦点。
+			obj1.focus();
+		}*/
+		if(obj ==null){
+			console.log('No textarea has focus.')
+			obj = document.getElementById('sqlTextArea');
+		}
+		setPos(obj);
+		if(document.selection){
+		obj.focus();
+		var sel=document.selection.createRange();
+		document.selection.empty();
+		sel.text = str;
+		} else {
+		var prefix, main, suffix;
+		prefix = obj.value.substring(0, obj.selectionStart);
+		main = obj.value.substring(obj.selectionStart, obj.selectionEnd);
+		suffix = obj.value.substring(obj.selectionEnd);
+		obj.value = prefix + str + suffix;
+		}
+		obj.focus();
+	}
+	function clearSelection() {
+		var obj = document.getElementById('sqlTextArea');
+		obj.value ='';
+	}
+
+	//百度文字转语音免费接口使用实例（需要联网）
+	//https://blog.csdn.net/ztblog/article/details/52209308
+	//百度语音合成接口
+	//http://yuyin.baidu.com/docs/tts/136
+	function readAloud(val){
+		//var val=document.getElementById("val").value;
+		var zhText = val;
+		zhText = encodeURI(zhText);
+		document.getElementById("player").innerHTML="<audio autoplay=\"autoplay\">"+
+			"<source src=\"http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&per=4&text="+ zhText +"\" type=\"audio/mpeg\">"+
+			"<embed height=\"0\" width=\"0\" src=\"http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&per=4&text="+ zhText +"\">"+
+			"</audio>";
+	}
+	/*
+	原文链接：https://blog.csdn.net/hj850126/java/article/details/19112795  
+	*/
+	function sleep(n) { //n表示的毫秒数
+            var start = new Date().getTime();
+            while (true) if (new Date().getTime() - start > n) break;
+    }  
+
+	/*mode: 1-show;0-hide*/
+    function showHint(mode) {
+		console.log('showHint',mode, Feedback);
+        Feedback = quiz.groups[current].generalExplanation;
+		if(mode==1){
+			document.getElementById('hint3').innerHTML='提示：'+Feedback;
+		}else {
+			document.getElementById('hint3').innerHTML='';
+		}
+    }
+
+    function alertMessage(message) {
+        alert(message)
+    }
+
+    function toastMessage(message) {
+        window.control.toastMessage(message)
+    }
+    /*
+	[',', '(', ')']
+	*/
+    function splitString(str, delimiters) {
+    let result = [];
+    let temp = '';
+    let insideQuotes = false;
+    let currentDelimiterIndex = 0;
+
+    for (let i = 0; i < str.length; i++) {
+        let char = str[i];
+
+        // 检查是否是分隔符
+        let isDelimiter = delimiters.some(delimiter => delimiter === char);
+
+        // 如果当前字符是分隔符并且不在引号内
+        if (isDelimiter && !insideQuotes) {
+            // 将之前的字符串片段加入结果数组
+            if (temp.trim() !== '') {
+                result.push(temp.trim());
+            }
+            temp = '';
+            currentDelimiterIndex = 0;
+        } else {
+            // 检查是否进入或退出引号
+            if (char === '(' || char === ')' || char === ',') {
+                if (char === '(' || char === ')') {
+                    insideQuotes = !insideQuotes;
+                }
+                // 如果是逗号且不在引号内，则视为分隔符
+                if (char === ',' && !insideQuotes) {
+                    result.push(temp.trim());
+                    temp = '';
+                    continue;
+                }
+            }
+            // 将字符添加到临时字符串
+            temp += char;
+        }
+    }
+
+    // 添加最后一个片段
+    if (temp.trim() !== '') {
+        result.push(temp.trim());
+    }
+
+    return result;
+}
+    
+	/*
+	v.key[0] 20221127
+	js模拟将手动输入词表（逗号分隔）转换为quiz.groups。stem为一串下划线，explanation为空
+	v2.0 20201005
+	弹出对话框，手动输入词表（逗号分隔）
+	*/
+	function diag(){
+		var str=prompt("请输入词表（逗号分隔）","（set off fireworks）aspect  , impression，constant(effect)discuss（efficient）glove(lion dance)");
+		//var str=prompt("请输入词表（每行一个词）","manufacture\npedal\ngreed");
+		if(str)
+		{
+			alert("您刚输入的是：\n"+ str);
+			//wfs=splitString(str,[' ', ',', '(', ')','，', '（', '）']);//自定义方法splitString(str, delimiters)
+			wfs=str.split(/[ ,，\(\)（）]+/);//[,， ]+|\\t+|\\s+分隔符可以是：空格，逗号，逗号+空格，跳格
+			//alert("输出"+ wfs);
+			console.log('wfs',wfs);
+			//workingWordList=[];
+			//console.log('quiz', quiz);
+			/*
+			eval()把将JSON格式的字符串转换为JSON对象
+			eval()把json格式字符串转换为json对象要加圆括号。
+			加上圆括号的目的是迫使eval函数在评估JavaScript代码的时候强制将括号内的表达式（expression）
+			转化为对象，而不是作为语句（statement）来执行。
+			https://blog.csdn.net/weixin_45707610/article/details/125683916
+			*/
+			quiz = eval('({groups: [], answers:[]})');
+			/*
+			js中forEach，for in，for of循环的用法
+			https://www.cnblogs.com/amujoe/p/8875053.html
+			 items ='[{"id":1,"kid":10007,"point":1, "content": "调查；测验 vt. n. {=survey#}"},{"id":2,"kid":10007,"point":1,  "content": "心烦的，苦恼的 adj.{=upset#}"},{"id":3, "kid":10101, "content": "不理睬，忽视{=ignore#}"},{"id":4, "kid":10101, "content": "（使） 平静，镇静，安静;{=calm … down#}"},{"id":5, "kid":10101, "content": "松散的， 宽松的{=loose#}"}]';
+			*/
+			
+			for(let x in wfs) {
+				var word={};//手动创建json对象
+				word.id=parseInt(x)+1;//如果引用的json对象属性并赋值时，如果不存在，就会自动创建
+				word.kid=10007;
+				word.point=1;
+				word.key=[wfs[x]];
+				
+				//console.log('str','[{"answer":"'+wfs[x]+'", "explanation":""}]');
+				//var ob=eval('[{"answer":"'+wfs[x]+'", "explanation":""}]');//Unexpected identifier
+				//console.log('ob',ob);
+				word.choices=eval('([{"choiceText":"'+wfs[x]+'", "explanation":""}])');
+				word.stem='____';
+				word.type=4;
+				word.answer='';
+				//word.score=0;
+				//word.state=0;
+				//workingWordList.push(word);//加入json数组
+				console.log('item', word);
+				quiz.groups.push(word);//加入json数组
+			}
+			console.log('quiz', quiz);
+			//console.log('workingWordList', workingWordList);
+			restart();/**/
+		}
+	}
+    function sumToJava(number1, number2){
+       window.control.onSumResult(number1 + number2)
+    }
+	
+	/*
+	查询数据
+	
+	function query(){
+		var sql=document.getElementById("sqlTextArea").value;
+		//必须用encodeURI()方法对sql字符串进行转码 ，
+		//否则如果里面含有%等URL转义字符，通过地址栏传递时就会出错。
+		sql=encodeURI(sql);
+		console.log('query sql:', sql);//
+		//window.location.href="js://webview?act=4&book="+v1+"&unit="+v2;
+		window.location.href="js://webview?act=4&query="+sql;
+	}*/
+
+	/*
+	执行查询之外的sql语句
+	function execute(){
+		var sql=document.getElementById("sqlTextArea2").value;
+		//必须用encodeURI()方法对sql字符串进行转码 ，
+		//否则如果里面含有%等URL转义字符，通过地址栏传递时就会出错。
+		sql=encodeURI(sql);
+		console.log('execute sql:', sql);//
+		window.location.href="js://webview?act=6&query="+sql;
+
+	}	*/
+
+
+	/*
+	根据用户选中的表格中的行生成查询SQL
+	参考：
+	控制多选框（input[type=checkbox]）选中状态
+	https://www.jianshu.com/p/63e2d5d0d4da
+	
+	function generateSQL(){
+		var ci = document.getElementsByName("candidate");//整个一组复选框
+		var selstr='';
+		//遍历复选框数组  如果被选中ci[i].checked的值就是true
+		for(var i = 0;i < ci.length;i++){
+			if(ci[i].checked==true){
+				//进行你的操作
+				selstr+=ci[i].value;
+				if(i<ci.length-1)selstr+=',';
+			}
+		}
+		console.log('candidate', selstr);//candidate
+
+		sqlStatement='select id, entry, pos, meaning from glossary where id in ('+selstr+')';
+		sqlStatement=sqlStatement.replace(',)',')')
+		document.getElementById("sqlTextArea2").value=sqlStatement;
+		return false;
+	}*/
+	/*
+	点击复选框勾选时通过下方的caption以及Toast显示完整单词词条
+	（由于手机屏幕小，表格中词条是截短不完整的）
+	index 词条索引，从0开始
+	
+	function showEntry(index){
+		//console.log('showEntry', index);
+		var captionstr=wordList[index].id+' '+wordList[index].entry+' '+wordList[index].pos+' '+wordList[index].meaning;
+		document.getElementById("caption").innerHTML='选中词条：'+captionstr;
+		Toast.init();
+		Toast.show(captionstr, 'success', 10000);
+		setTimeout(function () {
+			Toast.hide();
+		}, 3000);
+
+	}*/
+	/*mode: 0-disselectAll;1-selectAll;2-reverseSelect
+	function selectAll(mode){
+		var ci = document.getElementsByName("candidate");//整个一组复选框
+		var selstr='';
+		//遍历复选框数组  如果被选中ci[i].checked的值就是true
+		for(var i = 0;i < ci.length;i++){
+			if(mode==0){
+				ci[i].checked=false;
+			}else if(mode==1){
+				ci[i].checked=true;
+			}else if(mode==2){
+				if(ci[i].checked==true)
+					ci[i].checked=false;
+				else
+					ci[i].checked=true;
+			}
+		}
+	}*/
+
+	/*
+	点击Query按钮时根据第一个文本框中的sql查询单词表并渲染在表格里。
+	参考：
+	javascript控制form表单只提交请求，而不跳转的方法：
+	<form onsubmit="return fangfa();"> 点击<input type="submit"> 的时候，就会去执行fangfa这个方法，如果为false就不会提交。
+	fangfa里面获取值，但是要想提交，还是得用ajax
+	
+	function renderTable(){
+		var tbody='';
+		for(var p=0;p<wordList.length;p++){
+			var wordm=wordList[p].meaning;
+			if(wordm.length>5)wordm=wordm.substring(0,5);
+			var worde=wordList[p].entry;
+			if(worde.length>8)worde=worde.substring(0,8);
+			//<td>'+(p+1)+'</td>
+			var tline='<tr><td><input name="candidate" type="checkbox" value="'+wordList[p].id+'" onchange="showEntry('+p+')"/></td><td>'+wordList[p].id+'</td><td>'+worde+'</td><td>'+wordList[p].pos+' '+wordm+'</td></tr>';
+			tbody+=tline;
+		}
+		document.getElementById("tableArea").innerHTML='<table style="background-color:#C7EDCC;"><tr><td style="width:5%"></td><td style="width:5%">ID</td><td style="width:45%">Entry</td><td style="width:44%">Meaning</td></tr>'+tbody+'<tr><td colspan="10">共'+wordList.length+'项，选中0项</td></table>';//<td>Seq</td><td>Pos</td>
+	}*/
+	/*
+	//type 1-cloze;2-multiplechoice
+	function nextItem(){
+		len=quiz.groups.length;
+		current=++current%len;
+		document.getElementById("current").innerHTML =current+1;
+
+		kid=quiz.groups[current].kid;
+		var entry=catelogueUtil.getNodeLabel(kid);
+		if(entry==null)entry="词汇";
+
+		if(quiz.groups[current].type==1){//1-cloze;
+			console.log('stem',quiz.groups[current].stem);
+			document.getElementById("top").innerHTML=' 填空题 | '+kid+' | '+entry+" | <a href='js://webview?act=2&kid="+kid+"'>举一反三</a>";//+" | <a href='kid2.html' target='_blank'>目录</a>";
+
+			var stemComplex=quiz.groups[current].stem;
+
+			var af='&nbsp;<span id="answer" class="answer"><input type="text" class="GapBox" id="gap1"  size="'+(quiz.groups[current].key.length+2)+'" ></input></span><span id="mark" class="mark"></span>&nbsp;';
+			stemComplex=stemComplex.replace(/_+/g,af);
+			
+			document.getElementById("stem").innerHTML=stemComplex;
+
+			
+		}else{//2-multiplechoice
+			document.getElementById("top").innerHTML=' 选择题 | '+kid+' | '+entry+" | <a href='js://webview?act=2&kid="+kid+"'>举一反三</a>";//+" | <a href='kid2.html' target='_blank'>目录</a>";
+			var af='';
+			//current=Math.abs(--current)%len;
+			console.log('stem',quiz.groups[current].stem)
+			var stemComplex=quiz.groups[current].stem+'<br/>';
+			for(var k=0;k<quiz.groups[current].choices.length;k++){
+				var choice=quiz.groups[current].choices[k].answer;
+				af+='<li id="Q_0_0" class="QuizQuestion"><button class="FuncButton"  onfocus="FuncBtnOver(this)"  onblur="FuncBtnOut(this)"  onmouseover="FuncBtnOver(this)"  onmouseout="FuncBtnOut(this)"  onmousedown="FuncBtnDown(this)"  onmouseup="FuncBtnOut(this)"  id="Q_0_0_Btn"  onclick="CheckMCAnswer(0,'+k+',this)">&nbsp;&nbsp;?&nbsp;&nbsp;</button>&nbsp;&nbsp;'+choice+'</li>';
+			}
+			stemComplex+=af;
+			//document.getElementById("answer").innerHTML=af;
+			document.getElementById("stem").innerHTML=stemComplex;
+
+		}
+		showHint(0);//hide hint of last item
+		//target=quiz.groups[current].target;
+		
+	}*/
+
+	/**
+	 * @description: 是否支持全屏+判断浏览器前缀
+	 * @param {Function} fn 不支持全屏的回调函数 这里设了一个默认值
+	被installFullScreen()方法调用。
+	 */
+	function isFullscreen(fn) {
+	  let fullscreenEnabled;
+	  // 判断浏览器前缀
+	  if (document.fullscreenEnabled) {
+		fullscreenEnabled = document.fullscreenEnabled;
+	  } else if (document.webkitFullscreenEnabled) {
+		fullscreenEnabled = document.webkitFullscreenEnabled;
+		this.prefixName = 'webkit';
+	  } else if (document.mozFullScreenEnabled) {
+		fullscreenEnabled = document.mozFullScreenEnabled;
+		this.prefixName = 'moz';
+	  } else if (document.msFullscreenEnabled) {
+		fullscreenEnabled = document.msFullscreenEnabled;
+		this.prefixName = 'ms';
+	  }
+	  if (!fullscreenEnabled) {
+		if (fn !== undefined) fn(); // 执行不支持全屏的回调
+		this.isFullscreenData = false;
+	  }
+
+	  return fullscreenEnabled;
+	}
+
+	/*
+	安装全屏功能，调用方法<body onload="installFullScreen();">。
+	现代浏览器不能直接调用js代码进入全屏模式，而必须由用户点击动作进入全屏模式，所以用此方式。
+	先检查浏览器是否支持 Fullscreen API；
+	如果支持，则给fullscreenBtn按钮安装监听器；
+	用户点击按钮时监听器调用toggleFullScreen()方法实现进入和退出全屏。
+	*/
+	function installFullScreen(){
+
+		//检查浏览器是否支持 Fullscreen API
+		if (!isFullscreen()){
+			console.log('FullScreen not supported');
+		  // 如果浏览器不支持 Fullscreen API，则隐藏全屏按钮或显示提示信息
+		  //document.getElementById('fullscreenBtn').style.display = 'none';
+		  // 或者显示提示信息
+		  // alert('Your browser does not support fullscreen mode.');
+		  return 0
+		}
+
+			document.getElementById('fullscreenBtn').addEventListener('click', function() {
+
+				if (document.documentElement && document.documentElement.requestFullscreen) {
+					toggleFullScreen();
+					/*document.documentElement.requestFullscreen().then(() => {
+						console.log('Entered fullscreen mode');
+					}).catch(err => {
+						console.log('Failed to enter fullscreen mode', err);
+					});*/
+				}
+			});
+
+		  // 监听全屏变化事件
+		  document.addEventListener('fullscreenchange', function() {
+			if (document.fullscreenElement) {
+			  document.getElementById('fullscreenBtn').textContent = 'Exit Fullscreen';
+			} else {
+			  document.getElementById('fullscreenBtn').textContent = 'Enter Fullscreen';
+			}
+		  });
+
+		  // 对于 Firefox，还需要监听 mozfullscreenchange 事件
+		  document.addEventListener('mozfullscreenchange', function() {
+			if (document.mozFullScreenElement) {
+			  document.getElementById('fullscreenBtn').textContent = 'Exit Fullscreen';
+			} else {
+			  document.getElementById('fullscreenBtn').textContent = 'Enter Fullscreen';
+			}
+		  });
+
+		  // 对于 WebKit 浏览器，还需要监听 webkitfullscreenchange 事件
+		  document.addEventListener('webkitfullscreenchange', function() {
+			if (document.webkitFullscreenElement) {
+			  document.getElementById('fullscreenBtn').textContent = 'Exit Fullscreen';
+			} else {
+			  document.getElementById('fullscreenBtn').textContent = 'Enter Fullscreen';
+			}
+		  });
+
+		  // 对于 IE/Edge，还需要监听 msfullscreenchange 事件
+		  document.addEventListener('msfullscreenchange', function() {
+			if (document.msFullscreenElement) {
+			  document.getElementById('fullscreenBtn').textContent = 'Exit Fullscreen';
+			} else {
+			  document.getElementById('fullscreenBtn').textContent = 'Enter Fullscreen';
+			}
+		  });
+
+
+	}
+	/*
+	被installFullScreen()方法调用，切换进入和退出全屏。
+	*/
+	function toggleFullScreen(){
+		console.log('toggleFullScreen()');
+		if (document.fullscreenElement === null) {//当前没有元素在全屏状态
+			//document.getElementById('fullscreenBtn').addEventListener('click', function() {
+				var elem = document.documentElement; // 例如，使整个页面进入全屏
+				if (elem.requestFullscreen) {
+					elem.requestFullscreen();//Uncaught (in promise) TypeError: Permissions check failed
+				} else if (elem.mozRequestFullScreen) { /* Firefox */
+					elem.mozRequestFullScreen();
+				} else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+					elem.webkitRequestFullscreen();
+				} else if (elem.msRequestFullscreen) { /* IE/Edge */
+					elem.msRequestFullscreen();
+				}
+			//https://blog.csdn.net/jieyucx/article/details/140618971
+			//});
+
+
+			/*
+		  */
+
+
+			/*
+		  document.getElementById('fullscreenBtn').addEventListener('click', function() {
+			if (document.documentElement.requestFullscreen) {
+				//Failed to execute 'requestFullscreen' on 'Element': API can only be initiated by a user gesture.
+			  document.documentElement.requestFullscreen();
+			} else if (document.documentElement.mozRequestFullScreen) { // Firefox
+			  document.documentElement.mozRequestFullScreen();
+			} else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari & Opera
+			  document.documentElement.webkitRequestFullscreen();
+			  // 注意: 对于旧版本的 Safari，可能需要添加 "allowfullscreen" 属性到 <iframe> 或 <video> 元素上
+			} else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+			  document.documentElement.msRequestFullscreen();
+			}
+		  });
+		  */
+
+		} else {//当前已有元素在全屏状态
+			  //https://blog.csdn.net/qq_27829333/article/details/135730013
+			  if (document.exitFullScreen) {
+				document.exitFullScreen();
+			  } else if (document.mozCancelFullScreen) {
+				document.mozCancelFullScreen();
+			  } else if (document.webkitExitFullscreen) {
+				document.webkitExitFullscreen();
+			  } else if (document.msExitFullscreen) {
+				document.msExitFullscreen();
+			  }
+		
+		}
+
+	}//toggleFullScreen()
+
+	/*
+	20250115
+	增加菜单界面（点击齿轮图标调出）以适应手机和平板等无键盘的环境。
+	功能键具体操作代码移植到doAutoMode()方法，便于在此处和功能键监听方法中都便于调用。
+
+	*/
+	function showMenu() {
+		console.log('showMenu');
+		var menu="&nbsp;&nbsp;| <a href='javascript:;'>A</a><br/>&nbsp;&nbsp;| <a href='javascript:doAutoMode(115);'>F4轮播模式</a><br/>&nbsp;&nbsp;| <a href='javascript:doAutoMode(118);'>F7轮播模式</a><br/>&nbsp;&nbsp;| <a href='javascript:doAutoMode(120);'>F9立即跳到下一题（F2轮播模式中适用）</a>";
+		Toast.show(menu, 'success', 10000);
+		/*setTimeout(function () {
+			Toast.hide();
+		}, 3000);*/
+		return 1;//返回值 0-正常；1-用户未作答
+	}
+	
+	
+
+</script>
+
+<body onload="TimerStartUp();installFullScreen();adjustFontSize();">
+  <div class="container">
+  <div class="header"><h1 class="header">&nbsp;&nbsp;&nbsp;&nbsp;</h1></div>
+  <div class="left"></div>
+  <div class="content">
+
+<div id="name" style="font-weight:bold;">
+	<!--Quiz&nbsp;&nbsp;<span id="top" class="top">
+	填空题 | 10068 |  <a href='js://webview?act=2&kid=10068'>举一反三</a>
+	</span>-->
+	<!--
+	<span id="indexer" class="indexer" style="float:left;"></span><br/>
+	-->
+	<span id="fontPreference"  style="float:right;">
+	<a href='javascript:showMenu()'>⚙️</a>&nbsp;&nbsp;<input id="Btn1" type="button" value="+" name=""/>
+	<input id="Btn2" type="button" value="-" name=""/>
+	<button id='fullscreenBtn' >Enter Fullscreen</button>
+	</span>
+</div>
+<br/>
+
+<b style="display: flex;justify-content: center;align-items: center;"><a href= "javascript:void(0);" onclick ="diag();">Spelling</a></b><br/>
+<!--
+<div id="top" class="top">
+填空题 | 10068 |  <a href='js://webview?act=2&kid=10068'>举一反三</a>
+</div>
+
+<br/>
+<div id="StatusDiv" class="StdDiv" style="display: block;float:center">
+	<span style="padding:3px;">Current</span>
+	<span id="current" style="padding:3px;">0</span>
+	<span style="padding:3px;">Total</span>
+	<span id="total" style="padding:3px;">0</span>
+	<span style="padding:3px;">Score</span>
+	<span id="score" style="padding:3px;">0</span>
+	<span style="padding:3px;">Rate</span>
+	<span id="rate" style="padding:3px;">0</span>
+
+</div>
+
+<div id="CheckButtonDiv" class="StdDiv">
+Book
+<select id="books">
+	<option value="1" selected="selected">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+	<option value="8">8</option>
+	<option value="9">9</option>
+	<option value="10">10</option>
+</select>
+
+Unit
+<select id="units">
+	<option value="1" selected="selected">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+</select>
+
+<br/>
+
+</div>
+<br/>
+Table
+-->
+<span id="statisticArea" style="display: flex;justify-content: center;align-items: center;">Current 1 | Total  | Correct  | Wrong  | Rate </span>
+<br/>
+
+<div id="caption" style="justify-content: center;align-items: center;text-align:center;line-height: 20px;font-size:20px;" ></div>
+
+<br/><br/>
+<!--
+<textarea id="sqlTextArea" onfocus="setFocusedTextArea(1)" name="sqlTextArea" rows="5" style='width:100%;font-family:arial;background-color:#C7EDCC;'></textarea><br/>
+<textarea id="sqlTextArea2" onfocus="setFocusedTextArea(2)" name="sqlTextArea2" rows="5" style='width:100%;font-family:arial;background-color:#C7EDCC;'></textarea><br/>
+
+<div id="sqlArea" class="stem"></div>
+-->
+<div  style="height: 50px;line-height: 50px;display: flex;justify-content: center;align-items: center;">
+	<div id="stem" class="stem">comfortable</div>&nbsp;&nbsp;&nbsp;&nbsp;
+	<span id="emoj" style="display:inline-block;color:green;font-size:30px;">:)</span>
+</div>
+<br/>
+<div id="buttons" class="buttons">buttons</div>
+<!--<span id="answer" style="display: flex;justify-content: center;align-items: center;">answer</span>-->
+<br/>
+<span id="hint" style="display: flex;justify-content: center;align-items: center;">Ready</span>
+<br/>
+
+<!--
+-->
+
+<!--
+<div class="StdDiv" id="CheckButtonDiv">
+<button id="CheckButton1"  onclick="TimerStartUp()">&nbsp;Start&nbsp;</button>
+<button id="CheckButton2"  onclick="CheckAnswers()">&nbsp;Check&nbsp;</button>
+</div>
+-->
+
+<br/>
+<div id="control" style="display: flex;justify-content: center;align-items: center;">
+	
+
+	<button id="CheckButton1" class="css_btn_class" onclick="doHint();">Hint</button>&nbsp;&nbsp;
+
+	<button id="CheckButton1" class="css_btn_class" onclick="reset();">Reset</button>&nbsp;&nbsp;
+
+	<button id="CheckButton1" class="css_btn_class" onclick="showResult(2);">Result </button>&nbsp;&nbsp;
+
+	<button id="CheckButton1" class="css_btn_class" onclick="revise();">Revise</button>&nbsp;&nbsp;
+
+	<!---->	
+	
+</div>
+<br/>
+<div id="control2" style="display: flex;justify-content: center;align-items: center;">
+	<!--
+
+	<button id="CheckButton1" class="css_btn_class" onclick="query();">Query</button>&nbsp;&nbsp;
+	<button id="CheckButton1" class="css_btn_class" onclick="execute();">Execute</button>&nbsp;&nbsp;
+
+	<button id="CheckButton1" class="css_btn_class" onclick="load();">&nbsp;Start&nbsp;</button>&nbsp;&nbsp;
+
+	<button id="CheckButton1" class="css_btn_class" onclick="generateSQL();">&nbsp;SQL&nbsp;</button>
+
+	<button type="button" id="button1" class="css_btn_class" onclick="checkClozeAnswer()">提交</button>&nbsp;&nbsp;
+	<button type="button" id="button2" class="css_btn_class" onclick="showHint(1)">提示</button>&nbsp;&nbsp;
+	<button type="button" id="button3" class="css_btn_class" onclick="nextItem()">下一题</button>
+
+</div>
+-->
+  </div>
+  <!--control end--->
+<br/>
+<div id="expressions" class="expressions">
+
+</div>
+
+<!--
+提示
+答案：
+-->
+<div id="hint1" onclick="" style="display: flex;justify-content: center;align-items: center;"> </div>
+<div id="hint2" onclick=""></div>
+<div id="hint3" onclick="showHint(0)"></div>
+<br/>
+
+<div id="player"> </div>
+
+
+
+  </div>
+  <!--content end--->
+  <div class="right"></div>
+  <div class="footer" style="text-align:center;">Copyright 2020</div>
+  </div>
+</body>
+
+<script>
+/*
+20250115
+由于stemText是动态生成的，所以必须在每次动态生成之后再次调用本方法才有效。
+否则document.getElementById("stemText")返回null
+*/
+
+function  adjustFontSize() {
+		//20250112 加减按钮实现调整字体大小（此段代码必须放在html文件末尾body标签的后面才有效果）
+		//https://www.gxlsystem.com/qianduan-10030.html
+        var oPtxt1=document.getElementById("caption");//stem
+        var oPtxt2=document.getElementById("hint");//stem
+        var oPtxt3=document.getElementById("stemText");//stem
+        var oBtn1=document.getElementById("Btn1");
+        var oBtn2=document.getElementById("Btn2");
+        var num = 60; /*定义一个初始变量*/
+        oBtn1.onclick = function(){
+            num++;
+			console.log('调整字体大小 num=',num)
+			oPtxt1.style.fontSize=num+'px';
+			oPtxt1.style.lineHeight=num+'px';//"200%";//line-hight: 200%;
+			oPtxt2.style.fontSize=(num/2)+'px';
+			oPtxt2.style.lineHeight=(num/2)+'px';//"200%";//line-hight: 200%;
+			var elements = document.getElementsByClassName("css_btn_class");//通过css class获取html元素
+			for (var i = 0; i < elements.length; i++) {
+				//console.log(elements[i]);
+				elements[i].style.fontSize=num+'px';
+			}
+
+
+			oPtxt3.style.fontSize=num+'px';
+			oPtxt3.style.lineHeight=num+'px';//"200%";//line-hight: 200%;
+
+			var oGap1=document.getElementById("gap1");
+			//console.log("oGap1",oGap1);
+			if(oGap1 !=null){//只有Cloze有gap1
+				oGap1.style.fontSize=num+'px';
+				oGap1.style.lineHeight=num+'px';//"200%";//line-hight: 200%;
+			}
+        };
+        oBtn2.onclick = function(){
+            num--;
+			oPtxt1.style.fontSize=num+'px';
+			oPtxt1.style.lineHeight=num+'px';//"200%";//line-hight: 200%;
+			oPtxt2.style.fontSize=(num/2)+'px';
+			oPtxt2.style.lineHeight=(num/2)+'px';//"200%";//line-hight: 200%;
+			var elements = document.getElementsByClassName("css_btn_class");//通过css class获取html元素
+			for (var i = 0; i < elements.length; i++) {
+				//console.log(elements[i]);
+				elements[i].style.fontSize=num+'px';
+			}
+			oPtxt3.style.fontSize=num+'px';
+			oPtxt3.style.lineHeight=num+'px';//"200%";//line-hight: 200%;
+
+			var oGap1=document.getElementById("gap1");
+			//console.log("oGap1",oGap1);
+			if(oGap1 !=null){//只有Cloze有gap1
+				oGap1.style.fontSize=num+'px';
+				oGap1.style.lineHeight=num+'px';//"200%";//line-hight: 200%;
+			}
+		}
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+    var element = document.getElementById('stemText');
+	console.log('stemText',element);
+    if (element) {
+        // 对 element 进行操作
+		console.log('stemText2',element);
+    }
+});
+
+</script>
+
+</html>
