@@ -1,0 +1,1148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh">
+<html>
+  <head>
+    <title>Emulator</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="">
+	<style>
+/*容器的居中*/	
+/*css布局中margin为0,页面依然与浏览器顶部有一个间隙的问题*/
+body{margin:0;padding:0;}
+
+div.container{
+margin:0 auto; 
+/* 注意：如果文件头上的<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">内容没有，仅仅有一个<html>标记的话，则实现不了容器的居中。*/
+width:80%;border:0px solid gray;line-height:150%;background-color:#C7EDCC;/*豆沙绿*/}
+div.header,div.footer{padding:0.5em;color:grey;clear:left;}
+h1.header{padding:0;margin:0;}
+div.left,div.right{float:left;width:9%;height:100%;border:0px solid red;/*background-color:#C7EDCC;*/}
+div.content{width:80%;padding:0.5em;border:0px solid gray;float:left;}
+	
+	table{border-collapse:collapse;border:1px solid #66CCFF;} 
+	table td{border:1px dotted #66CCFF;padding:5px;} 
+	/* css注释：只对table td标签设置红色边框样式 */ 
+
+
+    /*toast样式：宽高等在此处设置
+    js封装toast组件——常用工具函数
+	https://segmentfault.com/a/1190000018012740
+	设置DIV随滚动条滚动而滚动(margin:0px auto;position:fixed;top:50%;left:50%;)
+	https://www.cnblogs.com/Keteven/p/4354684.html
+    */
+    #toastWaka {
+        position: fixed;
+        display: none;
+        left: 50%;
+        top: 50%;
+        z-index: 99999;
+        margin: 0 auto;
+        -webkit-transform: translate(-50%);
+        transform: translate(-50%);
+        width: 90%;
+        height:80px;
+        border-radius: 5px;
+        text-align: center;
+        color: #fff;
+        background-color: rgba(000,000,000,0.5);
+    }
+
+    #toastWaka .text{
+        color: #fff;
+        display: inline-block;
+        line-height: 80px;
+        vertical-align:middle;
+        font-size: 14px;
+        position: absolute;
+        top:0;
+        bottom:0;
+        right:0;
+        left:0;
+    }
+	
+	</style>
+
+	<script src="eruda.js"></script>
+
+	<script type="text/javascript">
+	//web 调试神器 eruda网址//cdn.jsdelivr.net/npm/eruda
+	//Eruda是一款专为前端移动端设计的调试面板，具备捕获console日志、检查元素状态、显示性能指标等功能，类似于Chrome DevTools的迷你版。支持动态加载、URL链接控制等多种使用方式，适用于调试移动端网页。
+	eruda.init();
+	//jquery代码下载https://www.jsdaima.com/jquery/
+	//http://code.jquery.com/jquery-latest.js
+	</script>
+	<script src="jquery-3.3.1.min.js"></script>
+	<!--express框架，如何在ejs文件中导入外部的js、css文件https://blog.csdn.net/MPFLY/article/details/78134980-->
+	<SCRIPT src="MultipleChoiceUtil.js"></SCRIPT>
+	<script type="text/javascript" src="GiftConverter.js"></script>
+	<script type="text/javascript" src="toast.js"></script>
+	<!-- 20221002增加拖放文件内容到文本框支持-->
+	<SCRIPT src="DragAndDropUtil.js"></SCRIPT>
+
+	
+	<script type="text/javascript">
+	/*
+	Emulator 
+
+	版本历史
+
+	v9.3 20241226
+	*修改：目前支持ABCDEFG七个选择项。参考：
+	GiftConverter.js->var choices=choiceline.split(/[ABCDEFG]\.|\\t+/);//20200224选项支持跳格\t或任意空格分隔 
+	*修正：reverse()方法中选择题选项以\n结尾改正为\t结尾。
+
+
+	v9.2 20241206
+	*增加type 6 classify（分类题型）转换逻辑。Classify（分类题）从GIFT文本框内容开始转换，其他题型从Raw文本框内容开始转换。
+	转换后更新JSON文本框内容。参考：convert()
+
+	v9.1 20241205
+	*增加reverse()方法：	将GIFT格式的文本转换为Raw格式的文本，支持Sort题型之外的题型，为convert()方法的逆向方法，对于选择题可读格式的生成非常有用。
+
+
+
+	v9.0 20241205
+	*增加type 6 classify（分类题型）：
+	classify（分类题型）界面类似于Match，但不使用题组（每组10个）。classify题型的多个题项（分类的类别）同时呈现，形成相互区别及对比的关系，可以只有一个题项（类别），但最好多于一个题项（类别）。题项（类别）的选项（元素）注意区别，应该只属于一个题项（类别），不要有可以同时属于多个题项（类别）的选项（元素）。
+	classify（分类题型）使用MultipleChoice题型的GIFT和JSON格式输入数据,不同的是有多个=选项即多个正确答案，例如：
+	水果{=apple# =orange# =peach# =strawberry# =grape# =banana#}
+	动物{=dog# =cat# =panda# =monkey#}
+	
+	*为适应classify（分类题型），MultipleChoiceUtil.js->Item数据成员key改为数组，可以有多个正确答案（用于classify题型和多个正确选项的多选题），第一个正确答案为key[0]。目前Cloze填空题型仍只能有一个答案，不支持多个备选正确答案，否则会被识别为MultipleChoice选择题型。
+
+	参考：
+	webview-classify.html
+	quickpotato.classify.template.js
+	quickpotato.classify.template.css
+
+	*拼写页面文件名统一为spelling.html，带数字的版本为备份
+
+
+
+	v8.5 20241128 
+	spelling-4.0.html和SQL_interpreter2.html增加文本转语音功能。参考:
+	text2speech.js->function speakText(text) 
+	gui.js
+
+	v8.4 20241110
+	增加：type 5 Sort排序题型。参考：
+	webview-sortx.html
+	注意相应改动：GiftConverter.js->
+	process(input, type, kid) {
+	process2(input, type, kid) {
+	if(type==1||type==3||type==4||type==5){
+	
+	
+	v8.3 20241030
+	webview-matchx-8.0.html
+	quickpotato.matchx.template-5.0.js
+	优化了匹配题
+	增加：点击卡片时当前卡片显示红色边框，1秒后隐藏红色边框。
+	增加：匹配错误时弹出Toast提示。
+	缩小了卡片内的Padding，参见quickpotato.matchx.template.css->div.CardStyle {padding: 1px;
+	增加：Eruda手机端调试面板。参考：eruda.js，eruda.init();
+
+	v8.2 20221217
+	emulator页面文件名统一为lemulator.html，不再带版本数字，真实版本以此注释中的最新版本为准。带版本数字的为备份文件。
+	
+	增加DownGrade按钮，以Gift文本框内容为基础，将MultipleChoice格式的Raw文本转换为Cloze格式。参考downgrade()方法。
+	
+	Transform按钮重命名为UpGrade按钮。transform()方法重命名为upgrade()方法。
+	
+	v8.1 20221217
+	增加Transform 按钮， 以Raw文本框内容为基础，将Cloze格式的Raw文本转换为MultipleChoice格式（用其他题项的答案作为干扰项，Cloze格式的题项数目大于10项干扰项分布较均匀，否则重复多）。
+	参考transform()方法。
+	
+	增加自定义方法：
+	copyContent(value, type = 'input')复制内容到剪贴板
+	subtract(input, regex)提取输入input文本{}中匹配正则表达式regex的内容返回。
+	
+	
+	v8.0 20221129
+	增加SQLite数据库支持（通过sql.js框架）。由于Chrome禁止读取本地文件，因此实现此特性要求站点部署在WEB容器（如ksweb）中然后通过网址访问。
+	操作步骤如下（详细参考QuickPotato.JS_Emulator使用说明.docx）：
+	A.部署WEB容器，ksweb可在手机或平板上运行，将_QuickPotato.JS-emulator-8.0目录拷贝至/sdcard/htdocs/目录下
+	在浏览器网址栏输入http://192.168.1.6:8080/_QuickPotato.JS-emulator-8.0/SQL_interpreter.html，点击回车键访问，如无错误就会出现Online SQL interpreter页面。
+	
+	B.点击Load an SQLite database file按钮打开文件选择框加载本地SQLite数据库（页面存储在服务器但数据库是选择存储于本地磁盘的数据库）。
+	
+	
+	C.在Enter some SQL文本框输入SQL语句（当然必须根据SQLite数据库的表格和字段），如：
+	SELECT entry, pos, meaning FROM glossary WHERE unitr5=34;
+	或
+	SELECT entry, pos, meaning FROM glossary WHERE id>25  and id<35;
+	或
+	SELECT entry, pos, meaning FROM glossary WHERE entry in ('clean', 'hard', 'learn', 'grandparent', 'introduce', 'fantastic', 'role', 'driver','beautiful', 'take', 'umbrella', 'both', 'nurse', 'problem', 'role', 'scene', 'summer', 'holiday', 'time', 'work');
+	
+	点击Execute按钮，页面底部就会以表格形式展示查询出来的数据。如：
+	chk	entry	pos	meaning
+	advice	n.	忠告，劝告，建议
+	advise	vt.	忠告，劝告，建议
+	angry	adj.	生气的，愤怒的
+
+	D.进一步使用数据，进行测试：
+1 可通过词汇列表chk列的复选框进一步筛选要测试的词汇。
+2 点击 Cloze填空题， MultipleChoice选择题, Match匹配题或 Spell逐字母拼写题按钮跳转到对应题型的词汇测试页面。
+3 点击Emulator Cloze或Emulator MultipleChoice按钮（SQL_interpreter2.html新增）跳转到Emulator页面，对测试进行进一步的编辑。在Type下拉列表选择目标题型，点击Convert按钮将Raw文本框内容转换为GIFT文本框的GIFT格式（如MultipleChoice选择题Cloze填空题Match匹配题Spell逐字母拼写题）。
+其中只有MultipleChoice多选题的GIFT格式与其他不同。Cloze填空题Match匹配题Spell逐字母拼写题都共用同一种GIFT格式。而且MultipleChoice选择题Cloze填空题Match匹配题的GIFT格式数据都可作为Spell单词逐字母拼写题的数据源。
+
+	参考：
+	dist（文件夹，sql.js框架资源）
+	SQL_interpreter.html（SQLite数据库支持主界面，可以点击选择文件打开本地磁盘上的SQLite数据库，实现查询）
+	gui.js（与SQL_interpreter.html配合，实现各种操作的js代码）
+	sql.min.js
+	codemirror.js
+	demo.css
+	codemirror.css
+
+	v7.1 20221126
+	增加逐字母拼写题型支持。参考：
+	spelling-3.0.html
+	修改spelling-2.0.html以{entry,pos，meaning}方式的来源，
+	改为与其他题型通用的来源，只是将答案（=#中间部分）作为拼写的对象
+	修正了GiftConverter.js一处错误process(input, type, kid) 与process2(input, type) 方法区分开来
+	
+	v7.0 20221120
+	增加匹配题型支持。	Type: 1-Cloze（填空题）；2-MultipleChoice（选择题）；3-Match（匹配题）；4-Spell（逐字母拼写）；5-Sort（排序题）；6-Classify（分类题）。填空题和匹配题两种题型GIFT格式相同。
+	如果需要匹配题型，先点击Convert按钮转换好以后再在界面Type下拉列表选择match，最后点击Debug按钮即可。
+	跳转到匹配题型页面后还要按Start按钮开始。
+	参考：
+	webview-matchx-7.0.html
+	quickpotato.matchx.template-4.0.js
+	quickpotato.matchx.template.css
+	
+	增加GIFT文本框。原Converted文本框更名为JSON文本框。参考：
+	GiftConverter.js -> process(input, type)
+
+	v5.0 20221116
+	增加文件拖放支持。参考：
+	DragAndDropUtil.js -> enableDragAndDrop(listeningElement,targetElement)
+
+	Convert 将人类阅读的多项选择题文件格式转换为机器格式(外部为JSon格式， content部分为gift格式);<br/>
+	Debug将测试题目数据(JSon格式字符串)发送到测试页面进行测试。
+	*/
+
+	//web 调试神器 eruda网址//cdn.jsdelivr.net/npm/eruda
+    //Eruda是一款专为前端移动端设计的调试面板，具备捕获console日志、检查元素状态、显示性能指标等功能，类似于Chrome DevTools的迷你版。支持动态加载、URL链接控制等多种使用方式，适用于调试移动端网页。
+    eruda.init();
+
+	/**
+	JavaScript没有独立的trim函数或者方法可以使用，所以我们需要自己写个trim函数来实现我们的目的。
+	https://www.jb51.net/article/60745.htm
+	*/
+	/**
+	* 删除左右两端的空格
+	*/
+	String.prototype.trim=function()
+	{
+		 return this.replace(/(^\s*)|(\s*$)/g, '');
+	}
+	/**
+	* 删除左边的空格
+	*/
+	String.prototype.ltrim=function()
+	{
+		 return this.replace(/(^\s*)/g,'');
+	}
+	/**
+	* 删除右边的空格
+	*/
+	String.prototype.rtrim=function()
+	{
+		 return this.replace(/(\s*$)/g,'');
+	}
+
+
+	
+	/*js 判断字符串是否为JSON格式
+		https://www.cnblogs.com/xulei1992/p/12010581.html	
+		如果st是字符串变量，不需要在外层套上引号"'"+str+"'"；
+		var v='[{"a":"he\'s"}]'
+		v
+		"[{"a":"he's"}]"
+		isJSON(v)
+		true
+		但如果从文本框取字符串，文本框字符含有字面量\'等，
+		则必须先用str.replace(/\//gi,'/').replace(/\\'/gi,'\'').replace(/\\\\"/gi,'"')去掉转义
+		再用此方法验证。
+	*/
+	function isJSON(str) {
+		if (typeof str == 'string') {
+			try {
+				var obj=JSON.parse(str);
+				if(typeof obj == 'object' && obj ){
+					return true;
+				}else{
+					return false;
+				}
+
+			} catch(e) {
+				console.log('error：'+str+'!!!'+e);
+				return false;
+			}
+		}
+		console.log('It is not a string!')
+	}
+
+	/*
+	Usage:
+	if(!testJSon(str))return;
+	*/
+	function testJSon(str){
+		Toast.init();
+		if(!isJSON(str)){//验证json是否格式错误
+			//js封装toast组件——常用工具函数https://segmentfault.com/a/1190000018012740
+				Toast.show('JSon格式有误，请修改后再试。', 'success', 10000);
+				setTimeout(function () {
+					Toast.hide();
+				}, 3000);
+			return false;
+		}else{
+				Toast.show('JSon格式验证通过。', 'success', 10000);
+				setTimeout(function () {
+					Toast.hide();
+				}, 3000);
+		
+		}
+		return true;
+	}
+
+	var id=1;
+	var kid=100;
+	var multipleChoiceUtil=new MultipleChoiceUtil('MultipleChoiceUtil');
+	var  converterUtil;
+
+	var raw="(D)1. I always ____ school at 7:00 am.\nA. arrive	B. arrive in	C. get	D. reach\n[解析] reach vt. arrrive in +大地点; arrive at+ 小地点\n\n"
+		+"(A)2. Tom can often ____ strange sounds recently.\nA. hear	B. listen	C. see	D. look\n[解析]hear vt. listen to + sth.\n\n";
+	var raw2="1. There are plans to split the corporation into a number of smaller ____ [independent#negative adjective needed](depend) companies.\n2. The house was surrounded by trees and ____[invisible#negative adjective needed] (visible) from the road.";
+	var raw5="将下列句子重新排序，组成一句通顺的对话。首句已给出。1. ____ [(1)Hello，I am Sarah.∧Hi！My Name is Chenjie.∧Nice to meet you.∧Nice to meet you too.∧Oh no！∧It's OK.We can share.∧Thanks，Sarah.#]\n2.把下列单词排列成一个正确的句子。 ____ [My mother∧is∧beatiful∧with long hair∧.#]\n3.把下列单词排列成一个正确的句子。 ____ [The∧fish∧can∧swim∧fast∧.#]\n";
+	var raw6="\n";
+	var giftString2="1.水果{=apple# =orange# =peach# =strawberry# =grape# =banana#}\n2.动物{=dog# =cat# =panda# =monkey#}\n3.物品{=cap# =dish# =basket# =box#}\n";
+	var parsed="{\"id\":1,\"kid\":10000,\"creator\":\"tgd\",\"domain\":\"领域\", \"title\":\"标题\", \"preface\":\"前言\", \"orientation\":\"导学(可包含微课)\", \"sidenote\":\"旁注\", \"epilogue\":\"后记\",\"updateTime\":\"2020-02-07 20:37:00\",\"status\":\"1\",\"factor\":\"1\",\"note\":\"注释\",\"content\": [{\"id\":1,\"kid\":10001,\"point\":1, \"content\":\"1. I always {~arrive# ~arrive in# ~get# =reach# reach vt. arrrive in +大地点; arrive at+ 小地点 } school at 7:00 am.\"},{\"id\":2,\"kid\":10001,\"point\":1, \"content\":\"2. Tom can often {=hear#hear vt. listen to + sth. ~listen# ~see# ~look# } strange sounds recently.\"}]}";
+	var parsed2="{\"id\":1,\"kid\":10000,\"creator\":\"tgd\",\"domain\":\"领域\", \"title\":\"标题\", \"preface\":\"前言\", \"orientation\":\"导学(可包含微课)\", \"sidenote\":\"旁注\", \"epilogue\":\"后记\",\"updateTime\":\"2020-02-07 20:37:00\",\"status\":\"1\",\"factor\":\"1\",\"note\":\"注释\",\"content\": [{\"id\":1,\"kid\":10001,\"point\":1, \"content\":\"1. There are plans to split the corporation into a number of smaller  {=independent#negative adjective needed}(depend) companies.\"},{\"id\":2,\"kid\":10001,\"point\":1, \"content\":\"2. The house was surrounded by trees and {=invisible#negative adjective needed} (visible) from the road.\"}]}";
+	var parsed5="{\"id\":1,\"kid\":10005,\"creator\":\"tgd\",\"domain\":\"领域\", \"title\":\"排序题\", \"preface\":\"前言\", \"orientation\":\"导学(可包含微课)\", \"sidenote\":\"旁注\", \"epilogue\":\"后记\",\"updateTime\":\"2024-11-03 20:37:00\",\"status\":\"1\",\"factor\":\"1\",\"note\":\"注释\",\"content\": [{\"id\":1,\"kid\":10005,\"point\":1, \"content\":\"1.把下列单词排列成一个正确的句子。 {=The∧fish∧can∧swim∧fast∧.#}\"},{\"id\":2,\"kid\":10005,\"point\":1, \"content\":\"2.把下列单词排列成一个正确的句子。{=My mother∧is∧beatiful∧with∧long∧hair∧.#}\"}]}";
+	var parsed6="{\"id\":1,\"kid\":10005,\"creator\":\"tgd\",\"domain\":\"领域\", \"title\":\"排序题\", \"preface\":\"前言\", \"orientation\":\"导学(可包含微课)\", \"sidenote\":\"旁注\", \"epilogue\":\"后记\",\"updateTime\":\"2024-11-03 20:37:00\",\"status\":\"1\",\"factor\":\"1\",\"note\":\"注释\",\"content\": [{\"id\":1,\"kid\":10005,\"point\":1, \"content\":\"1.水果{=apple# =orange# =peach# =strawberry# =grape# =banana#}\"},{\"id\":2,\"kid\":10005,\"point\":1, \"content\":\"2.动物{=dog# =cat# =panda# =monkey#}\"},{\"id\":3,\"kid\":10005,\"point\":1, \"content\":\"3.物品{=cap# =dish# =basket# =box#}\"}]}";
+
+
+	/*
+	数据来源参考d:\LeanCloud\myphDev\mt.txt
+	var jsonStr='[{"id":1,"kid":10007,"point":1, "content": "Nowadays {=the#互联网the Intenet是万维网www的特殊实例（目前世界唯一）要用定冠词}Intenet is becoming increasingly popular and a new high speed broadband network has recently started. "},{"id":2,"kid":10007,"point":1,  "content": "While {=the#此处music是特指后面the TV play的音乐，用定冠词；不同于listen to music泛指听音乐；} music is just so-so, the story in this TV play is quite moving. "},{"id":3, "kid":1, "content": "5. {~That# =Whether#考察whether引导的主语从句 ~If# ~Even if#} his dream of going to college will come true is uncertain."}]';
+	//var jsonStr='[{"id":32,"kid":10073,"creator":"tgd","domain":"领域", "title":"标题", "preface":"前言", "orientation":"导学(可包含微课)", "sidenote":"旁注", "epilogue":"后记","updateTime":"2018-11-08 20:37:00","status":"1","factor":"1","note":"注释","content":[{"id":1,"kid":10073,"point":1, "content":" 1. {~Tom being late# ~Tom to be late# ~For Tom being late# =Tom\'s being late# 考察考察v-ing独立主格结构。 } for school once in a while often makes Mr. Smith angry."},{"id":2,"kid":10073,"point":1, "content":"2. I really appreciate {~you to offer# ~that you offer# =your offering# 考察考察v-ing独立主格结构。appreciate接v-ing作宾语。同时offer help的动作发出者不同于句子主语I，因此应该用独立主格结构。 ~that you are offering# } to help me, but I am sure that I can manage by myself."}]},{"id":33,"kid":10074,"creator":"tgd","domain":"领域", "title":"标题", "preface":"前言", "orientation":"导学(可包含微课)", "sidenote":"旁注", "epilogue":"后记","updateTime":"2018-11-08 20:37:00","status":"1","factor":"1","note":"注释","content":[{"id":1,"kid":10074,"point":1, "content":"1. He fell asleep, with the lamp  {=burning#考察with复合结构：with+宾语+现在分词作宾补，让灯一直燃烧，火焰燃烧为主动含义，所以用现在分词作宾补。}."},{"id":2,"kid":10074,"point":1, "content":"2. With advanced communication products {=applied#考察with复合结构：with+宾语+过去分词作宾补，通讯产品是被应用，所以用过去分词作宾补。} (apply), these days it is not as hard as you’d think to stay in touch with someone (living in another part of the country)."}]}]';//中间不能有换行；英语单引号要替换为\';中文单引号不影响，但不建议保留。
+	*/
+
+	/*
+	界面Type下拉列表
+	js下拉列表添加监听事件
+	https://blog.csdn.net/csp277/article/details/50043303/ 
+	https://blog.csdn.net/qq_24192465/article/details/78364377
+	*/
+	$(document).ready(function(){
+		document.getElementById('type').addEventListener('change',function(){
+		//$('#comboType').change(function(){
+			var selected = this.value;
+			//var id = $(this).children('option:selected').val()
+			console.log("selected:",selected);
+			if(selected==1){
+				//console.log("raw2:",raw2);
+				$("#mtcontent").val(parsed2);
+				$("#raw").val(raw2);
+			}else if(selected==2){
+				//console.log("raw:",raw);
+				$("#mtcontent").val(parsed);
+				$("#raw").val(raw);
+			}else if(selected==5){
+				//Typ 3-5不应该随着下拉列表改变改变#mtcontent文本框（JSON文本框）内容，因为转换后点击Debug按钮前还要改变下拉列表选项
+				//$("#mtcontent").val(parsed5);
+				$("#raw").val(raw5);
+			}else if(selected==6){
+				//Typ 3-5不应该随着下拉列表改变改变#mtcontent文本框（JSON文本框）内容，因为转换后点击Debug按钮前还要改变下拉列表选项
+				$("#mtcontent").val(parsed6);
+				$("#mtcontent2").val(giftString2);
+				$("#raw").val(raw6);
+			}
+		},false);
+		//});
+	});
+	
+
+/**
+ * 获取指定的URL参数值
+ * URL:http://www.quwan.com/index?name=tyler
+ * 参数：paramName URL参数
+ * 调用方法:getParam("name")
+ * 返回值:
+ * 注意：用unescape()解码会导致中文乱码，用decodeURI()解码就能保证中文不出现乱码
+	JS中encodeURI()、decodeURI()、encodeURIComponent()和decodeURIComponent()编码与解码
+	https://www.cnblogs.com/ylxmt/p/10234210.html
+ */
+	function getParam(paramName) {
+		paramValue = "", isFound = !1;
+		if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+			//用unescape()解码会导致中文乱码，用decodeURI()解码就能保证中文不出现乱码
+			arrSource = decodeURIComponent(this.location.search).substring(1, this.location.search.length).split("&"), i = 0;
+			while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0),i++;
+		}
+		return paramValue == "" && (paramValue = null), paramValue
+	}
+
+	function init(){
+		console.log("Init");
+		Toast.init();//开始时调用一次。这样其他方法中就不用重复调用
+		
+		//20221204
+		 var items = getParam('items');//注意：getParam(paramName)是自定义参数，用于获取指定的URL参数值
+		 if(items!=null){
+			items =items.replace(/@/gi,'=').replace(/\$/gi,'#');
+			console.log('items: ', items);
+			document.getElementById("raw").value=items;
+			
+		 }else{
+			
+			document.getElementById("raw").value=raw2;
+		}
+		document.getElementById("mtcontent").value=parsed2;
+		converterUtil= new GiftConverter('GiftConverter');
+
+		//支持文件拖放，参考DragAndDropUtil.js
+		var outTextarea = document.getElementById('raw');
+		enableDragAndDrop(outTextarea,outTextarea);
+		var outTextarea2 = document.getElementById('mtcontent');
+		enableDragAndDrop(outTextarea2,outTextarea2);
+		var outTextarea3 = document.getElementById('mtcontent2');
+		enableDragAndDrop(outTextarea3,outTextarea3);
+	}
+
+	/*
+	被launch2()调用，模拟以地址栏参数方式发送数据到另一个网页。
+	参考d:\workspace\MicroTestStudio\xalauncher-2.0.html
+	1-Cloze（填空题）；2-MultipleChoice（选择题）；3-Match（匹配题）；4-Spell（逐字母拼写）；5-Sort（排序题）；6-Classify（分类题）；
+	*/
+	function launch(data){
+		//console.log('launch');
+		type= $('#type').val();//jquery
+		console.log('type=', type);
+	
+		//var url='clozexa-2.0.html?data='+encodeURIComponent(data);
+		//20221011multiplechoiceplus页面文件名统一为multiplechoiceplus.html，不再带版本数字，真实版本以multiplechoiceplus.html注释中的最新版本为准。带版本数字的为备份文件。
+		//type 等于1或2时都用multiplechoiceplus.html处理
+		var url='multiplechoiceplus.html?items='+data;
+		//var url='multiplechoiceplus-4.0.html?items='+escape(data);
+		if(type==3)//
+			var url='webview-matchx.html?groupMode=2&voice=1&items='+data;
+		if(type==4)//
+			var url='spelling.html?mode=1&items='+data;
+		if(type==5)//20241103
+			var url='webview-sortx.html?items='+data;
+		if(type==6)//20241205
+			var url='webview-classify.html?items='+data;
+
+		window.open(url, '_blank');
+
+		//file:///storage/emulated/0/1/
+		//var url='clozexa.html?items='+encodeURL('公司');
+		//var url='clozexa.html?items='+escape('公司');
+		//var url='www.baidu.com';
+	}
+
+	/*
+	准备数据，调用launch(data)，模拟以地址栏参数方式发送数据到另一个网页。
+	跳转网页发送的数据是JSON文本框中的内容。
+	参考d:\workspace\MicroTestStudio\xalauncher-2.0.html
+	*/
+	function launch2(){
+		var data=document.getElementById("mtcontent").value;//JSON文本框内容
+		if(data==null || data.length<1)
+		data='{"id":1,"kid":10000,"creator":"tgd","domain":"领域", "title":"标题", "preface":"前言", "orientation":"导学(可包含微课)", "sidenote":"旁注", "epilogue":"后记","updateTime":"2020-02-07 20:37:00","status":"1","factor":"1","note":"注释","content": [{"id":1,"kid":10007,"point":1, "content": "1.Nowadays {=the#互联网the Intenet是万维网www的特殊实例（目前世界唯一）要用定冠词}Intenet is becoming increasingly popular and a new high speed broadband network has recently started. "},{"id":2,"kid":10007,"point":1,  "content": "While {=the#此处music是特指后面the TV play的音乐，用定冠词；不同于listen to music泛指听音乐；} music is just so-so, the story in this TV play is quite moving. "},{"id":3, "kid":1, "content": "2. {~That# =Whether#考察whether引导的主语从句 ~If# ~Even if#} his dream of going to college will come true is uncertain."}]}';
+		
+		var content=$('#mtcontent').val().trim();//JSON文本框内容
+		content=content.replace(/\//gi,'/').replace(/\\'/gi,'\'').replace(/\\\\"/gi,'"');
+		console.log('content', content)
+		if(!testJSon(content))return;
+		var jsonObj = JSON.parse(content);
+		//console.log('jsonObj', jsonObj)
+		//因为作为url参数?param=value方式传递，而js时通过=判断解析参数；因此传递时=#分别替换为@和$
+		//在multiplechoiceplus-4.0.html的Init()方法中@和$转换回=和#
+		data=JSON.stringify(jsonObj.content).replace(/=/gi,'@').replace(/#/gi,'$');
+		data=encodeURIComponent(data);
+		//.replace(/%/gi,'%25')//将百分号替换为转义字符%25（改为用encodeURI(data)）
+		//js将单引号替换为\'：string.replace(/'/gi,'\\\'')
+		//data=data.replace(/=/gi,'@').replace(/#/gi,'$');//
+		console.log('data', data)
+		/*20200225，
+		encodeURI(data)替换为转义字符（如题目中出现的%等在URL中会引起转义的字符）。
+		否则报错Uncaught URIError: URI malformed at decodeURI (<anonymous>)，
+		参考 https://www.cnblogs.com/zhengah/p/5026441.html
+		注意：在multiplechoiceplus-4.0.html的getParam(paramName)方法中会用decodeURI()转换回来。
+		*/
+		launch(data);//encodeURIComponent()
+	}
+	/*
+	将人类阅读的填空题或多项选择题文件格式（可读格式）转换为机器格式(JSon格式字符串)
+	Type: 1-Cloze（填空题）；2-MultipleChoice（选择题）；3-Match（匹配题）；4-Spell（逐字母拼写）；5-Sort（排序题）；6-Classify（分类题）；
+	如果需要匹配题型，先点击Convert按钮转换好以后再在界面Type下拉列表选择Match,最后点击Debug按钮即可。
+	*/
+	function convert(){
+		Toast.init();
+		var tempraw=$('#raw').val().trim();
+		var type= $('#type').val();
+		var id=$('#id').val();//jquery
+		var kid=$('#kid').val();//jquery
+		var gift1='';
+		var gift2='';
+		var groupjson='';
+
+		if(type==6){//Classify（分类题）从GIFT文本框内容开始转换，其他题型从Raw文本框内容开始转换
+			//tempgift字符串内容模版1.水果{=apple# =orange# =peach# =strawberry# =grape# =banana#}\n2.动物{=dog# =cat# =panda# =monkey#}\n3.物品{=cap# =dish# =basket# =box#}\n
+			var tempgift=$('#mtcontent2').val().trim();
+
+			var lines = tempgift.split('\n');
+			for(var j=0;j<lines.length;j++){
+
+				//gift1字符串内容模版[{"id":1,"kid":10005,"point":1, "content":"1.水果 {=apple# =orange# =peach# =strawberry# =grape# =banana#}"},{"id":2,"kid":10005,"point":1, "content":"2.动物{=dog# =cat# =panda# =monkey#}"},{"id":3,"kid":10005,"point":1, "content":"3.物品{=cap# =dish# =basket# =box#}"}]
+				gift1+='{"id":'+id+',"'+kid+'":10005,"point":1, "content":"'+lines[j].trim()+'"}';
+				if(j<lines.length-1)gift1+=',';
+
+			}
+			gift1='['+gift1+']';
+
+
+		}else{//type6之外题型
+
+			var rs_match = tempraw.match(/_\s*\[/);
+			if(rs_match!=null && rs_match.length>0){//Raw文本框内容匹配cloze格式，匹配下划线+空格+方括号模式（_ [）即代表不是选择题,可以是填空题、匹配题、拼写题或排序题（格式相同）
+				if(type!=1){//多种题型共用格式即使此时界面Type下拉列表当前选择的不是cloze也不强制改为cloze
+					//alert('It seems that you are editing items of cloze type, chage type combox accordingly?' );
+					//js封装toast组件——常用工具函数https://segmentfault.com/a/1190000018012740
+					/*
+					Toast.show('It seems that you are editing items of cloze type, chage type combox accordingly.', 'success', 1000);
+					$('#type').val(1);//jquery
+					//setTimeout("$('#comboType').val(1)",500);
+					*/
+					type=1;
+				}
+			}else{//Raw文本框内容匹配multiplechoice格式，不匹配下划线+空格+方括号模式（_ [）即代表是选择题
+				if(type!=2){//如果此时界面Type下拉列表当前选择的不是multiplechoice则强制改为multiplechoice
+					//alert('It seems that you are editing items of multiplechoice type, chage type combox accordingly?' );
+					Toast.show('It seems that you are editing items of multiplechoice type, chage type combox accordingly.', 'success', 1000);
+					/*setTimeout(function () {
+						Toast.hide();
+					}, 3000);*/
+					$('#type').val(2);//jquery修改下拉框当前选项为MultipleChoice（选择题）
+					//setTimeout("$('#comboType').val(2)",500);
+					type=2;
+				}
+			}
+			gift1=converterUtil.process(tempraw, type, kid);//20221120 带kid信息
+			gift2=converterUtil.process2(tempraw, type);//20221120 不带kid，纯gift格式
+			console.log("type",type,"gift:",gift1);
+			$("#mtcontent2").val(gift2);//jquery修改GIFT文本框中的内容
+		}//type6之外题型
+
+		//var kid=JSON.parse(gift)[0].kid
+		groupjson='{"id":'+id+',"kid":'+kid+',"creator":"tgd","domain":"领域", "title":"标题", "preface":"前言", "orientation":"导学(可包含微课)", "sidenote":"旁注", "epilogue":"后记","updateTime":"2020-02-07 20:37:00","status":"1","factor":"1","note":"注释","content": '+gift1+'}';//\'
+		$("#mtcontent").val(groupjson);//jquery修改JSON文本框中的内容
+		//document.getElementById("raw").value=gift;
+	}
+	/**
+	20221217
+	 *JS 复制内容到剪贴板
+	 * @param {String} value 需要复制的内容
+	 * @param {String} type 元素类型 input, textarea
+	 注意：会丢失换行符
+	 
+	 https://blog.csdn.net/qq_39025670/article/details/123089428
+	 
+	被upgrade()方法调用。
+	 */
+	function copyContent(value, type = 'input') {
+	  const input = document.createElement(type);
+	  input.setAttribute('readonly', 'readonly'); // 设置为只读, 防止在 ios 下拉起键盘
+	  // input.setAttribute('value', value); // textarea 不能用此方式赋值, 否则无法复制内容
+	  input.value = value;
+	  document.body.appendChild(input);
+	  input.setSelectionRange(0, 9999); // 防止 ios 下没有全选内容而无法复制
+	  input.select();
+	  document.execCommand('copy');
+	  document.body.removeChild(input);
+	}
+
+	
+	/*
+	提取输入input文本{}中匹配正则表达式regex的内容返回
+	regex 正则表达式，如
+	/\{([^}]+)\}/g;//有g 匹配{}中的内容
+	/[=~][^=~]+/g;//有g 以=或~开始加上其他字符
+	
+	@return 返回字符串数组或null（无匹配）
+	
+	被upgrade()，reverse()方法调用。
+	*/
+	function subtract(input, regex) {
+		//var str = "1.The question is {~if# ~what# =whether#[EXPLANATION] ~how#h } the film is worth seeing.";
+		//console.log("input :",input);
+		var reg = /\{([^}]+)\}/;//有g
+		if(regex!=null)
+			reg =regex;//
+		var rs_match = input.match(reg);//返回数组
+		if(rs_match==null || rs_match.length.length<1){
+			console.error("no {} section subtracted for :",input);
+			return null;
+		}
+		//console.log("subtract:",rs_match);
+		return rs_match;
+		//var res=rs_match[0];
+		//res=res.substring(1,res.length-1);
+		//return res;
+	}	
+	/*
+	20241205
+	Reverse GIFT format data in  GIFT teaxtarea to raw data in Raw teaxtarea
+	将GIFT格式的文本转换为Raw格式的文本，支持Sort题型之外的题型，为convert()方法的逆向方法，对于选择题可读格式的生成非常有用。
+	*/
+	function reverse(){
+		//Toast.init();
+		var lines=[];//
+		var answers=[];//
+		var explanations=[];//
+		
+		var seprator='\n';
+		var input= document.getElementById("mtcontent2").value;//GIFT文本框中的内容
+		
+		//copyContent(input)为自定义方法，复制内容到剪贴板
+		//copyContent(input);
+		
+		var items = input.split(seprator);
+
+		//去掉空行
+		for(var j=0;j<items.length;j++){
+			if(items[j]==null||items[j].length<1)
+				items.splice(j,1);
+		}
+
+		var normalstr='';
+		
+		//
+		for(var j=0;j<items.length;j++){
+			var item={};
+			item.choices=[];
+			item.key=[];
+
+			var stem=items[j].replace(/\{[^}]+\}/g,'____');//stem题干，正则表达式匹配{}中的内容
+			console.log("line=",items[j],"stem=",stem);
+			item.stem=stem;
+
+
+			var subtracted='';
+			//var res=subtract(items[j],/\[([^\]]+)\]/);//正则表达式匹配[]中的内容
+			var res=subtract(items[j],/\{[^}]+\}/g);//正则表达式匹配{}中的内容，返回值为数组
+			if(res!=null)subtracted=res[0];//
+
+			//choices_字符串数组，每个字符串以=或~开头
+			var choices_= multipleChoiceUtil.processMultipleChoices(subtracted);
+
+			if(choices_.length<0){
+				rerun -1;//没有选项，格式错误，返回-1
+			}
+			var keyindex=0;//20241204
+			var choicestr='';
+
+			for(var k=0;k<choices_.length;k++){
+				var res=multipleChoiceUtil.processBlank(choices_[k]);
+				var keystr='A';
+				
+				item.choices[k]=res;//JSON格式 {'choiceText':choiceText,'explanation':explanation}
+				if(choices_[k].trim().indexOf("=")==0){
+					item.key[keyindex++]=res.choiceText;
+					item.generalExplanation=res.explanation;
+					
+				}
+				//console.log('choice detail: ', res);
+				if(choices_.length==1){//填空题
+					$('#type').val(1);//jquery修改下拉框当前选项为Cloze（选择题）
+					//stem题干，正则表达式匹配{}中的内容;
+					normalstr=normalstr+items[j].replace(/\{[^}]+\}/g,'____['+item.key[0]+"#"+item.generalExplanation+"]")+"\n";//
+					break;
+				}else{
+					//
+					$('#type').val(2);//jquery修改下拉框当前选项为MultipleChoice（选择题）
+				}
+				//选择题
+				switch(k){
+					case 0:
+						 if(choices_[k].trim().indexOf("=")==0)keystr='A';
+						 choicestr+='A. '+res.choiceText+"\t";//+"\n";
+						 break;
+					case 1:
+						 if(choices_[k].trim().indexOf("=")==0)keystr='B';
+						 choicestr+='B. '+res.choiceText+"\t";//+"\n";
+						 break;
+					case 2:
+						 if(choices_[k].trim().indexOf("=")==0)keystr='C';
+						 choicestr+='C. '+res.choiceText+"\t";//+"\n";
+						 break;
+					case 3:
+						 if(choices_[k].trim().indexOf("=")==0)keystr='D';
+						 choicestr+='D. '+res.choiceText+"\t";//+"\n";
+						 break;
+					case 4:
+						 if(choices_[k].trim().indexOf("=")==0)keystr='E';
+						 choicestr+='E. '+res.choiceText+"\t";//+"\n";
+						 break;
+					case 5:
+						 if(choices_[k].trim().indexOf("=")==0)keystr='F';
+						 choicestr+='F. '+res.choiceText+"\t";//+"\n";
+						 break;
+					case 6:
+						 if(choices_[k].trim().indexOf("=")==0)keystr='G';
+						 choicestr+='G. '+res.choiceText+"\t";//+"\n";
+						 break;
+					default :
+					;
+				}
+				console.log('k=', k, 'keystr=', keystr, 'choicestr=', choicestr);
+				
+
+			}//choices_
+			
+			if(choices_.length>1)normalstr+='('+keystr+') '+stem+'\n'+choicestr+'\n\n';//多选题答案
+			/*
+			var key=subtracted.substring(1, subtracted.indexOf('#')).trim();
+			var explanation=subtracted.substring(subtracted.indexOf('#')+1,subtracted.length-1).trim();
+			console.log("line=",items[j],"key=",key, "explanation=",explanation);
+			answers.push(key);
+			explanations.push(explanation);
+			*/
+		}
+		
+		//var giftstr='';
+
+		/*
+		for(var j=0;j<items.length;j++){
+
+			//正确答案
+			var k=Math.floor(Math.random()*3);
+			//var u=Math.floor(Math.random()*3);
+			var keystr='A';
+			switch(k){
+				case 1:
+					 keystr='B';
+					 break;
+				case 2:
+					 keystr='C';
+					 break;
+				case 3:
+					 keystr='D';
+					 break;
+				default :
+				;
+			}
+			console.log('k=', k, 'keystr=', keystr);
+			
+			normalstr+='('+keystr+') ';//多选题答案
+			normalstr+=items[j].replace( /\[([^\]]+)\]/,'')+'\n';//题干
+
+			//生成三个干扰项
+			var choices=['','',''];
+			var  choicesIndex=[-1,-1,-1, k];//20221228  存储干扰项及正确项（最后一个）下标，用于检查及避免重复
+			for(var n=0;n<3;n++){
+				var rnd=-1;
+				do{
+					rnd=(Math.floor(Math.random()*answers.length))%answers.length;
+					//console.log("rnd=",rnd);
+				}while(choicesIndex.includes(rnd));//20221228 每次生成干扰项都检查是否与已经生成的项及正确项是否重复
+				//6种JavaScript判断数组是否包含某个值的方法
+				//https://blog.csdn.net/snsHL9db69ccu1aIKl9r/article/details/120792741
+				choicesIndex[n]=rnd;
+
+				var obsanswer=answers[rnd];
+				choices[n]='~'+obsanswer+'# ';//#后面的空格不可少
+			}
+			console.log("choicesIndex=",choicesIndex);
+
+
+			//再将答案随机插入其中一个位置
+			choices.splice(k,0,'='+answers[j]+'# ');//#后面的空格不可少
+			//
+			for(var p=0;p<4;p++){
+				var chstr='A';
+				switch(p){
+					case 1:
+						 chstr='B';
+						 break;
+					case 2:
+						 chstr='C';
+						 break;
+					case 3:
+						 chstr='D';
+						 break;
+					default :
+					;
+				}
+				normalstr+=chstr+'. '+choices[p].substring(1,choices[p].length-2)+'\t';
+			}
+			normalstr+='\n[解析]'+'\n\n';
+			//
+			var reg = /\[([^\]]+)\]/g;//有g，将方括号[]包括的部分替换为大括号{}包括的部分
+			var line = items[j].replace( /_+/g,'').replace(reg, '{'+choices[0]+choices[1]+choices[2]+choices[3]+'}');
+			
+			giftstr+=line+'\n';
+			lines.push(line);
+		}//一题处理结束
+		*/
+
+		console.log("reverse() raw:",normalstr);
+		console.log("reverse() lines:",lines);
+		
+		document.getElementById("raw").value=normalstr;
+		//document.getElementById("mtcontent2").value=giftstr;
+		//$("#mtcontent2").val(gift2);//jquery修改GIFT文本框中的内容		
+	}
+
+	/**
+	20221217
+	 *JS 复制内容到剪贴板
+	 * @param {String} value 需要复制的内容
+	 * @param {String} type 元素类型 input, textarea
+	 注意：会丢失换行符
+	 
+	 https://blog.csdn.net/qq_39025670/article/details/123089428
+	 
+	被upgrade()方法调用。
+	 */
+	function copyContent(value, type = 'input') {
+	  const input = document.createElement(type);
+	  input.setAttribute('readonly', 'readonly'); // 设置为只读, 防止在 ios 下拉起键盘
+	  // input.setAttribute('value', value); // textarea 不能用此方式赋值, 否则无法复制内容
+	  input.value = value;
+	  document.body.appendChild(input);
+	  input.setSelectionRange(0, 9999); // 防止 ios 下没有全选内容而无法复制
+	  input.select();
+	  document.execCommand('copy');
+	  document.body.removeChild(input);
+	}
+
+	
+	/*
+	提取输入input文本{}中匹配正则表达式regex的内容返回
+	regex 正则表达式，如
+	/\{([^}]+)\}/g;//有g 匹配{}中的内容
+	/[=~][^=~]+/g;//有g 以=或~开始加上其他字符
+	
+	@return 返回字符串数组或null（无匹配）
+	
+	被upgrade()方法调用。
+	*/
+	function subtract(input, regex) {
+		//var str = "1.The question is {~if# ~what# =whether#[EXPLANATION] ~how#h } the film is worth seeing.";
+		//console.log("input :",input);
+		var reg = /\{([^}]+)\}/;//有g
+		if(regex!=null)
+			reg =regex;//
+		var rs_match = input.match(reg);
+		if(rs_match==null || rs_match.length.length<1){
+			console.error("no {} section subtracted for :",input);
+			return null;
+		}
+		//console.log("subtract:",rs_match);
+		return rs_match;
+		//var res=rs_match[0];
+		//res=res.substring(1,res.length-1);
+		//return res;
+	}	
+	/*
+	20221217
+	Transform Cloze format in Raw textarea to MultipleChoice
+	将Cloze格式的Raw文本转换为MultipleChoice格式（用其他题项的答案作为干扰项，Cloze格式的题项数目大于10项干扰项分布较均匀，否则重复多）
+	*/
+	function upgrade(){
+		//Toast.init();
+		var lines=[];//
+		var answers=[];//
+		var explanations=[];//
+		
+		var seprator='\n';
+		var input= document.getElementById("raw").value;
+		
+		//copyContent(input)为自定义方法，复制内容到剪贴板
+		//copyContent(input);
+		
+		var items = input.split(seprator);
+		if(items.length<10){
+			Toast.show('Cloze题数不够！Cloze格式的题项数目大于10项干扰项分布较均匀，否则重复多。请增加Cloze题数再试。', 'success', 10000);
+			return;
+		}
+		//去掉空行
+		for(var j=0;j<items.length;j++){
+			if(items[j]==null||items[j].length<1)
+				items.splice(j,1);
+		}
+		
+		//
+		for(var j=0;j<items.length;j++){
+			var subtracted='';
+			var res=subtract(items[j],/\[([^\]]+)\]/);//匹配[]中的内容
+			if(res!=null)subtracted=res[0];//.substring(1,input.length-1);
+			
+			var key=subtracted.substring(1, subtracted.indexOf('#')).trim();
+			var explanation=subtracted.substring(subtracted.indexOf('#')+1,subtracted.length-1).trim();
+			console.log("line=",items[j],"key=",key, "explanation=",explanation);
+			answers.push(key);
+			explanations.push(explanation);
+			
+		}
+		//
+		var giftstr='';
+		var normalstr='';
+
+
+		for(var j=0;j<items.length;j++){
+
+			//正确答案
+			var k=Math.floor(Math.random()*3);
+			//var u=Math.floor(Math.random()*3);
+			var keystr='A';
+			switch(k){
+				case 1:
+					 keystr='B';
+					 break;
+				case 2:
+					 keystr='C';
+					 break;
+				case 3:
+					 keystr='D';
+					 break;
+				default :
+				;
+			}
+			console.log('k=', k, 'keystr=', keystr);
+			
+			normalstr+='('+keystr+') ';//多选题答案
+			normalstr+=items[j].replace( /\[([^\]]+)\]/,'')+'\n';//题干
+
+			//生成三个干扰项
+			var choices=['','',''];
+			var  choicesIndex=[-1,-1,-1, k];//20221228  存储干扰项及正确项（最后一个）下标，用于检查及避免重复
+			for(var n=0;n<3;n++){
+				var rnd=-1;
+				do{
+					rnd=(Math.floor(Math.random()*answers.length))%answers.length;
+					//console.log("rnd=",rnd);
+				}while(choicesIndex.includes(rnd));//20221228 每次生成干扰项都检查是否与已经生成的项及正确项是否重复
+				//6种JavaScript判断数组是否包含某个值的方法
+				//https://blog.csdn.net/snsHL9db69ccu1aIKl9r/article/details/120792741
+				choicesIndex[n]=rnd;
+
+				var obsanswer=answers[rnd];
+				choices[n]='~'+obsanswer+'# ';//#后面的空格不可少
+			}
+			console.log("choicesIndex=",choicesIndex);
+
+
+			//再将答案随机插入其中一个位置
+			choices.splice(k,0,'='+answers[j]+'# ');//#后面的空格不可少
+			//
+			for(var p=0;p<4;p++){
+				var chstr='A';
+				switch(p){
+					case 1:
+						 chstr='B';
+						 break;
+					case 2:
+						 chstr='C';
+						 break;
+					case 3:
+						 chstr='D';
+						 break;
+					default :
+					;
+				}
+				normalstr+=chstr+'. '+choices[p].substring(1,choices[p].length-2)+'\t';
+			}
+			normalstr+='\n[解析]'+'\n\n';
+			//
+			var reg = /\[([^\]]+)\]/g;//有g，将方括号[]包括的部分替换为大括号{}包括的部分
+			var line = items[j].replace( /_+/g,'').replace(reg, '{'+choices[0]+choices[1]+choices[2]+choices[3]+'}');
+			
+			giftstr+=line+'\n';
+			lines.push(line);
+		}//一题处理结束
+		
+
+		console.log("upgrade() raw:",normalstr);
+		console.log("upgrade() lines:",lines);
+		
+		document.getElementById("raw").value=normalstr;
+		document.getElementById("mtcontent2").value=giftstr;
+		
+	}
+	
+	/*
+	以Gift文本框内容为基础，将MultipleChoice格式的Raw文本转换为Cloze格式。
+	*/
+	function downgrade(){
+		var normalstr='';
+
+		var seprator='\n';
+		var input= document.getElementById("mtcontent2").value;
+		//copyContent(input)为自定义方法，复制内容到剪贴板
+		//copyContent(input);
+		//
+		var items = input.split(seprator);
+		//去掉空行
+		for(var j=0;j<items.length;j++){
+			if(items[j]==null||items[j].length<1)
+				items.splice(j,1);
+		}
+		//
+		
+		for(var j=0;j<items.length;j++){
+			var res=subtract(items[j],/\{([^}]+)\}/);//匹配{}中的内容
+			if(res!=null)subtracted=res[0];//
+			
+			var reg = /[=~][^=~]+/g;//有g 以=或~开始加上其他字符
+			var choices = subtracted.substring(1,subtracted.length-1).match(reg);//substring去掉首尾的花括号
+			console.log("downgrade() choices:",choices);
+			for(var p=0;p<choices.length;p++){
+				if(choices[p].trim().indexOf("=")==0){
+					normalstr+=items[j].replace( /\{([^}]+)\}/,'____['+choices[p].substring(1,choices[p].length).trim()+']')+'\n';
+					break;
+				}
+				
+			}
+		}
+		console.log("downgrade() raw:",normalstr);
+		document.getElementById("raw").value=normalstr;
+		
+	}
+	
+	/*
+	1.  Most of us are more focused ______ [on#考察与动词next搭配的介词；be focused on (集中精力于)是固定搭配。] on our tasks in the morning than we are later in the day.(2016全国Ⅱ卷· 64) 
+2. (2014全国Ⅱ卷· 44) When the bus finally came, we all hurried on board. I got a place to next ____ [to#考察与形容词next搭配的介词；next to意为“在…的旁边；挨着…”] the window, so I had a good view of the sidewalk. 
+	*/
+	function TimerStartUp(){
+		//init();
+		//setTimeout('StartUp()', 300);
+		export2database();
+	}
+
+	/*
+	将测试题目数据(JSon格式字符串)转换为SQL，便于导入到Sqlite数据库QuickPotato.Android\app\src\main\res\raw\data.db中的quiz表。
+	quiz表每一条记录对应一个“题组”，可以包含属于同一主题(如英语数词的用法)的多个题目；
+	微测试的最小单位是“题目”(item)；其次是“题组”(group)，可以包含属于同一主题(如英语数词的用法)的多个题目；多个“题组”可以组合成“模块”、多个“模块”组合成“单元”或“试卷”、多个“单元”组合成“课程”。每一模块、单元和课程都遵循SCORM规范添加学习资源相关元数据(Meta Data)。包括creator/创建主体、domain/领域、title/标题、preface/前言、orientation/导学(可包含微课)、sidenote/旁注、epilogue/后记、updateTime/更新时间、note/注释、status/状态、factor/因子和content/测试内容。
+	注释：增加KID（Knowledge ID）用于为领域知识（如英语语法）进行全局统一编号，便于建立“知识点-测试题”的对应关系。
+	设计为一次处理属于同一题组的多个题目。
+	转换结果参考：d:\adroidstudioprojects\QuickPotato.Android\database.txt
+	*/
+	function export2database(){
+		var data=$('#mtcontent').val().trim();
+		var jsonObj = JSON.parse(data);
+		//console.log('kid', jsonObj[1].kid);
+		//console.log('content', jsonObj[1].content);
+		kid=$('#kid').val();//
+		var sql="";
+		//一次处理属于同一题组的多个题目
+		//for(var i=0;i<jsonObj.length;i++){
+			var stmt="insert into quiz(kid, content) values ("+kid+", '";
+			var ctnt= JSON.stringify(jsonObj.content).replace(/'/g, "''");
+			//var ctnt= data.replace(/'/g, "''");//
+			//var ctnt= JSON.stringify(jsonObj[i].content).replace(/'/g, "''");
+			
+			//insert into quiz(kid, content) values (10002, '[{"id":1,"kid":10002,"point":1, "content": " ---What would you like to drink, {~hamburger# ~chip# =coke#考察名词的种类。四个名词都是物质名词、具体名词。根据句意，能drink的只有coke。 ~icecream#} or orange?   ---Orange, please."},{"id":2,"kid":10002,"point":1,  "content": " What\'s your {~idea# ~key# =excuse#考察名词的种类。四个名词都是物质抽象名词。根据句意，迟到需要的是借口excuse。 ~news#} for being late again?"}]');
+			stmt+=ctnt+"');";
+			sql+=stmt+"\n";//现在输出到文本框里面的文字而不是作为html页面文字，所以换行由<br/>改为\n
+		//}
+		document.getElementById("resultarea").innerHTML=sql;
+
+	}
+
+	function testFormat() {
+		var ct=$("#mtcontent").val().replace(/\//gi,'/').replace(/\\'/gi,'\'').replace(/\\\\"/gi,'"');
+		
+		testJSon(ct)
+	}
+
+    function alertMessage(message) {
+        alert(message)
+    }
+
+    function toastMessage(message) {
+        window.control.toastMessage(message)
+    }
+
+    function sumToJava(number1, number2){
+       window.control.onSumResult(number1 + number2)
+    }
+
+	</script>
+
+  </head>
+  <body onload=init()>
+  <div class="container">
+  <div class="header"><h1 class="header"> &nbsp;</h1></div>
+  <div class="left"><p> &nbsp;</p></div>
+  <div class="content">
+    <h1>Emulator </h1>
+    <h3>v8.3</h3>
+      ID &nbsp;&nbsp;
+      <input type="text" id="id" value='1'  style='width:100px' title='group id, 题组id'/> 
+      Title&nbsp;&nbsp;<input type="text" id="title" name="title" value=''  style='width:300px'/>
+      <a href='kid.html' target='_blank' title='knowledge id, click the link for details'>KID</a>&nbsp;&nbsp;
+      <input type="text" id="kid" value='10000'  style='width:100px' title='knowledge id, click the link for details'/> 
+      Type&nbsp;&nbsp;
+      <!--下拉列表监听事件参见addEventListener('change',function(){-->
+      <select id="type" name="type" title='Type: 1-cloze;2-multiplechoice;3-match;4-Spell;5-Sort;6-Classify'>
+		<option value="1" selected='selected'>Cloze</option>
+		<option value="2" >MultipleChoice</option>
+		<option value="3" >Match</option>
+		<option value="4" >Spell</option>
+		<option value="5" >Sort</option>
+		<option value="6" >Classify</option>
+      </select>
+      <br/><br/>
+
+    Raw<br/>
+    <textarea id="raw" name="raw" rows="15" style='width:90%;background-color:#C7EDCC;'></textarea>
+	<br/>
+	<button title="" onclick="convert()">Convert</button>&nbsp;&nbsp;
+	<button onclick="testFormat()" title="Test json format in the  'Converted' textarea">Format</button>&nbsp;&nbsp;
+	<button title="" onclick="launch2()">Debug</button>&nbsp;&nbsp;&nbsp;&nbsp;
+	<button title="将测试题目数据(JSon格式字符串)转换为SQL" onclick="export2database()">SQL</button>&nbsp;&nbsp;
+	<button title="Transform Cloze to MultipleChoice" onclick="upgrade()">UpGrade</button>&nbsp;&nbsp;
+	<button title="Transform MultipleChoiceto Cloze" onclick="downgrade()">DownGrade</button>&nbsp;&nbsp;
+	<button title="Reverse GIFT format data in  GIFT teaxtarea to raw data in Raw teaxtarea" onclick="reverse()">Reverse</button>&nbsp;&nbsp;&nbsp;&nbsp;
+
+	<br/><br/>
+    GIFT<br/>
+    <!--表单提交属性必须用name=；而jquery引用元素必须用id= textarea不能用value=""-->
+    <textarea id="mtcontent2" name="mtcontent2"  rows="15" style='width:90%;background-color:#C7EDCC;'></textarea>
+	<br/><br/>
+
+    JSON<br/>
+    <!--表单提交属性必须用name=；而jquery引用元素必须用id= textarea不能用value=""-->
+    <textarea id="mtcontent" name="mtcontent"  rows="15" style='width:90%;background-color:#C7EDCC;'></textarea>
+	<br/>
+	JSon备份于LeanCloud\myphDev\mt.txt<br/>
+    <!--Note: Replace all ' with \'-->
+    <br/>
+
+     SQL<br/>
+    <textarea id="resultarea" name="resultarea" rows="10"    style='width:90%;background-color:#C7EDCC;'></textarea><br/>
+	SQL备份于QuickPotato.Android\database.txt<br/>
+    Converter 将人类阅读的多项选择题文件格式转换为机器格式(本工具设计为一次处理属于同一题组的多个题目。外部为JSon格式数组， content部分为gift格式);<br/>
+	Debug将测试题目数据(JSon格式字符串)发送到测试页面进行测试。<br/>
+	SQL将测试题目数据(JSon格式字符串)转换为SQL ，便于导入到Sqlite数据库。<br/>
+	UpGrade: Transform Cloze to MultipleChoice<br/>
+	DownGrade: Transform MultipleChoiceto Cloze<br/>
+    <!--Note: <br/>1. Each cloze item in one line, embrace key and explanation in squre brackets like [independent#negative adjective needed]<br/>
+    2.Each multiplechoice item include 4 lines. Line 1 stem with key letter in round brackets in the beginning like (A); <br/>
+    Line 2 choices separated with tabs; Line 3 explanation beginning with [Explanation] or [解析]; <br/>Line 4 empty as separator between items.<br/>
+    <button onclick="mySubmit(3)" title="Convert readable cloze or multiplechoice text in the 'Raw' textarea into json format in the  'Converted' textarea">Convert</button>&nbsp;&nbsp;
+    <button onclick="mySubmit(4)" title="Test and debug converted content in the 'Converted' textarea">Debug</button>
+	<br/><br/>
+	-->
+  </div>
+  <div class="right"><p> &nbsp;</p></div>
+  <div class="footer" style="text-align:center;"></div>
+  </div>      
+  </body>
+</html>
